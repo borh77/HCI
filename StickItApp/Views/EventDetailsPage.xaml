@@ -11,13 +11,37 @@
             </Border>
 
             <TextBlock Text="{Binding Event.Description}" Margin="0,12,0,0" TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Event.City}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Event.Country}" Foreground="{DynamicResource TextBrush}" />
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="{DynamicResource CityLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Event.City}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource CountryLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Event.Country}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
             <TextBlock Text="{Binding DateText}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Event.AverageCost, StringFormat=Average cost: {0}}" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Event.Attendance, StringFormat=Attendance: {0}}" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Event.IsCharitable, StringFormat=Charitable: {0}}" Foreground="{DynamicResource TextBrush}" />
-            <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource AverageCostLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Event.AverageCost}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Event.Attendance}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource CharitableLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Event.IsCharitable}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="{DynamicResource TypeLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Type.Name}" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
 
             <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
             <ItemsControl ItemsSource="{Binding Tags}">
@@ -28,7 +52,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="Previous Dates" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{DynamicResource PreviousDatesLabel}" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
             <ItemsControl ItemsSource="{Binding PreviousDates}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -52,7 +76,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Height="38" Margin="0,0,4,0" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
                 <Button Grid.Column="1" Height="38" Margin="4,0,4,0" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
-                <Button Grid.Column="2" Height="38" Margin="4,0,0,0" Content="Back" Command="{Binding BackCommand}" />
+                <Button Grid.Column="2" Height="38" Margin="4,0,0,0" Content="{DynamicResource BackLabel}" Command="{Binding BackCommand}" />
             </Grid>
         </StackPanel>
     </ScrollViewer>

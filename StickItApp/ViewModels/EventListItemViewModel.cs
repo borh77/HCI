@@ -43,5 +43,4 @@ public sealed class EventListItemViewModel
 
     public string TypeColorHex => Type?.ColorHex ?? "#64748B";
 
-    public string MapButtonText => IsPlacedOnMap ? "Remove from map" : "Put on map";
 }

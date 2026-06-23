@@ -17,11 +17,11 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                    <TextBlock Text="City" Foreground="{DynamicResource TextBrush}" />
+                    <TextBlock Text="{DynamicResource CityLabel}" Foreground="{DynamicResource TextBrush}" />
                     <TextBox Height="32" Padding="8,4" Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
-                    <TextBlock Text="Country" Foreground="{DynamicResource TextBrush}" />
+                    <TextBlock Text="{DynamicResource CountryLabel}" Foreground="{DynamicResource TextBrush}" />
                     <TextBox Height="32" Padding="8,4" Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
@@ -35,20 +35,20 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                    <TextBlock Text="AverageCost" Foreground="{DynamicResource TextBrush}" />
+                    <TextBlock Text="{DynamicResource AverageCostLabel}" Foreground="{DynamicResource TextBrush}" />
                     <TextBox Height="32" Padding="8,4" Text="{Binding AverageCost, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
-                    <TextBlock Text="Attendance" Foreground="{DynamicResource TextBrush}" />
+                    <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
                     <ComboBox Height="32" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding Attendance}" />
                 </StackPanel>
             </Grid>
 
-            <CheckBox Content="IsCharitable" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" IsChecked="{Binding IsCharitable}" />
+            <CheckBox Content="{DynamicResource IsCharitableLabel}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" IsChecked="{Binding IsCharitable}" />
 
-            <TextBlock Text="Type" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{DynamicResource TypeLabel}" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
             <ComboBox Height="32" ItemsSource="{Binding EventTypes}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name" />
-            <Button Margin="0,6,0,0" MinHeight="30" Content="Add new type" Command="{Binding AddTypeCommand}" />
+            <Button Margin="0,6,0,0" MinHeight="30" Content="{DynamicResource AddNewTypeLabel}" Command="{Binding AddTypeCommand}" />
 
             <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
             <TextBox Height="32" Padding="8,4" Text="{Binding TagSearchText, UpdateSourceTrigger=PropertyChanged}" />
@@ -60,7 +60,7 @@
                 <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding AvailableTagsView}" SelectedItem="{Binding SelectedAvailableTag}" DisplayMemberPath="Name" />
                 <Button Grid.Column="1" Margin="6,0,0,0" MinHeight="32" Content="{DynamicResource AddLabel}" Command="{Binding AddSelectedTagCommand}" />
             </Grid>
-            <Button Margin="0,6,0,0" MinHeight="30" Content="Add new tag" Command="{Binding AddTagCommand}" />
+            <Button Margin="0,6,0,0" MinHeight="30" Content="{DynamicResource AddNewTagLabel}" Command="{Binding AddTagCommand}" />
             <ItemsControl ItemsSource="{Binding SelectedTags}" Margin="0,6,0,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -78,7 +78,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="Icon" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{DynamicResource IconLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
             <TextBox Height="32" Padding="8,4" Text="{Binding IconPath, UpdateSourceTrigger=PropertyChanged}" />
             <Border Height="90" Margin="0,8,0,0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8">
                 <Image Source="{Binding EffectiveIconPreviewPath}" Stretch="Uniform" Margin="8" />
@@ -88,7 +88,7 @@
                 <Button MinHeight="32" Content="{DynamicResource RemoveImageLabel}" Command="{Binding RemoveImageCommand}" />
             </StackPanel>
 
-            <TextBlock Text="Current Date" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{DynamicResource CurrentDateLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -98,7 +98,7 @@
                 <DatePicker Grid.Column="1" Margin="5,0,0,0" SelectedDate="{Binding CurrentEnd}" />
             </Grid>
 
-            <TextBlock Text="Previous Dates" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{DynamicResource PreviousDatesLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
