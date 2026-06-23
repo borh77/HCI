@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using StickItApp.Commands;
+using StickItApp.Models;
 using StickItApp.Services;
 using StickItApp.Views;
 
@@ -26,12 +27,12 @@ public sealed class MainWindowViewModel : ObservableObject
         ToggleThemeCommand = new RelayCommand(ToggleTheme);
         ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(), "MapLabel"));
         ShowEventsCommand = new RelayCommand(() => Navigate(new EventListPage(), "EventsLabel"));
-        ShowTypesCommand = new RelayCommand(() => Navigate(new TypeListPage(), "TypesLabel"));
-        ShowTagsCommand = new RelayCommand(() => Navigate(new TagListPage(), "TagsLabel"));
+        ShowTypesCommand = new RelayCommand(NavigateToTypeList);
+        ShowTagsCommand = new RelayCommand(NavigateToTagList);
         ShowSettingsCommand = new RelayCommand(() => Navigate(new SettingsPage(), "SettingsLabel"));
         NewEventCommand = new RelayCommand(() => Navigate(new EventEditorPage(), "NewEventLabel"));
-        NewTypeCommand = new RelayCommand(() => Navigate(new TypeEditorPage(), "NewTypeLabel"));
-        NewTagCommand = new RelayCommand(() => Navigate(new TagEditorPage(), "NewTagLabel"));
+        NewTypeCommand = new RelayCommand(() => NavigateToTypeEditor(null));
+        NewTagCommand = new RelayCommand(() => NavigateToTagEditor(null));
     }
 
     public bool IsMenuOpen
@@ -91,6 +92,26 @@ public sealed class MainWindowViewModel : ObservableObject
         CurrentPage = page;
         _currentPageTitleKey = titleKey;
         OnPropertyChanged(nameof(CurrentPageTitle));
+    }
+
+    public void NavigateToTypeList()
+    {
+        Navigate(new TypeListPage(this), "TypesLabel");
+    }
+
+    public void NavigateToTypeEditor(EventType? type)
+    {
+        Navigate(new TypeEditorPage(this, type), type is null ? "NewTypeLabel" : "TypeEditorLabel");
+    }
+
+    public void NavigateToTagList()
+    {
+        Navigate(new TagListPage(this), "TagsLabel");
+    }
+
+    public void NavigateToTagEditor(Tag? tag)
+    {
+        Navigate(new TagEditorPage(this, tag), tag is null ? "NewTagLabel" : "TagEditorLabel");
     }
 
     private void ToggleTheme()

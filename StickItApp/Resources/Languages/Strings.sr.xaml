@@ -29,4 +29,11 @@
     <sys:String x:Key="TypeEditorLabel">Uredjivanje tipa</sys:String>
     <sys:String x:Key="TagEditorLabel">Uredjivanje oznake</sys:String>
     <sys:String x:Key="SettingsPlaceholder">Privremeni prikaz podesavanja jezika i teme</sys:String>
+    <sys:String x:Key="CodeLabel">Sifra</sys:String>
+    <sys:String x:Key="NameLabel">Naziv</sys:String>
+    <sys:String x:Key="DescriptionLabel">Opis</sys:String>
+    <sys:String x:Key="IconPathLabel">Putanja ikone</sys:String>
+    <sys:String x:Key="ColorHexLabel">Hex boja</sys:String>
+    <sys:String x:Key="ChangeImageLabel">Promeni sliku</sys:String>
+    <sys:String x:Key="RemoveImageLabel">Ukloni sliku</sys:String>
 </ResourceDictionary>
