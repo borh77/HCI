@@ -1,0 +1,5 @@
+_reference_do_not_commit/
+*.zip
+bin/
+obj/
+.vs/
