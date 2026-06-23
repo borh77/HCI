@@ -62,4 +62,6 @@
     <sys:String x:Key="ChooseTypeLabel">Choose type</sys:String>
     <sys:String x:Key="SearchTagsLabel">Search tags</sys:String>
     <sys:String x:Key="SelectedTagsLabel">Selected tags</sys:String>
+    <sys:String x:Key="ClearMapLabel">Clear Map</sys:String>
+    <sys:String x:Key="BackToListLabel">Back to list</sys:String>
 </ResourceDictionary>

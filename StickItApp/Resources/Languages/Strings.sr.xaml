@@ -62,4 +62,6 @@
     <sys:String x:Key="ChooseTypeLabel">Izaberi tip</sys:String>
     <sys:String x:Key="SearchTagsLabel">Pretrazi oznake</sys:String>
     <sys:String x:Key="SelectedTagsLabel">Izabrane oznake</sys:String>
+    <sys:String x:Key="ClearMapLabel">Ocisti mapu</sys:String>
+    <sys:String x:Key="BackToListLabel">Vrati u listu</sys:String>
 </ResourceDictionary>

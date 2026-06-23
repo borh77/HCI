@@ -18,14 +18,14 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        _currentPage = new MapPage();
+        _currentPage = new MapPage(this);
         _currentPageTitleKey = "MapLabel";
         _selectedLanguage = PersonalizationService.NormalizeLanguage(App.DataStore.Settings.Language);
         _isDarkTheme = PersonalizationService.NormalizeTheme(App.DataStore.Settings.Theme) == "Dark";
 
         ToggleMenuCommand = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
         ToggleThemeCommand = new RelayCommand(ToggleTheme);
-        ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(), "MapLabel"));
+        ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(this), "MapLabel"));
         ShowEventsCommand = new RelayCommand(NavigateToEventList);
         ShowTypesCommand = new RelayCommand(NavigateToTypeList);
         ShowTagsCommand = new RelayCommand(NavigateToTagList);
