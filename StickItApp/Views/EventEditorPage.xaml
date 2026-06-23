@@ -1,12 +1,141 @@
 <UserControl x:Class="StickItApp.Views.EventEditorPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Background="{DynamicResource ContentBrush}">
-        <TextBlock Text="{DynamicResource EventEditorLabel}"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="{DynamicResource TextBrush}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-    </Grid>
+    <ScrollViewer Background="{DynamicResource ContentBrush}" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="14">
+            <TextBlock Text="{Binding PageTitle}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" />
+
+            <TextBlock Text="{DynamicResource CodeLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBox Height="32" Padding="8,4" Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Text="{DynamicResource NameLabel}" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBox Height="32" Padding="8,4" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="City" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="32" Padding="8,4" Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="Country" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="32" Padding="8,4" Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="{DynamicResource DescriptionLabel}" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBox MinHeight="72" Padding="8,4" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="AverageCost" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="32" Padding="8,4" Text="{Binding AverageCost, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="Attendance" Foreground="{DynamicResource TextBrush}" />
+                    <ComboBox Height="32" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding Attendance}" />
+                </StackPanel>
+            </Grid>
+
+            <CheckBox Content="IsCharitable" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" IsChecked="{Binding IsCharitable}" />
+
+            <TextBlock Text="Type" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
+            <ComboBox Height="32" ItemsSource="{Binding EventTypes}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name" />
+            <Button Margin="0,6,0,0" MinHeight="30" Content="Add new type" Command="{Binding AddTypeCommand}" />
+
+            <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBox Height="32" Padding="8,4" Text="{Binding TagSearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Margin="0,6,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding AvailableTagsView}" SelectedItem="{Binding SelectedAvailableTag}" DisplayMemberPath="Name" />
+                <Button Grid.Column="1" Margin="6,0,0,0" MinHeight="32" Content="{DynamicResource AddLabel}" Command="{Binding AddSelectedTagCommand}" />
+            </Grid>
+            <Button Margin="0,6,0,0" MinHeight="30" Content="Add new tag" Command="{Binding AddTagCommand}" />
+            <ItemsControl ItemsSource="{Binding SelectedTags}" Margin="0,6,0,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,4" Padding="6" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" />
+                                <Button Grid.Column="1" Content="x" Command="{Binding DataContext.RemoveSelectedTagCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="Icon" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <TextBox Height="32" Padding="8,4" Text="{Binding IconPath, UpdateSourceTrigger=PropertyChanged}" />
+            <Border Height="90" Margin="0,8,0,0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8">
+                <Image Source="{Binding EffectiveIconPreviewPath}" Stretch="Uniform" Margin="8" />
+            </Border>
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <Button MinHeight="32" Margin="0,0,6,0" Content="{DynamicResource ChangeImageLabel}" Command="{Binding ChangeImageCommand}" />
+                <Button MinHeight="32" Content="{DynamicResource RemoveImageLabel}" Command="{Binding RemoveImageCommand}" />
+            </StackPanel>
+
+            <TextBlock Text="Current Date" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <DatePicker Grid.Column="0" Margin="0,0,5,0" SelectedDate="{Binding CurrentStart}" />
+                <DatePicker Grid.Column="1" Margin="5,0,0,0" SelectedDate="{Binding CurrentEnd}" />
+            </Grid>
+
+            <TextBlock Text="Previous Dates" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <DatePicker Grid.Column="0" Margin="0,0,4,0" SelectedDate="{Binding PreviousStart}" />
+                <DatePicker Grid.Column="1" Margin="4,0,4,0" SelectedDate="{Binding PreviousEnd}" />
+                <Button Grid.Column="2" Content="+" Command="{Binding AddPreviousDateCommand}" />
+            </Grid>
+            <ItemsControl ItemsSource="{Binding PreviousDates}" Margin="0,6,0,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,4" Padding="6" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Text}" Foreground="{DynamicResource TextBrush}" />
+                                <Button Grid.Column="1" Content="x" Command="{Binding DataContext.RemovePreviousDateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="{Binding ValidationMessage}" Margin="0,10,0,0" Foreground="#DC2626" TextWrapping="Wrap" />
+
+            <Grid Margin="0,14,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Height="40" Margin="0,0,5,0" Content="{DynamicResource SaveLabel}" Command="{Binding SaveCommand}" />
+                <Button Grid.Column="1" Height="40" Margin="5,0,0,0" Content="{DynamicResource CancelLabel}" Command="{Binding CancelCommand}" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

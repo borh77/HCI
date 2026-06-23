@@ -15,9 +15,17 @@ public sealed class CsvDataService
     [
         "Id",
         "Name",
+        "City",
+        "Country",
         "Description",
-        "Date",
+        "AverageCost",
+        "Attendance",
+        "IsCharitable",
         "TypeId",
+        "IconPath",
+        "CurrentStart",
+        "CurrentEnd",
+        "IsPlacedOnMap",
         "X",
         "Y",
         "IsCompleted",
@@ -28,7 +36,7 @@ public sealed class CsvDataService
     private static readonly string[] EventTypeHeader = ["Id", "Name", "IconKey", "ColorHex", "Description"];
     private static readonly string[] TagHeader = ["Id", "Name", "ColorHex"];
     private static readonly string[] EventTagHeader = ["EventId", "TagId"];
-    private static readonly string[] PreviousDateHeader = ["Id", "EventId", "Date"];
+    private static readonly string[] PreviousDateHeader = ["Id", "EventId", "StartDate", "EndDate"];
     private static readonly string[] SettingsHeader = ["Key", "Value"];
 
     public CsvDataService()
@@ -178,6 +186,12 @@ public sealed class CsvDataService
 
         foreach (IReadOnlyList<string> row in ReadDataRows(EventsPath))
         {
+            if (row.Count >= 18)
+            {
+                LoadExtendedEventRow(events, typeIds, seenIds, row);
+                continue;
+            }
+
             if (row.Count < 10 ||
                 string.IsNullOrWhiteSpace(row[0]) ||
                 string.IsNullOrWhiteSpace(row[4]) ||
@@ -202,14 +216,66 @@ public sealed class CsvDataService
                 Name = row[1],
                 Description = row[2],
                 Date = eventDate,
+                CurrentStart = eventDate,
+                CurrentEnd = eventDate,
                 TypeId = row[4],
                 X = x,
                 Y = y,
+                IsPlacedOnMap = true,
                 IsCompleted = ParseBool(row[7]),
                 CreatedAt = createdAt,
                 UpdatedAt = updatedAt
             });
         }
+    }
+
+    private static void LoadExtendedEventRow(
+        ObservableCollection<Event> events,
+        HashSet<string> typeIds,
+        HashSet<string> seenIds,
+        IReadOnlyList<string> row)
+    {
+        if (string.IsNullOrWhiteSpace(row[0]) ||
+            string.IsNullOrWhiteSpace(row[8]) ||
+            !seenIds.Add(row[0]) ||
+            !typeIds.Contains(row[8]))
+        {
+            return;
+        }
+
+        if (!TryParseDecimal(row[5], out decimal averageCost) ||
+            !TryParseDate(row[10], out DateTime currentStart) ||
+            !TryParseDate(row[11], out DateTime currentEnd) ||
+            !TryParseDouble(row[13], out double x) ||
+            !TryParseDouble(row[14], out double y) ||
+            !TryParseDate(row[16], out DateTime createdAt) ||
+            !TryParseDate(row[17], out DateTime updatedAt))
+        {
+            return;
+        }
+
+        events.Add(new Event
+        {
+            Id = row[0],
+            Name = row[1],
+            City = row[2],
+            Country = row[3],
+            Description = row[4],
+            AverageCost = averageCost,
+            Attendance = ParseAttendance(row[6]),
+            IsCharitable = ParseBool(row[7]),
+            TypeId = row[8],
+            IconPath = string.IsNullOrWhiteSpace(row[9]) ? null : row[9],
+            Date = currentStart,
+            CurrentStart = currentStart,
+            CurrentEnd = currentEnd,
+            IsPlacedOnMap = ParseBool(row[12]),
+            X = x,
+            Y = y,
+            IsCompleted = ParseBool(row[15]),
+            CreatedAt = createdAt,
+            UpdatedAt = updatedAt
+        });
     }
 
     private void LoadEventTags(
@@ -252,8 +318,26 @@ public sealed class CsvDataService
                 string.IsNullOrWhiteSpace(row[0]) ||
                 string.IsNullOrWhiteSpace(row[1]) ||
                 !seenIds.Add(row[0]) ||
-                !eventIds.Contains(row[1]) ||
-                !TryParseDate(row[2], out DateTime date))
+                !eventIds.Contains(row[1]))
+            {
+                continue;
+            }
+
+            DateTime start;
+            DateTime end;
+            if (row.Count >= 4)
+            {
+                if (!TryParseDate(row[2], out start) || !TryParseDate(row[3], out end))
+                {
+                    continue;
+                }
+            }
+            else if (TryParseDate(row[2], out DateTime singleDate))
+            {
+                start = singleDate;
+                end = singleDate;
+            }
+            else
             {
                 continue;
             }
@@ -262,7 +346,9 @@ public sealed class CsvDataService
             {
                 Id = row[0],
                 EventId = row[1],
-                Date = date
+                Date = start,
+                Start = start,
+                End = end
             });
         }
     }
@@ -306,9 +392,17 @@ public sealed class CsvDataService
         {
             item.Id,
             item.Name,
+            item.City,
+            item.Country,
             item.Description,
-            FormatDate(item.Date),
+            FormatDecimal(item.AverageCost),
+            item.Attendance.ToString(),
+            FormatBool(item.IsCharitable),
             item.TypeId,
+            item.IconPath ?? string.Empty,
+            FormatDate(item.CurrentStart == default ? item.Date : item.CurrentStart),
+            FormatDate(item.CurrentEnd == default ? item.Date : item.CurrentEnd),
+            FormatBool(item.IsPlacedOnMap),
             FormatDouble(item.X),
             FormatDouble(item.Y),
             FormatBool(item.IsCompleted),
@@ -354,7 +448,8 @@ public sealed class CsvDataService
         {
             item.Id,
             item.EventId,
-            FormatDate(item.Date)
+            FormatDate(item.Start == default ? item.Date : item.Start),
+            FormatDate(item.End == default ? item.Date : item.End)
         }));
         WriteRows(PreviousDatesPath, rows);
     }
@@ -502,6 +597,21 @@ public sealed class CsvDataService
     private static string FormatDouble(double value)
     {
         return value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static bool TryParseDecimal(string value, out decimal result)
+    {
+        return decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out result);
+    }
+
+    private static string FormatDecimal(decimal value)
+    {
+        return value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static AttendanceCategory ParseAttendance(string value)
+    {
+        return Enum.TryParse(value, out AttendanceCategory attendance) ? attendance : AttendanceCategory.UpTo1000;
     }
 
     private static bool ParseBool(string value)

@@ -26,11 +26,11 @@ public sealed class MainWindowViewModel : ObservableObject
         ToggleMenuCommand = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
         ToggleThemeCommand = new RelayCommand(ToggleTheme);
         ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(), "MapLabel"));
-        ShowEventsCommand = new RelayCommand(() => Navigate(new EventListPage(), "EventsLabel"));
+        ShowEventsCommand = new RelayCommand(NavigateToEventList);
         ShowTypesCommand = new RelayCommand(NavigateToTypeList);
         ShowTagsCommand = new RelayCommand(NavigateToTagList);
         ShowSettingsCommand = new RelayCommand(() => Navigate(new SettingsPage(), "SettingsLabel"));
-        NewEventCommand = new RelayCommand(() => Navigate(new EventEditorPage(), "NewEventLabel"));
+        NewEventCommand = new RelayCommand(() => NavigateToEventEditor(null));
         NewTypeCommand = new RelayCommand(() => NavigateToTypeEditor(null));
         NewTagCommand = new RelayCommand(() => NavigateToTagEditor(null));
     }
@@ -97,6 +97,21 @@ public sealed class MainWindowViewModel : ObservableObject
     public void NavigateToTypeList()
     {
         Navigate(new TypeListPage(this), "TypesLabel");
+    }
+
+    public void NavigateToEventList()
+    {
+        Navigate(new EventListPage(this), "EventsLabel");
+    }
+
+    public void NavigateToEventEditor(Event? eventItem)
+    {
+        Navigate(new EventEditorPage(this, eventItem), eventItem is null ? "NewEventLabel" : "EventEditorLabel");
+    }
+
+    public void NavigateToEventDetails(Event eventItem)
+    {
+        Navigate(new EventDetailsPage(this, eventItem), "EventDetailsLabel");
     }
 
     public void NavigateToTypeEditor(EventType? type)

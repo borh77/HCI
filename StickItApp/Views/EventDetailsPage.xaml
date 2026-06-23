@@ -1,12 +1,59 @@
 <UserControl x:Class="StickItApp.Views.EventDetailsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Background="{DynamicResource ContentBrush}">
-        <TextBlock Text="{DynamicResource EventDetailsLabel}"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="{DynamicResource TextBrush}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-    </Grid>
+    <ScrollViewer Background="{DynamicResource ContentBrush}" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="14">
+            <TextBlock Text="{Binding Event.Name}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.Id}" Foreground="{DynamicResource MutedTextBrush}" />
+
+            <Border Height="110" Margin="0,10,0,0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8">
+                <Image Source="{Binding IconPreviewPath}" Stretch="Uniform" Margin="8" />
+            </Border>
+
+            <TextBlock Text="{Binding Event.Description}" Margin="0,12,0,0" TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.City}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.Country}" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding DateText}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.AverageCost, StringFormat=Average cost: {0}}" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.Attendance, StringFormat=Attendance: {0}}" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Event.IsCharitable, StringFormat=Charitable: {0}}" Foreground="{DynamicResource TextBrush}" />
+            <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" />
+
+            <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+            <ItemsControl ItemsSource="{Binding Tags}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="Previous Dates" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+            <ItemsControl ItemsSource="{Binding PreviousDates}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="{DynamicResource TextBrush}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0:yyyy-MM-dd} - {1:yyyy-MM-dd}">
+                                    <Binding Path="Start" />
+                                    <Binding Path="End" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Height="38" Margin="0,0,4,0" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
+                <Button Grid.Column="1" Height="38" Margin="4,0,4,0" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
+                <Button Grid.Column="2" Height="38" Margin="4,0,0,0" Content="Back" Command="{Binding BackCommand}" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

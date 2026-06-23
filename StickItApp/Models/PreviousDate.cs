@@ -7,4 +7,8 @@ public sealed class PreviousDate
     public string EventId { get; set; } = string.Empty;
 
     public DateTime Date { get; set; }
+
+    public DateTime Start { get; set; }
+
+    public DateTime End { get; set; }
 }
