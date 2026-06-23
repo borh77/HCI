@@ -1,0 +1,17 @@
+<UserControl x:Class="StickItApp.Views.MapPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{DynamicResource ContentBrush}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Map"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextBrush}"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="Event map placeholder"
+                       Margin="0,8,0,0"
+                       Foreground="{DynamicResource MutedTextBrush}"
+                       HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

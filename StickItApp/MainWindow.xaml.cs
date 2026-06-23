@@ -1,0 +1,13 @@
+using System.Windows;
+using StickItApp.ViewModels;
+
+namespace StickItApp;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        DataContext = new MainWindowViewModel();
+    }
+}

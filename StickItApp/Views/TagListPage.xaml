@@ -1,0 +1,12 @@
+<UserControl x:Class="StickItApp.Views.TagListPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{DynamicResource ContentBrush}">
+        <TextBlock Text="Tags"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource TextBrush}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+    </Grid>
+</UserControl>
