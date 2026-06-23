@@ -359,7 +359,7 @@ public sealed class CsvDataService
         WriteRows(PreviousDatesPath, rows);
     }
 
-    private void SaveSettings(AppSettings settings)
+    public void SaveSettings(AppSettings settings)
     {
         WriteRows(SettingsPath,
         [

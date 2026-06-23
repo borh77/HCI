@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Background="{DynamicResource ContentBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Settings"
+            <TextBlock Text="{DynamicResource SettingsLabel}"
                        FontSize="28"
                        FontWeight="Bold"
                        Foreground="{DynamicResource TextBrush}"
                        HorizontalAlignment="Center" />
-            <TextBlock Text="Language and theme settings placeholder"
+            <TextBlock Text="{DynamicResource SettingsPlaceholder}"
                        Margin="0,8,0,0"
                        Foreground="{DynamicResource MutedTextBrush}"
                        HorizontalAlignment="Center"

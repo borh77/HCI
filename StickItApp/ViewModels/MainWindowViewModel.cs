@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using StickItApp.Commands;
+using StickItApp.Services;
 using StickItApp.Views;
 
 namespace StickItApp.ViewModels;
@@ -10,25 +11,27 @@ public sealed class MainWindowViewModel : ObservableObject
 {
     private bool _isMenuOpen = true;
     private UserControl _currentPage;
-    private string _currentPageTitle;
-    private string _selectedLanguage = "EN";
+    private string _currentPageTitleKey;
+    private string _selectedLanguage;
     private bool _isDarkTheme;
 
     public MainWindowViewModel()
     {
         _currentPage = new MapPage();
-        _currentPageTitle = "Map";
+        _currentPageTitleKey = "MapLabel";
+        _selectedLanguage = PersonalizationService.NormalizeLanguage(App.DataStore.Settings.Language);
+        _isDarkTheme = PersonalizationService.NormalizeTheme(App.DataStore.Settings.Theme) == "Dark";
 
         ToggleMenuCommand = new RelayCommand(() => IsMenuOpen = !IsMenuOpen);
         ToggleThemeCommand = new RelayCommand(ToggleTheme);
-        ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(), "Map"));
-        ShowEventsCommand = new RelayCommand(() => Navigate(new EventListPage(), "Events"));
-        ShowTypesCommand = new RelayCommand(() => Navigate(new TypeListPage(), "Types"));
-        ShowTagsCommand = new RelayCommand(() => Navigate(new TagListPage(), "Tags"));
-        ShowSettingsCommand = new RelayCommand(() => Navigate(new SettingsPage(), "Settings"));
-        NewEventCommand = new RelayCommand(() => Navigate(new EventEditorPage(), "New Event"));
-        NewTypeCommand = new RelayCommand(() => Navigate(new TypeEditorPage(), "New Type"));
-        NewTagCommand = new RelayCommand(() => Navigate(new TagEditorPage(), "New Tag"));
+        ShowMapCommand = new RelayCommand(() => Navigate(new MapPage(), "MapLabel"));
+        ShowEventsCommand = new RelayCommand(() => Navigate(new EventListPage(), "EventsLabel"));
+        ShowTypesCommand = new RelayCommand(() => Navigate(new TypeListPage(), "TypesLabel"));
+        ShowTagsCommand = new RelayCommand(() => Navigate(new TagListPage(), "TagsLabel"));
+        ShowSettingsCommand = new RelayCommand(() => Navigate(new SettingsPage(), "SettingsLabel"));
+        NewEventCommand = new RelayCommand(() => Navigate(new EventEditorPage(), "NewEventLabel"));
+        NewTypeCommand = new RelayCommand(() => Navigate(new TypeEditorPage(), "NewTypeLabel"));
+        NewTagCommand = new RelayCommand(() => Navigate(new TagEditorPage(), "NewTagLabel"));
     }
 
     public bool IsMenuOpen
@@ -51,19 +54,26 @@ public sealed class MainWindowViewModel : ObservableObject
         private set => SetProperty(ref _currentPage, value);
     }
 
-    public string CurrentPageTitle
-    {
-        get => _currentPageTitle;
-        private set => SetProperty(ref _currentPageTitle, value);
-    }
+    public string CurrentPageTitle => GetString(_currentPageTitleKey);
 
     public string SelectedLanguage
     {
         get => _selectedLanguage;
-        set => SetProperty(ref _selectedLanguage, value);
+        set
+        {
+            string normalizedLanguage = PersonalizationService.NormalizeLanguage(value);
+            if (SetProperty(ref _selectedLanguage, normalizedLanguage))
+            {
+                App.DataStore.Settings.Language = normalizedLanguage;
+                App.DataService.SaveSettings(App.DataStore.Settings);
+                PersonalizationService.ApplyLanguage(normalizedLanguage);
+                OnPropertyChanged(nameof(CurrentPageTitle));
+                OnPropertyChanged(nameof(ThemeButtonText));
+            }
+        }
     }
 
-    public string ThemeButtonText => _isDarkTheme ? "Dark" : "Light";
+    public string ThemeButtonText => _isDarkTheme ? GetString("DarkThemeLabel") : GetString("LightThemeLabel");
 
     public ICommand ToggleMenuCommand { get; }
     public ICommand ToggleThemeCommand { get; }
@@ -76,15 +86,25 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand NewTypeCommand { get; }
     public ICommand NewTagCommand { get; }
 
-    private void Navigate(UserControl page, string title)
+    private void Navigate(UserControl page, string titleKey)
     {
         CurrentPage = page;
-        CurrentPageTitle = title;
+        _currentPageTitleKey = titleKey;
+        OnPropertyChanged(nameof(CurrentPageTitle));
     }
 
     private void ToggleTheme()
     {
         _isDarkTheme = !_isDarkTheme;
+        string theme = _isDarkTheme ? "Dark" : "Light";
+        App.DataStore.Settings.Theme = theme;
+        App.DataService.SaveSettings(App.DataStore.Settings);
+        PersonalizationService.ApplyTheme(theme);
         OnPropertyChanged(nameof(ThemeButtonText));
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

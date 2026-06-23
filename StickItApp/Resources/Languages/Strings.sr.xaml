@@ -2,4 +2,31 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="ApplicationName">StickItApp</sys:String>
+    <sys:String x:Key="MenuLabel">Meni</sys:String>
+    <sys:String x:Key="MapLabel">Mapa</sys:String>
+    <sys:String x:Key="EventsLabel">Dogadjaji</sys:String>
+    <sys:String x:Key="TypesLabel">Tipovi</sys:String>
+    <sys:String x:Key="TagsLabel">Oznake</sys:String>
+    <sys:String x:Key="SearchLabel">Pretraga</sys:String>
+    <sys:String x:Key="SettingsLabel">Podesavanja</sys:String>
+    <sys:String x:Key="AddLabel">Dodaj</sys:String>
+    <sys:String x:Key="NewEventLabel">Novi dogadjaj</sys:String>
+    <sys:String x:Key="NewTypeLabel">Novi tip</sys:String>
+    <sys:String x:Key="NewTagLabel">Nova oznaka</sys:String>
+    <sys:String x:Key="SaveLabel">Sacuvaj</sys:String>
+    <sys:String x:Key="CancelLabel">Otkazi</sys:String>
+    <sys:String x:Key="DeleteLabel">Obrisi</sys:String>
+    <sys:String x:Key="EditLabel">Izmeni</sys:String>
+    <sys:String x:Key="DetailsLabel">Detalji</sys:String>
+    <sys:String x:Key="ResetLabel">Resetuj</sys:String>
+    <sys:String x:Key="SortLabel">Sortiraj</sys:String>
+    <sys:String x:Key="FilterLabel">Filtriraj</sys:String>
+    <sys:String x:Key="LightThemeLabel">Svetla</sys:String>
+    <sys:String x:Key="DarkThemeLabel">Tamna</sys:String>
+    <sys:String x:Key="EventMapPlaceholder">Privremeni prikaz mape dogadjaja</sys:String>
+    <sys:String x:Key="EventEditorLabel">Uredjivanje dogadjaja</sys:String>
+    <sys:String x:Key="EventDetailsLabel">Detalji dogadjaja</sys:String>
+    <sys:String x:Key="TypeEditorLabel">Uredjivanje tipa</sys:String>
+    <sys:String x:Key="TagEditorLabel">Uredjivanje oznake</sys:String>
+    <sys:String x:Key="SettingsPlaceholder">Privremeni prikaz podesavanja jezika i teme</sys:String>
 </ResourceDictionary>

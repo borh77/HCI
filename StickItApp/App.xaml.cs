@@ -14,6 +14,7 @@ public partial class App : Application
         DataService = new CsvDataService();
         DataService.Initialize();
         DataStore = DataService.LoadAll();
+        PersonalizationService.Apply(DataStore.Settings);
 
         base.OnStartup(e);
     }

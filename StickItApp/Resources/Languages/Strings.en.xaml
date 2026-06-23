@@ -2,4 +2,31 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="ApplicationName">StickItApp</sys:String>
+    <sys:String x:Key="MenuLabel">Menu</sys:String>
+    <sys:String x:Key="MapLabel">Map</sys:String>
+    <sys:String x:Key="EventsLabel">Events</sys:String>
+    <sys:String x:Key="TypesLabel">Types</sys:String>
+    <sys:String x:Key="TagsLabel">Tags</sys:String>
+    <sys:String x:Key="SearchLabel">Search</sys:String>
+    <sys:String x:Key="SettingsLabel">Settings</sys:String>
+    <sys:String x:Key="AddLabel">Add</sys:String>
+    <sys:String x:Key="NewEventLabel">New Event</sys:String>
+    <sys:String x:Key="NewTypeLabel">New Type</sys:String>
+    <sys:String x:Key="NewTagLabel">New Tag</sys:String>
+    <sys:String x:Key="SaveLabel">Save</sys:String>
+    <sys:String x:Key="CancelLabel">Cancel</sys:String>
+    <sys:String x:Key="DeleteLabel">Delete</sys:String>
+    <sys:String x:Key="EditLabel">Edit</sys:String>
+    <sys:String x:Key="DetailsLabel">Details</sys:String>
+    <sys:String x:Key="ResetLabel">Reset</sys:String>
+    <sys:String x:Key="SortLabel">Sort</sys:String>
+    <sys:String x:Key="FilterLabel">Filter</sys:String>
+    <sys:String x:Key="LightThemeLabel">Light</sys:String>
+    <sys:String x:Key="DarkThemeLabel">Dark</sys:String>
+    <sys:String x:Key="EventMapPlaceholder">Event map placeholder</sys:String>
+    <sys:String x:Key="EventEditorLabel">Event Editor</sys:String>
+    <sys:String x:Key="EventDetailsLabel">Event Details</sys:String>
+    <sys:String x:Key="TypeEditorLabel">Type Editor</sys:String>
+    <sys:String x:Key="TagEditorLabel">Tag Editor</sys:String>
+    <sys:String x:Key="SettingsPlaceholder">Language and theme settings placeholder</sys:String>
 </ResourceDictionary>
