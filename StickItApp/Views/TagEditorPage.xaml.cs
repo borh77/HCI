@@ -4,7 +4,7 @@ using StickItApp.ViewModels;
 
 namespace StickItApp.Views;
 
-public partial class TagEditorPage : UserControl
+public partial class TagEditorPage : UserControl, IShortcutAwarePage
 {
     public TagEditorPage()
     {
@@ -15,5 +15,26 @@ public partial class TagEditorPage : UserControl
         : this()
     {
         DataContext = new TagEditorViewModel(mainViewModel.NavigateToTagList, tag);
+    }
+
+    public bool FocusPrimarySearch()
+    {
+        return false;
+    }
+
+    public bool ResetFilters()
+    {
+        return false;
+    }
+
+    public bool CancelOrBack()
+    {
+        if (DataContext is TagEditorViewModel viewModel)
+        {
+            viewModel.CancelCommand.Execute(null);
+            return true;
+        }
+
+        return false;
     }
 }

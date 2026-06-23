@@ -5,7 +5,7 @@ using StickItApp.ViewModels;
 
 namespace StickItApp.Views;
 
-public partial class MapPage : UserControl
+public partial class MapPage : UserControl, IShortcutAwarePage
 {
     private const string DragFormat = "StickItApp.MapEvent";
 
@@ -85,5 +85,34 @@ public partial class MapPage : UserControl
             viewModel.ReturnToList(item);
             e.Handled = true;
         }
+    }
+
+    public bool FocusPrimarySearch()
+    {
+        MapFilterTextBox.Focus();
+        MapFilterTextBox.SelectAll();
+        return true;
+    }
+
+    public bool ResetFilters()
+    {
+        if (DataContext is MapViewModel viewModel)
+        {
+            viewModel.ResetFilterCommand.Execute(null);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CancelOrBack()
+    {
+        if (DataContext is MapViewModel { SelectedEvent: not null } viewModel)
+        {
+            viewModel.SelectedEvent = null;
+            return true;
+        }
+
+        return false;
     }
 }

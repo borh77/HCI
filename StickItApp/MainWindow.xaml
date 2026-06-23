@@ -112,6 +112,7 @@
                         <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource EventsLabel}" Command="{Binding ShowEventsCommand}" />
                         <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource TypesLabel}" Command="{Binding ShowTypesCommand}" />
                         <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource TagsLabel}" Command="{Binding ShowTagsCommand}" />
+                        <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource SearchLabel}" Command="{Binding ShowSearchCommand}" />
                         <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource SettingsLabel}" Command="{Binding ShowSettingsCommand}" />
                         <Separator Margin="8,10" />
                         <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource NewEventLabel}" Command="{Binding NewEventCommand}" />

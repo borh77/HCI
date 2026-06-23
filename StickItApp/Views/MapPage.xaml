@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBox Height="32"
+            <TextBox x:Name="MapFilterTextBox"
+                     Height="32"
                      Padding="8,4"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
             <Grid Margin="0,8,0,6">
@@ -36,10 +37,12 @@
                            VerticalAlignment="Center" />
                 <Button Grid.Column="1"
                         Style="{StaticResource MapActionButtonStyle}"
+                        ToolTip="{DynamicResource ResetFilterLabel}"
                         Content="{DynamicResource ResetLabel}"
                         Command="{Binding ResetFilterCommand}" />
                 <Button Grid.Column="2"
                         Style="{StaticResource MapActionButtonStyle}"
+                        ToolTip="{DynamicResource ClearMapLabel}"
                         Content="{DynamicResource ClearMapLabel}"
                         Command="{Binding ClearMapCommand}" />
             </Grid>
@@ -136,9 +139,9 @@
                             <TextBlock Text="{Binding Location}" Foreground="{DynamicResource TextBrush}" FontSize="12" />
                             <TextBlock Text="{Binding TypeName}" Foreground="{DynamicResource MutedTextBrush}" FontSize="12" />
                             <WrapPanel HorizontalAlignment="Right" Margin="0,8,0,0" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource DetailsLabel}" Command="{Binding DetailsCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Content="{DynamicResource DetailsLabel}" Command="{Binding DetailsCommand}" />
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource EditLabel}" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DeleteLabel}" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
                                 <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource BackToListLabel}" Command="{Binding BackToListCommand}" />
                             </WrapPanel>
                         </StackPanel>

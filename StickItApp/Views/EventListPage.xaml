@@ -23,14 +23,14 @@
         <TextBlock Grid.Row="0" Text="{DynamicResource EventsLabel}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" />
 
         <StackPanel Grid.Row="1" Margin="0,10,0,8">
-            <TextBox Height="32" Padding="8,4" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox x:Name="FilterTextBox" Height="32" Padding="8,4" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
             <Grid Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" />
-                <Button Grid.Column="1" Style="{StaticResource SmallButtonStyle}" Content="{DynamicResource ResetLabel}" Command="{Binding ResetFilterCommand}" />
+                <Button Grid.Column="1" Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource ResetFilterLabel}" Content="{DynamicResource ResetLabel}" Command="{Binding ResetFilterCommand}" />
             </Grid>
         </StackPanel>
 
@@ -57,9 +57,9 @@
                                     <TextBlock Text="{Binding Attendance}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
 
                                     <WrapPanel HorizontalAlignment="Right" Margin="0,6,0,0">
-                                        <Button Style="{StaticResource SmallButtonStyle}" Content="{DynamicResource DetailsLabel}" Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
-                                        <Button Style="{StaticResource SmallButtonStyle}" Content="{DynamicResource EditLabel}" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
-                                        <Button Style="{StaticResource SmallButtonStyle}" Content="{DynamicResource DeleteLabel}" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                        <Button Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Content="{DynamicResource DetailsLabel}" Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                        <Button Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource EditLabel}" Content="{DynamicResource EditLabel}" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                        <Button Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource DeleteLabel}" Content="{DynamicResource DeleteLabel}" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
                                         <Button Content="{DynamicResource PutOnMapLabel}" Command="{Binding DataContext.ToggleMapCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}">
                                             <Button.Style>
                                                 <Style TargetType="Button" BasedOn="{StaticResource SmallButtonStyle}">

@@ -3,7 +3,7 @@ using StickItApp.ViewModels;
 
 namespace StickItApp.Views;
 
-public partial class TagListPage : UserControl
+public partial class TagListPage : UserControl, IShortcutAwarePage
 {
     public TagListPage()
     {
@@ -16,5 +16,28 @@ public partial class TagListPage : UserControl
         DataContext = new TagListViewModel(
             () => mainViewModel.NavigateToTagEditor(null),
             mainViewModel.NavigateToTagEditor);
+    }
+
+    public bool FocusPrimarySearch()
+    {
+        FilterTextBox.Focus();
+        FilterTextBox.SelectAll();
+        return true;
+    }
+
+    public bool ResetFilters()
+    {
+        if (DataContext is TagListViewModel viewModel)
+        {
+            viewModel.ResetFilterCommand.Execute(null);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CancelOrBack()
+    {
+        return false;
     }
 }

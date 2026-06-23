@@ -4,7 +4,7 @@ using StickItApp.ViewModels;
 
 namespace StickItApp.Views;
 
-public partial class TypeEditorPage : UserControl
+public partial class TypeEditorPage : UserControl, IShortcutAwarePage
 {
     public TypeEditorPage()
     {
@@ -15,5 +15,26 @@ public partial class TypeEditorPage : UserControl
         : this()
     {
         DataContext = new TypeEditorViewModel(mainViewModel.NavigateToTypeList, type);
+    }
+
+    public bool FocusPrimarySearch()
+    {
+        return false;
+    }
+
+    public bool ResetFilters()
+    {
+        return false;
+    }
+
+    public bool CancelOrBack()
+    {
+        if (DataContext is TypeEditorViewModel viewModel)
+        {
+            viewModel.CancelCommand.Execute(null);
+            return true;
+        }
+
+        return false;
     }
 }

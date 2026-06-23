@@ -1,0 +1,167 @@
+<UserControl x:Class="StickItApp.Views.SearchPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="SmallButtonStyle" TargetType="Button">
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource ContentBrush}" Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{DynamicResource SearchLabel}"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextBrush}" />
+
+            <TextBlock Text="{DynamicResource NameLabel}" Margin="0,8,0,2" Foreground="{DynamicResource TextBrush}" />
+            <TextBox x:Name="PrimarySearchBox"
+                     Height="30"
+                     Padding="8,3"
+                     Text="{Binding EventName, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Grid Margin="0,6,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="{DynamicResource DescriptionLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="30" Padding="8,3" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="{DynamicResource TagsLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="30" Padding="8,3" Text="{Binding TagsSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,6,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="{DynamicResource TypeLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <ComboBox Height="30" ItemsSource="{Binding TypeOptions}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <ComboBox Height="30" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding SelectedAttendance}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,6,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="{DynamicResource LocationLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <TextBox Height="30" Padding="8,3" Text="{Binding LocationText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="{DynamicResource CharitableLabel}" Foreground="{DynamicResource TextBrush}" />
+                    <ComboBox Height="30" ItemsSource="{Binding CharitableOptions}" SelectedItem="{Binding SelectedCharitable}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,8,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Height="34"
+                        Margin="0,0,5,0"
+                        Content="{DynamicResource SearchLabel}"
+                        Command="{Binding SearchCommand}" />
+                <Button Grid.Column="1"
+                        Height="34"
+                        Margin="5,0,0,0"
+                        ToolTip="{DynamicResource ResetFilterLabel}"
+                        Content="{DynamicResource ResetLabel}"
+                        Command="{Binding ResetCommand}" />
+            </Grid>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Results}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="52" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Width="42" Height="42" Background="{Binding TypeColorHex}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6">
+                                    <Image Source="{Binding IconPath}" Stretch="Uniform" Margin="5" />
+                                </Border>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding Id}" FontSize="11" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                                    <TextBlock Text="{Binding Location}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding Attendance}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
+
+                                    <WrapPanel HorizontalAlignment="Right" Margin="0,6,0,0">
+                                        <Button Style="{StaticResource SmallButtonStyle}"
+                                                ToolTip="{DynamicResource DetailsLabel}"
+                                                Content="{DynamicResource DetailsLabel}"
+                                                Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Style="{StaticResource SmallButtonStyle}"
+                                                ToolTip="{DynamicResource EditLabel}"
+                                                Content="{DynamicResource EditLabel}"
+                                                Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Content="{DynamicResource PutOnMapLabel}"
+                                                Command="{Binding DataContext.ToggleMapCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource SmallButtonStyle}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsPlacedOnMap}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Content="{DynamicResource RemoveFromMapLabel}"
+                                                Command="{Binding DataContext.ToggleMapCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource SmallButtonStyle}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsPlacedOnMap}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

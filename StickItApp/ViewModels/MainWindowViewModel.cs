@@ -29,6 +29,7 @@ public sealed class MainWindowViewModel : ObservableObject
         ShowEventsCommand = new RelayCommand(NavigateToEventList);
         ShowTypesCommand = new RelayCommand(NavigateToTypeList);
         ShowTagsCommand = new RelayCommand(NavigateToTagList);
+        ShowSearchCommand = new RelayCommand(NavigateToSearch);
         ShowSettingsCommand = new RelayCommand(() => Navigate(new SettingsPage(), "SettingsLabel"));
         NewEventCommand = new RelayCommand(() => NavigateToEventEditor(null));
         NewTypeCommand = new RelayCommand(() => NavigateToTypeEditor(null));
@@ -82,6 +83,7 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand ShowEventsCommand { get; }
     public ICommand ShowTypesCommand { get; }
     public ICommand ShowTagsCommand { get; }
+    public ICommand ShowSearchCommand { get; }
     public ICommand ShowSettingsCommand { get; }
     public ICommand NewEventCommand { get; }
     public ICommand NewTypeCommand { get; }
@@ -102,6 +104,11 @@ public sealed class MainWindowViewModel : ObservableObject
     public void NavigateToEventList()
     {
         Navigate(new EventListPage(this), "EventsLabel");
+    }
+
+    public void NavigateToSearch()
+    {
+        Navigate(new SearchPage(this), "SearchLabel");
     }
 
     public void NavigateToEventEditor(Event? eventItem)
