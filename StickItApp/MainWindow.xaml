@@ -37,6 +37,14 @@
             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
+        <Style x:Key="StatusTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsStatusError}" Value="True">
+                    <Setter Property="Foreground" Value="#DC2626" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Border Margin="12"
@@ -48,6 +56,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="64" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0"
@@ -126,6 +135,19 @@
                     <ContentControl Content="{Binding CurrentPage}" />
                 </Border>
             </Grid>
+
+            <Border Grid.Row="2"
+                    Margin="12,0,12,12"
+                    Padding="10,8"
+                    Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Visibility="{Binding HasStatusMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="{Binding StatusMessage}"
+                           Style="{StaticResource StatusTextStyle}"
+                           TextWrapping="Wrap" />
+            </Border>
         </Grid>
     </Border>
 </Window>

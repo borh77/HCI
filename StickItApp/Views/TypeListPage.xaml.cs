@@ -15,7 +15,8 @@ public partial class TypeListPage : UserControl, IShortcutAwarePage
     {
         DataContext = new TypeListViewModel(
             () => mainViewModel.NavigateToTypeEditor(null),
-            mainViewModel.NavigateToTypeEditor);
+            mainViewModel.NavigateToTypeEditor,
+            mainViewModel.SetStatus);
     }
 
     public bool FocusPrimarySearch()

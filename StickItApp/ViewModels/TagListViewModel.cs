@@ -11,13 +11,15 @@ public sealed class TagListViewModel : ObservableObject
 {
     private readonly Action _addTag;
     private readonly Action<Tag> _editTag;
+    private readonly Action<string, bool>? _showStatus;
     private string _filterText = string.Empty;
     private string _selectedSortMode = "Code";
 
-    public TagListViewModel(Action addTag, Action<Tag> editTag)
+    public TagListViewModel(Action addTag, Action<Tag> editTag, Action<string, bool>? showStatus = null)
     {
         _addTag = addTag;
         _editTag = editTag;
+        _showStatus = showStatus;
         TagsView = CollectionViewSource.GetDefaultView(App.DataStore.Tags);
         TagsView.Filter = FilterTag;
         ApplySort();
@@ -117,5 +119,6 @@ public sealed class TagListViewModel : ObservableObject
         App.DataService.SaveAll(App.DataStore);
         TagsView.Refresh();
         MessageBox.Show("Tag deleted. Related event-tag links were removed.", "Delete tag", MessageBoxButton.OK, MessageBoxImage.Information);
+        _showStatus?.Invoke($"Tag '{tag.Name}' deleted.", false);
     }
 }

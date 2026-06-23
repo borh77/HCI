@@ -15,6 +15,8 @@ public sealed class MainWindowViewModel : ObservableObject
     private string _currentPageTitleKey;
     private string _selectedLanguage;
     private bool _isDarkTheme;
+    private string _statusMessage = string.Empty;
+    private bool _isStatusError;
 
     public MainWindowViewModel()
     {
@@ -77,6 +79,20 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public string ThemeButtonText => _isDarkTheme ? GetString("DarkThemeLabel") : GetString("LightThemeLabel");
 
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        private set => SetProperty(ref _statusMessage, value);
+    }
+
+    public bool IsStatusError
+    {
+        get => _isStatusError;
+        private set => SetProperty(ref _isStatusError, value);
+    }
+
+    public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
+
     public ICommand ToggleMenuCommand { get; }
     public ICommand ToggleThemeCommand { get; }
     public ICommand ShowMapCommand { get; }
@@ -134,6 +150,13 @@ public sealed class MainWindowViewModel : ObservableObject
     public void NavigateToTagEditor(Tag? tag)
     {
         Navigate(new TagEditorPage(this, tag), tag is null ? "NewTagLabel" : "TagEditorLabel");
+    }
+
+    public void SetStatus(string message, bool isError = false)
+    {
+        StatusMessage = message;
+        IsStatusError = isError;
+        OnPropertyChanged(nameof(HasStatusMessage));
     }
 
     private void ToggleTheme()

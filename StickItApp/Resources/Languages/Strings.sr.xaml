@@ -28,6 +28,9 @@
     <sys:String x:Key="EventDetailsLabel">Detalji dogadjaja</sys:String>
     <sys:String x:Key="TypeEditorLabel">Uredjivanje tipa</sys:String>
     <sys:String x:Key="TagEditorLabel">Uredjivanje oznake</sys:String>
+    <sys:String x:Key="EditEventLabel">Uredjivanje dogadjaja</sys:String>
+    <sys:String x:Key="EditTypeLabel">Uredjivanje tipa</sys:String>
+    <sys:String x:Key="EditTagLabel">Uredjivanje oznake</sys:String>
     <sys:String x:Key="SettingsPlaceholder">Privremeni prikaz podesavanja jezika i teme</sys:String>
     <sys:String x:Key="CodeLabel">Sifra</sys:String>
     <sys:String x:Key="NameLabel">Naziv</sys:String>
@@ -65,4 +68,5 @@
     <sys:String x:Key="ClearMapLabel">Ocisti mapu</sys:String>
     <sys:String x:Key="BackToListLabel">Vrati u listu</sys:String>
     <sys:String x:Key="ResetFilterLabel">Resetuj filter</sys:String>
+    <sys:String x:Key="NoOverlapMessage">Dogadjaji ne mogu da se preklapaju na mapi.</sys:String>
 </ResourceDictionary>

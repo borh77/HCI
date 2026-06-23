@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
@@ -10,12 +11,14 @@ public sealed class EventDetailsViewModel : ObservableObject
 {
     private readonly Action _backToList;
     private readonly Action<Event> _editEvent;
+    private readonly Action<string, bool>? _showStatus;
 
-    public EventDetailsViewModel(Event eventItem, Action backToList, Action<Event> editEvent)
+    public EventDetailsViewModel(Event eventItem, Action backToList, Action<Event> editEvent, Action<string, bool>? showStatus = null)
     {
         Event = eventItem;
         _backToList = backToList;
         _editEvent = editEvent;
+        _showStatus = showStatus;
         Tags = new ObservableCollection<Tag>(
             App.DataStore.EventTags
                 .Where(relation => relation.EventId == Event.Id)
@@ -64,6 +67,17 @@ public sealed class EventDetailsViewModel : ObservableObject
 
     private void Delete()
     {
+        MessageBoxResult result = MessageBox.Show(
+            $"Delete event '{Event.Name}'?",
+            "Delete event",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
         App.DataStore.Events.Remove(Event);
         foreach (EventTag relation in App.DataStore.EventTags.Where(item => item.EventId == Event.Id).ToList())
         {
@@ -76,6 +90,7 @@ public sealed class EventDetailsViewModel : ObservableObject
         }
 
         App.DataService.SaveAll(App.DataStore);
+        _showStatus?.Invoke($"Event '{Event.Name}' deleted.", false);
         _backToList();
     }
 

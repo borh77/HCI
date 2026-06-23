@@ -15,7 +15,8 @@ public partial class TagListPage : UserControl, IShortcutAwarePage
     {
         DataContext = new TagListViewModel(
             () => mainViewModel.NavigateToTagEditor(null),
-            mainViewModel.NavigateToTagEditor);
+            mainViewModel.NavigateToTagEditor,
+            mainViewModel.SetStatus);
     }
 
     public bool FocusPrimarySearch()

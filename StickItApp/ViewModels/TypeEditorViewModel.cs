@@ -36,7 +36,7 @@ public sealed class TypeEditorViewModel : ObservableObject
         RemoveImageCommand = new RelayCommand(() => IconKey = string.Empty);
     }
 
-    public string PageTitle => _originalId is null ? "New Type" : "Edit Type";
+    public string PageTitle => _originalId is null ? GetString("NewTypeLabel") : GetString("EditTypeLabel");
 
     public string Code
     {
@@ -200,5 +200,10 @@ public sealed class TypeEditorViewModel : ObservableObject
         }
 
         return Path.Combine(AppContext.BaseDirectory, path);
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

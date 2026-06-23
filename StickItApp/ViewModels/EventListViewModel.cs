@@ -13,14 +13,16 @@ public sealed class EventListViewModel : ObservableObject
     private readonly Action _addEvent;
     private readonly Action<Event> _editEvent;
     private readonly Action<Event> _showDetails;
+    private readonly Action<string, bool>? _showStatus;
     private string _filterText = string.Empty;
     private string _selectedSortMode = "Name";
 
-    public EventListViewModel(Action addEvent, Action<Event> editEvent, Action<Event> showDetails)
+    public EventListViewModel(Action addEvent, Action<Event> editEvent, Action<Event> showDetails, Action<string, bool>? showStatus = null)
     {
         _addEvent = addEvent;
         _editEvent = editEvent;
         _showDetails = showDetails;
+        _showStatus = showStatus;
 
         RebuildItems();
         EventsView = CollectionViewSource.GetDefaultView(Items);
@@ -139,11 +141,23 @@ public sealed class EventListViewModel : ObservableObject
             return;
         }
 
+        MessageBoxResult result = MessageBox.Show(
+            $"Delete event '{item.Name}'?",
+            "Delete event",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
         App.DataStore.Events.Remove(item.Event);
         RemoveRelations(item.Event.Id);
         App.DataService.SaveAll(App.DataStore);
         Items.Remove(item);
         EventsView.Refresh();
+        _showStatus?.Invoke($"Event '{item.Name}' deleted.", false);
     }
 
     private void ToggleMap(object? parameter)

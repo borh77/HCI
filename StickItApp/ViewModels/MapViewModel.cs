@@ -10,13 +10,15 @@ public sealed class MapViewModel : ObservableObject
     public const double IconSize = 48;
 
     private readonly MainWindowViewModel _shell;
+    private readonly Action<string, bool>? _showStatus;
     private string _filterText = string.Empty;
     private string _message = string.Empty;
     private MapEventViewModel? _selectedEvent;
 
-    public MapViewModel(MainWindowViewModel shell)
+    public MapViewModel(MainWindowViewModel shell, Action<string, bool>? showStatus = null)
     {
         _shell = shell;
+        _showStatus = showStatus;
 
         ResetFilterCommand = new RelayCommand(() => FilterText = string.Empty);
         ClearMapCommand = new RelayCommand(ClearMap);
@@ -90,7 +92,8 @@ public sealed class MapViewModel : ObservableObject
 
         if (OverlapsAnotherEvent(item.Event, clampedX, clampedY))
         {
-            Message = "Two events cannot be overlapping";
+            Message = "Events cannot overlap on the map.";
+            _showStatus?.Invoke(Message, true);
             item.SyncFromEvent();
             return false;
         }
@@ -102,6 +105,7 @@ public sealed class MapViewModel : ObservableObject
         item.X = clampedX;
         item.Y = clampedY;
         Message = string.Empty;
+        _showStatus?.Invoke(string.Empty, false);
         SaveAndRefresh(keepSelectedEventId: item.Event.Id);
         return true;
     }
@@ -113,6 +117,7 @@ public sealed class MapViewModel : ObservableObject
         item.Event.Y = 0;
         item.Event.UpdatedAt = DateTime.Today;
         Message = string.Empty;
+        _showStatus?.Invoke(string.Empty, false);
         SelectedEvent = null;
         SaveAndRefresh();
     }
@@ -212,6 +217,7 @@ public sealed class MapViewModel : ObservableObject
         }
 
         Message = string.Empty;
+        _showStatus?.Invoke($"Event '{SelectedEvent.Name}' deleted.", false);
         SaveAndRefresh();
     }
 

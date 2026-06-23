@@ -17,7 +17,8 @@ public partial class EventDetailsPage : UserControl, IShortcutAwarePage
         DataContext = new EventDetailsViewModel(
             eventItem,
             mainViewModel.NavigateToEventList,
-            mainViewModel.NavigateToEventEditor);
+            mainViewModel.NavigateToEventEditor,
+            mainViewModel.SetStatus);
     }
 
     public bool FocusPrimarySearch()

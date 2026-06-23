@@ -11,13 +11,15 @@ public sealed class TypeListViewModel : ObservableObject
 {
     private readonly Action _addType;
     private readonly Action<EventType> _editType;
+    private readonly Action<string, bool>? _showStatus;
     private string _filterText = string.Empty;
     private string _selectedSortMode = "Code";
 
-    public TypeListViewModel(Action addType, Action<EventType> editType)
+    public TypeListViewModel(Action addType, Action<EventType> editType, Action<string, bool>? showStatus = null)
     {
         _addType = addType;
         _editType = editType;
+        _showStatus = showStatus;
         TypesView = CollectionViewSource.GetDefaultView(App.DataStore.EventTypes);
         TypesView.Filter = FilterType;
         ApplySort();
@@ -122,5 +124,6 @@ public sealed class TypeListViewModel : ObservableObject
         App.DataService.SaveAll(App.DataStore);
         TypesView.Refresh();
         MessageBox.Show("Type deleted.", "Delete type", MessageBoxButton.OK, MessageBoxImage.Information);
+        _showStatus?.Invoke($"Type '{type.Name}' deleted.", false);
     }
 }

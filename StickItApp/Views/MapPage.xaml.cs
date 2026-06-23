@@ -20,7 +20,7 @@ public partial class MapPage : UserControl, IShortcutAwarePage
     public MapPage(MainWindowViewModel shell)
         : this()
     {
-        DataContext = new MapViewModel(shell);
+        DataContext = new MapViewModel(shell, shell.SetStatus);
     }
 
     private void EventCard_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

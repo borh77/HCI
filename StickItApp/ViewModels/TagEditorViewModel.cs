@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
@@ -37,7 +38,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
         });
     }
 
-    public string PageTitle => _originalId is null ? "New Tag" : "Edit Tag";
+    public string PageTitle => _originalId is null ? GetString("NewTagLabel") : GetString("EditTagLabel");
 
     public IReadOnlyList<string> PresetColors { get; } =
     [
@@ -157,4 +158,9 @@ public sealed partial class TagEditorViewModel : ObservableObject
 
     [GeneratedRegex("^#[0-9A-Fa-f]{6}$")]
     private static partial Regex HexColorRegex();
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
 }

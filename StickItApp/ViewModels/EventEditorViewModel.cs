@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -61,7 +62,7 @@ public sealed class EventEditorViewModel : ObservableObject
         RemovePreviousDateCommand = new RelayCommand(RemovePreviousDate);
     }
 
-    public string PageTitle => _originalId is null ? "New Event" : "Edit Event";
+    public string PageTitle => _originalId is null ? GetString("NewEventLabel") : GetString("EditEventLabel");
 
     public IReadOnlyList<AttendanceCategory> AttendanceOptions { get; } = Enum.GetValues<AttendanceCategory>();
 
@@ -506,5 +507,10 @@ public sealed class EventEditorViewModel : ObservableObject
         }
 
         return Path.Combine(AppContext.BaseDirectory, path);
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }
