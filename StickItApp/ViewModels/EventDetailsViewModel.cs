@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
@@ -53,14 +52,13 @@ public sealed class EventDetailsViewModel : ObservableObject
     {
         get
         {
-            string eventIcon = ResolvePath(Event.IconPath ?? string.Empty);
-            if (File.Exists(eventIcon))
+            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
+            if (!string.IsNullOrWhiteSpace(eventIcon))
             {
                 return eventIcon;
             }
 
-            string typeIcon = ResolvePath(Type?.IconKey ?? string.Empty);
-            return File.Exists(typeIcon) ? typeIcon : string.Empty;
+            return ImagePathService.ToImageSourcePath(Type?.IconKey);
         }
     }
 
@@ -97,16 +95,6 @@ public sealed class EventDetailsViewModel : ObservableObject
         App.DataService.SaveAll(App.DataStore);
         _showStatus?.Invoke($"Event '{Event.Name}' deleted.", false);
         _backToList();
-    }
-
-    private static string ResolvePath(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
-        {
-            return path;
-        }
-
-        return Path.Combine(AppContext.BaseDirectory, path);
     }
 
     private static string GetString(string resourceKey)

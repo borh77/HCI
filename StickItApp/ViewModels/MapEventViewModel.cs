@@ -1,4 +1,3 @@
-using System.IO;
 using StickItApp.Models;
 using StickItApp.Services;
 
@@ -54,14 +53,13 @@ public sealed class MapEventViewModel : ObservableObject
     {
         get
         {
-            string typeIcon = ResolvePath(Type?.IconKey);
-            if (!string.IsNullOrWhiteSpace(typeIcon) && File.Exists(typeIcon))
+            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
+            if (!string.IsNullOrWhiteSpace(eventIcon))
             {
-                return typeIcon;
+                return eventIcon;
             }
 
-            string eventIcon = ResolvePath(Event.IconPath);
-            return !string.IsNullOrWhiteSpace(eventIcon) && File.Exists(eventIcon) ? eventIcon : string.Empty;
+            return ImagePathService.ToImageSourcePath(Type?.IconKey);
         }
     }
 
@@ -83,13 +81,4 @@ public sealed class MapEventViewModel : ObservableObject
         Y = Event.Y;
     }
 
-    private static string ResolvePath(string? path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
-        {
-            return path ?? string.Empty;
-        }
-
-        return Path.Combine(AppContext.BaseDirectory, path);
-    }
 }

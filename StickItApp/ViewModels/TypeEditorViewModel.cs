@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -33,10 +34,38 @@ public sealed class TypeEditorViewModel : ObservableObject
         SaveCommand = new RelayCommand(Save);
         CancelCommand = new RelayCommand(_backToList);
         ChangeImageCommand = new RelayCommand(ChangeImage);
-        RemoveImageCommand = new RelayCommand(() => IconKey = string.Empty);
+        RemoveImageCommand = new RelayCommand(() => IconKey = DefaultIconOptions.First().Path);
+        SelectDefaultIconCommand = new RelayCommand(parameter =>
+        {
+            if (parameter is TypeIconOption option)
+            {
+                IconKey = option.Path;
+            }
+        });
+
+        if (string.IsNullOrWhiteSpace(_iconKey))
+        {
+            _iconKey = DefaultIconOptions.First().Path;
+        }
+
+        RefreshIconSelection();
     }
 
     public string PageTitle => _originalId is null ? GetString("NewTypeLabel") : GetString("EditTypeLabel");
+
+    public IReadOnlyList<TypeIconOption> DefaultIconOptions { get; } =
+    [
+        new("Music", "/Assets/Icons/EventTypes/music.png"),
+        new("Sport", "/Assets/Icons/EventTypes/sport.png"),
+        new("Movie", "/Assets/Icons/EventTypes/movie.png"),
+        new("Charity", "/Assets/Icons/EventTypes/charity.png"),
+        new("Launch", "/Assets/Icons/EventTypes/launch.png"),
+        new("Education", "/Assets/Icons/EventTypes/education.png"),
+        new("Food", "/Assets/Icons/EventTypes/food.png"),
+        new("Conference", "/Assets/Icons/EventTypes/conference.png"),
+        new("Art", "/Assets/Icons/EventTypes/art.png"),
+        new("Calendar", "/Assets/Icons/EventTypes/calendar.png")
+    ];
 
     public string Code
     {
@@ -64,18 +93,15 @@ public sealed class TypeEditorViewModel : ObservableObject
             if (SetProperty(ref _iconKey, value))
             {
                 OnPropertyChanged(nameof(IconPreviewPath));
+                OnPropertyChanged(nameof(HasIconPreview));
+                RefreshIconSelection();
             }
         }
     }
 
-    public string? IconPreviewPath
-    {
-        get
-        {
-            string path = ResolvePath(IconKey);
-            return File.Exists(path) ? path : null;
-        }
-    }
+    public string IconPreviewPath => ImagePathService.ToImageSourcePath(IconKey);
+
+    public bool HasIconPreview => !string.IsNullOrWhiteSpace(IconPreviewPath);
 
     public string ValidationMessage
     {
@@ -90,6 +116,8 @@ public sealed class TypeEditorViewModel : ObservableObject
     public ICommand ChangeImageCommand { get; }
 
     public ICommand RemoveImageCommand { get; }
+
+    public ICommand SelectDefaultIconCommand { get; }
 
     private void Save()
     {
@@ -114,7 +142,7 @@ public sealed class TypeEditorViewModel : ObservableObject
             EventType? type = App.DataStore.EventTypes.FirstOrDefault(item => item.Id == _originalId);
             if (type is null)
             {
-                ValidationMessage = "The selected type no longer exists.";
+                ValidationMessage = GetString("TypeMissingMessage");
                 return;
             }
 
@@ -140,7 +168,7 @@ public sealed class TypeEditorViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(Code))
         {
-            ValidationMessage = "Code is required.";
+            ValidationMessage = GetString("CodeRequiredMessage");
             return false;
         }
 
@@ -150,19 +178,19 @@ public sealed class TypeEditorViewModel : ObservableObject
 
         if (duplicate)
         {
-            ValidationMessage = "Code must be unique.";
+            ValidationMessage = GetString("CodeUniqueMessage");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(Name))
         {
-            ValidationMessage = "Name is required.";
+            ValidationMessage = GetString("NameRequiredMessage");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(Description))
         {
-            ValidationMessage = "Description is required.";
+            ValidationMessage = GetString("DescriptionRequiredMessage");
             return false;
         }
 
@@ -192,18 +220,37 @@ public sealed class TypeEditorViewModel : ObservableObject
             : path;
     }
 
-    private static string ResolvePath(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
-        {
-            return path;
-        }
-
-        return Path.Combine(AppContext.BaseDirectory, path);
-    }
-
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private void RefreshIconSelection()
+    {
+        foreach (TypeIconOption option in DefaultIconOptions)
+        {
+            option.IsSelected = string.Equals(option.Path, IconKey, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+}
+
+public sealed class TypeIconOption : ObservableObject
+{
+    private bool _isSelected;
+
+    public TypeIconOption(string label, string path)
+    {
+        Label = label;
+        Path = path;
+    }
+
+    public string Label { get; }
+
+    public string Path { get; }
+
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set => SetProperty(ref _isSelected, value);
     }
 }

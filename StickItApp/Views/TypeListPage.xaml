@@ -79,13 +79,6 @@
                                         CornerRadius="6">
                                     <Grid>
                                         <Image Source="{Binding IconKey}" Stretch="Uniform" Margin="5" />
-                                        <TextBlock Text="{Binding IconKey}"
-                                                   FontSize="9"
-                                                   Foreground="White"
-                                                   TextAlignment="Center"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   VerticalAlignment="Center"
-                                                   Margin="3" />
                                     </Grid>
                                 </Border>
 

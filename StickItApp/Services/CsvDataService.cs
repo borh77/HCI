@@ -640,7 +640,7 @@ public sealed class CsvDataService
         {
             Id = "TYPE-CONCERT",
             Name = "Concert",
-            IconKey = string.Empty,
+            IconKey = "/Assets/Icons/EventTypes/music.png",
             ColorHex = "#7C3AED",
             Description = "Live music event with performers and an audience."
         };
@@ -648,7 +648,7 @@ public sealed class CsvDataService
         {
             Id = "TYPE-CONFERENCE",
             Name = "Conference",
-            IconKey = string.Empty,
+            IconKey = "/Assets/Icons/EventTypes/conference.png",
             ColorHex = "#059669",
             Description = "Professional or academic event with talks and sessions."
         };
@@ -656,7 +656,7 @@ public sealed class CsvDataService
         {
             Id = "TYPE-FESTIVAL",
             Name = "Festival",
-            IconKey = string.Empty,
+            IconKey = "/Assets/Icons/EventTypes/art.png",
             ColorHex = "#DB2777",
             Description = "Multi-day public program with music, film, or culture."
         };
@@ -664,7 +664,7 @@ public sealed class CsvDataService
         {
             Id = "TYPE-SPORTS",
             Name = "Sports event",
-            IconKey = string.Empty,
+            IconKey = "/Assets/Icons/EventTypes/sport.png",
             ColorHex = "#2563EB",
             Description = "Competitive sports event with spectators."
         };
@@ -672,7 +672,7 @@ public sealed class CsvDataService
         {
             Id = "TYPE-CULTURE",
             Name = "Cultural event",
-            IconKey = string.Empty,
+            IconKey = "/Assets/Icons/EventTypes/calendar.png",
             ColorHex = "#D97706",
             Description = "Public event focused on culture, film, food, or tradition."
         };

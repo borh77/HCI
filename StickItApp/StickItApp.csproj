@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Icons\EventTypes\*.png" />
     <Resource Include="Assets\Maps\event_map.png" />
   </ItemGroup>
 

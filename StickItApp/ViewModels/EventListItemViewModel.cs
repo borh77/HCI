@@ -42,7 +42,16 @@ public sealed class EventListItemViewModel
 
     public EventType? Type => App.DataStore.EventTypes.FirstOrDefault(type => type.Id == Event.TypeId);
 
-    public string? IconPath => !string.IsNullOrWhiteSpace(Event.IconPath) ? Event.IconPath : Type?.IconKey;
+    public string IconPath
+    {
+        get
+        {
+            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
+            return !string.IsNullOrWhiteSpace(eventIcon)
+                ? eventIcon
+                : ImagePathService.ToImageSourcePath(Type?.IconKey);
+        }
+    }
 
     public string TypeColorHex => Type?.ColorHex ?? "#64748B";
 

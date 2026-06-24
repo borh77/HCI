@@ -40,6 +40,11 @@
     <sys:String x:Key="IconPathLabel">Putanja ikone</sys:String>
     <sys:String x:Key="ColorHexLabel">Hex boja</sys:String>
     <sys:String x:Key="ColorPickerLabel">Bira&#269; boje</sys:String>
+    <sys:String x:Key="DefaultTypeIconLabel">Podrazumevana ikona za ovaj tip doga&#273;aja</sys:String>
+    <sys:String x:Key="ChoosePictureLabel">Izaberi sliku</sys:String>
+    <sys:String x:Key="ImageFormatHintLabel">Slika mora biti u .jpg, .jpeg ili .png formatu</sys:String>
+    <sys:String x:Key="PreviewLabel">Pregled</sys:String>
+    <sys:String x:Key="NoIconSelectedLabel">Ikona nije izabrana</sys:String>
     <sys:String x:Key="ChangeImageLabel">Promeni sliku</sys:String>
     <sys:String x:Key="RemoveImageLabel">Ukloni sliku</sys:String>
     <sys:String x:Key="CityLabel">Grad</sys:String>
@@ -89,8 +94,10 @@
     <sys:String x:Key="TypeDeletedMessage">Tip je obrisan.</sys:String>
     <sys:String x:Key="TagDeletedMessage">Oznaka je obrisana. Veze sa događajima su uklonjene.</sys:String>
     <sys:String x:Key="TagMissingMessage">Izabrana oznaka vi&#353;e ne postoji.</sys:String>
+    <sys:String x:Key="TypeMissingMessage">Izabrani tip vi&#353;e ne postoji.</sys:String>
     <sys:String x:Key="CodeRequiredMessage">&#352;ifra je obavezna.</sys:String>
     <sys:String x:Key="CodeUniqueMessage">&#352;ifra mora biti jedinstvena.</sys:String>
+    <sys:String x:Key="NameRequiredMessage">Naziv je obavezan.</sys:String>
     <sys:String x:Key="DescriptionRequiredMessage">Opis je obavezan.</sys:String>
     <sys:String x:Key="ColorHexInvalidMessage">Hex boja mora biti ispravna, na primer #FFB300.</sys:String>
     <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>

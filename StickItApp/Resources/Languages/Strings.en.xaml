@@ -40,6 +40,11 @@
     <sys:String x:Key="IconPathLabel">IconPath</sys:String>
     <sys:String x:Key="ColorHexLabel">ColorHex</sys:String>
     <sys:String x:Key="ColorPickerLabel">Color picker</sys:String>
+    <sys:String x:Key="DefaultTypeIconLabel">Default icon for this event type</sys:String>
+    <sys:String x:Key="ChoosePictureLabel">Choose picture</sys:String>
+    <sys:String x:Key="ImageFormatHintLabel">Image must be in .jpg, .jpeg or .png format</sys:String>
+    <sys:String x:Key="PreviewLabel">Preview</sys:String>
+    <sys:String x:Key="NoIconSelectedLabel">No icon selected</sys:String>
     <sys:String x:Key="ChangeImageLabel">Change Image</sys:String>
     <sys:String x:Key="RemoveImageLabel">Remove Image</sys:String>
     <sys:String x:Key="CityLabel">City</sys:String>
@@ -89,8 +94,10 @@
     <sys:String x:Key="TypeDeletedMessage">Type deleted.</sys:String>
     <sys:String x:Key="TagDeletedMessage">Tag deleted. Related event-tag links were removed.</sys:String>
     <sys:String x:Key="TagMissingMessage">The selected tag no longer exists.</sys:String>
+    <sys:String x:Key="TypeMissingMessage">The selected type no longer exists.</sys:String>
     <sys:String x:Key="CodeRequiredMessage">Code is required.</sys:String>
     <sys:String x:Key="CodeUniqueMessage">Code must be unique.</sys:String>
+    <sys:String x:Key="NameRequiredMessage">Name is required.</sys:String>
     <sys:String x:Key="DescriptionRequiredMessage">Description is required.</sys:String>
     <sys:String x:Key="ColorHexInvalidMessage">ColorHex must be a valid color, for example #FFB300.</sys:String>
     <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>

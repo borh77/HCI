@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -168,14 +169,14 @@ public sealed class EventEditorViewModel : ObservableObject
     {
         get
         {
-            string eventIcon = ResolvePath(IconPath);
-            if (File.Exists(eventIcon))
+            string eventIcon = ImagePathService.ToImageSourcePath(IconPath);
+            if (!string.IsNullOrWhiteSpace(eventIcon))
             {
                 return eventIcon;
             }
 
-            string typeIcon = ResolvePath(SelectedType?.IconKey ?? string.Empty);
-            return File.Exists(typeIcon) ? typeIcon : null;
+            string typeIcon = ImagePathService.ToImageSourcePath(SelectedType?.IconKey);
+            return string.IsNullOrWhiteSpace(typeIcon) ? null : typeIcon;
         }
     }
 
