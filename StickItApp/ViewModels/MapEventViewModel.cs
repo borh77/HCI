@@ -54,14 +54,14 @@ public sealed class MapEventViewModel : ObservableObject
     {
         get
         {
-            string eventIcon = ResolvePath(Event.IconPath);
-            if (!string.IsNullOrWhiteSpace(eventIcon) && File.Exists(eventIcon))
+            string typeIcon = ResolvePath(Type?.IconKey);
+            if (!string.IsNullOrWhiteSpace(typeIcon) && File.Exists(typeIcon))
             {
-                return eventIcon;
+                return typeIcon;
             }
 
-            string typeIcon = ResolvePath(Type?.IconKey);
-            return !string.IsNullOrWhiteSpace(typeIcon) && File.Exists(typeIcon) ? typeIcon : string.Empty;
+            string eventIcon = ResolvePath(Event.IconPath);
+            return !string.IsNullOrWhiteSpace(eventIcon) && File.Exists(eventIcon) ? eventIcon : string.Empty;
         }
     }
 

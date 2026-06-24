@@ -302,10 +302,91 @@
         <Setter Property="Background" Value="{DynamicResource ContentBrush}" />
     </Style>
 
+    <Style x:Key="DarkScrollBarPageButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkScrollBarThumbStyle" TargetType="{x:Type primitives:Thumb}">
+        <Setter Property="Background" Value="#64748B" />
+        <Setter Property="BorderBrush" Value="#94A3B8" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:Thumb}">
+                    <Border x:Name="ThumbBorder"
+                            Margin="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="#94A3B8" />
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="#CBD5E1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="Background" Value="{DynamicResource ContentBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Foreground" Value="#64748B" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="Root"
+                          Background="{TemplateBinding Background}"
+                          SnapsToDevicePixels="True">
+                        <primitives:Track x:Name="PART_Track"
+                                          IsDirectionReversed="True">
+                            <primitives:Track.DecreaseRepeatButton>
+                                <RepeatButton x:Name="DecreaseButton"
+                                              Command="{x:Static ScrollBar.PageUpCommand}"
+                                              Style="{StaticResource DarkScrollBarPageButtonStyle}" />
+                            </primitives:Track.DecreaseRepeatButton>
+                            <primitives:Track.Thumb>
+                                <primitives:Thumb Style="{StaticResource DarkScrollBarThumbStyle}" />
+                            </primitives:Track.Thumb>
+                            <primitives:Track.IncreaseRepeatButton>
+                                <RepeatButton x:Name="IncreaseButton"
+                                              Command="{x:Static ScrollBar.PageDownCommand}"
+                                              Style="{StaticResource DarkScrollBarPageButtonStyle}" />
+                            </primitives:Track.IncreaseRepeatButton>
+                        </primitives:Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter TargetName="Root" Property="Height" Value="12" />
+                            <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False" />
+                            <Setter TargetName="DecreaseButton" Property="Command" Value="{x:Static ScrollBar.PageLeftCommand}" />
+                            <Setter TargetName="IncreaseButton" Property="Command" Value="{x:Static ScrollBar.PageRightCommand}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter TargetName="Root" Property="Width" Value="12" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type ToolTip}">

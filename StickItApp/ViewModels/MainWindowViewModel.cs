@@ -56,6 +56,16 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public string CurrentPageTitle => GetString(_currentPageTitleKey);
 
+    public bool IsMapSelected => _currentPageTitleKey == "MapLabel";
+
+    public bool IsEventsSelected => _currentPageTitleKey == "EventsLabel";
+
+    public bool IsTypesSelected => _currentPageTitleKey == "TypesLabel";
+
+    public bool IsTagsSelected => _currentPageTitleKey == "TagsLabel";
+
+    public bool IsSearchSelected => _currentPageTitleKey == "SearchLabel";
+
     public bool CanGoBack => _backStack.Count > 0 || !IsOnMainPage;
 
     public bool IsOnMainPage
@@ -135,8 +145,7 @@ public sealed class MainWindowViewModel : ObservableObject
         _currentPageTitleKey = titleKey;
         IsOnMainPage = isMainPage;
         IsMenuOpen = false;
-        OnPropertyChanged(nameof(CurrentPageTitle));
-        OnPropertyChanged(nameof(TopBarTitle));
+        NotifyNavigationStateChanged();
         OnPropertyChanged(nameof(CanGoBack));
     }
 
@@ -160,8 +169,7 @@ public sealed class MainWindowViewModel : ObservableObject
         CurrentPage = previous.Page;
         _currentPageTitleKey = previous.TitleKey;
         IsOnMainPage = previous.IsMainPage;
-        OnPropertyChanged(nameof(CurrentPageTitle));
-        OnPropertyChanged(nameof(TopBarTitle));
+        NotifyNavigationStateChanged();
         OnPropertyChanged(nameof(CanGoBack));
     }
 
@@ -225,5 +233,16 @@ public sealed class MainWindowViewModel : ObservableObject
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private void NotifyNavigationStateChanged()
+    {
+        OnPropertyChanged(nameof(CurrentPageTitle));
+        OnPropertyChanged(nameof(TopBarTitle));
+        OnPropertyChanged(nameof(IsMapSelected));
+        OnPropertyChanged(nameof(IsEventsSelected));
+        OnPropertyChanged(nameof(IsTypesSelected));
+        OnPropertyChanged(nameof(IsTagsSelected));
+        OnPropertyChanged(nameof(IsSearchSelected));
     }
 }

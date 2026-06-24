@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="MapActionButtonStyle" TargetType="Button">
             <Setter Property="MinHeight" Value="30" />
             <Setter Property="Margin" Value="3" />
@@ -9,6 +10,105 @@
             <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        </Style>
+
+        <Style x:Key="MapAddButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="52" />
+            <Setter Property="Height" Value="52" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="26">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="EventIconFrameStyle" TargetType="Border">
+            <Setter Property="Width" Value="54" />
+            <Setter Property="Height" Value="54" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Background" Value="{Binding TypeColorHex}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="EventIconImageStyle" TargetType="Image">
+            <Setter Property="Visibility" Value="Visible" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="Margin" Value="8" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IconPath}" Value="">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="EventIconInitialStyle" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IconPath}" Value="">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MapMarkerButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="64" />
+            <Setter Property="Height" Value="76" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -21,31 +121,78 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBox x:Name="MapFilterTextBox"
-                     Height="32"
-                     Padding="8,4"
-                     Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
-            <Grid Margin="0,8,0,6">
+            <Grid>
+                <TextBox x:Name="MapFilterTextBox"
+                         Height="32"
+                         Padding="8,4,32,4"
+                         Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Width="24"
+                        Height="24"
+                        Margin="0,0,5,0"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Content="X"
+                        FontSize="11"
+                        ToolTip="{DynamicResource ResetFilterLabel}"
+                        Command="{Binding ClearFilterCommand}"
+                        Visibility="{Binding HasFilterText, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+
+            <Border Margin="0,5,0,3"
+                    Padding="8,5"
+                    Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="#DC2626"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Visibility="{Binding HasMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Message}"
+                               Foreground="#DC2626"
+                               FontSize="12"
+                               TextWrapping="Wrap"
+                               VerticalAlignment="Center" />
+                    <Button Grid.Column="1"
+                            Width="24"
+                            Height="24"
+                            Margin="6,0,0,0"
+                            Padding="0"
+                            Content="X"
+                            FontSize="11"
+                            Command="{Binding ClearMessageCommand}" />
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,4,0,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           Text="{Binding Message}"
-                           Foreground="#DC2626"
-                           TextWrapping="Wrap"
-                           VerticalAlignment="Center" />
                 <Button Grid.Column="1"
                         Style="{StaticResource MapActionButtonStyle}"
                         ToolTip="{DynamicResource ResetFilterLabel}"
-                        Content="{DynamicResource ResetLabel}"
-                        Command="{Binding ResetFilterCommand}" />
+                        Command="{Binding ResetFilterCommand}"
+                        Visibility="{Binding IsResetVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE72C;" Margin="0,0,5,0" />
+                        <TextBlock Text="{DynamicResource ResetLabel}" />
+                    </StackPanel>
+                </Button>
                 <Button Grid.Column="2"
                         Style="{StaticResource MapActionButtonStyle}"
                         ToolTip="{DynamicResource ClearMapLabel}"
-                        Content="{DynamicResource ClearMapLabel}"
-                        Command="{Binding ClearMapCommand}" />
+                        Command="{Binding ClearMapCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" Margin="0,0,5,0" />
+                        <TextBlock Text="{DynamicResource ClearMapLabel}" />
+                    </StackPanel>
+                </Button>
             </Grid>
         </StackPanel>
 
@@ -98,26 +245,40 @@
                         </ItemsControl.ItemContainerStyle>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Button Width="48"
-                                        Height="48"
-                                        Padding="0"
+                                <Button Style="{StaticResource MapMarkerButtonStyle}"
                                         ToolTip="{Binding Name}"
                                         Command="{Binding DataContext.SelectEventCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                         CommandParameter="{Binding}"
                                         PreviewMouseLeftButtonDown="EventCard_PreviewMouseLeftButtonDown"
                                         PreviewMouseMove="EventCard_PreviewMouseMove">
-                                    <Grid>
-                                        <Border Background="{Binding TypeColorHex}" CornerRadius="8" />
-                                        <Image Source="{Binding IconPath}" Stretch="Uniform" Margin="6" />
-                                        <Border Background="#AA000000" VerticalAlignment="Bottom" CornerRadius="0,0,8,8">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <Border Style="{StaticResource EventIconFrameStyle}"
+                                                Width="56"
+                                                Height="56"
+                                                CornerRadius="11"
+                                                Background="{Binding TypeColorHex}">
+                                            <Grid>
+                                                <Image Source="{Binding IconPath}"
+                                                       Style="{StaticResource EventIconImageStyle}" />
+                                                <TextBlock Text="{Binding Initial}"
+                                                           Style="{StaticResource EventIconInitialStyle}" />
+                                            </Grid>
+                                        </Border>
+                                        <Border Margin="0,3,0,0"
+                                                Padding="4,1"
+                                                Background="{DynamicResource SurfaceBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="5">
                                             <TextBlock Text="{Binding ShortCode}"
-                                                       Foreground="White"
-                                                       FontSize="8"
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       FontSize="9"
                                                        FontWeight="SemiBold"
-                                                       HorizontalAlignment="Center"
+                                                       MaxWidth="54"
+                                                       TextAlignment="Center"
                                                        TextTrimming="CharacterEllipsis" />
                                         </Border>
-                                    </Grid>
+                                    </StackPanel>
                                 </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -171,13 +332,42 @@
                                         Command="{Binding DataContext.CloseDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                             </Grid>
                             <WrapPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0,8,0,0" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Content="{DynamicResource DetailsLabel}" Command="{Binding DetailsCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource EditLabel}" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DeleteLabel}" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource BackToMapLabel}" Command="{Binding CloseDetailsCommand}" />
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Command="{Binding DetailsCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" Margin="0,0,5,0" />
+                                        <TextBlock Text="{DynamicResource DetailsLabel}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource EditLabel}" Command="{Binding EditCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE70F;" Margin="0,0,5,0" />
+                                        <TextBlock Text="{DynamicResource EditLabel}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" Margin="0,0,5,0" />
+                                        <TextBlock Text="{DynamicResource DeleteLabel}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource MapActionButtonStyle}" Command="{Binding CloseDetailsCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" Margin="0,0,5,0" />
+                                        <TextBlock Text="{DynamicResource BackToMapLabel}" />
+                                    </StackPanel>
+                                </Button>
                             </WrapPanel>
                         </Grid>
                     </Border>
+
+                    <Button HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,14,14"
+                            Panel.ZIndex="20"
+                            Style="{StaticResource MapAddButtonStyle}"
+                            Content="+"
+                            ToolTip="{DynamicResource AddEventLabel}"
+                            Command="{Binding AddEventCommand}" />
                 </Grid>
             </Border>
         </StackPanel>
@@ -232,9 +422,9 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="118"
+                            <Border Width="112"
                                     Height="106"
-                                    Margin="0,0,8,0"
+                                    Margin="0,0,6,0"
                                     Padding="6"
                                     Background="{DynamicResource ContentBrush}"
                                     BorderBrush="{DynamicResource BorderBrush}"
@@ -244,50 +434,17 @@
                                     PreviewMouseMove="EventCard_PreviewMouseMove"
                                     Cursor="Hand">
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
-                                    <Border Width="54" Height="54" Background="{Binding TypeColorHex}" CornerRadius="10" HorizontalAlignment="Center">
+                                    <Border Style="{StaticResource EventIconFrameStyle}">
                                         <Grid>
                                             <Image Source="{Binding IconPath}"
-                                                   Stretch="Uniform"
-                                                   Margin="8">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IconPath}" Value="">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
+                                                   Style="{StaticResource EventIconImageStyle}" />
                                             <TextBlock Text="{Binding Initial}"
-                                                       Foreground="White"
-                                                       FontSize="20"
-                                                       FontWeight="Bold"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IconPath}" Value="">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
+                                                       Style="{StaticResource EventIconInitialStyle}" />
                                         </Grid>
                                     </Border>
                                     <TextBlock Text="{Binding Name}"
                                                Margin="0,8,0,0"
-                                               Width="104"
+                                               Width="100"
                                                FontSize="11"
                                                FontWeight="SemiBold"
                                                Foreground="{DynamicResource TextBrush}"

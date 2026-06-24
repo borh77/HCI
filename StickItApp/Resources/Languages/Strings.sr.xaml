@@ -9,6 +9,7 @@
     <sys:String x:Key="TagsLabel">Oznake</sys:String>
     <sys:String x:Key="SearchLabel">Pretraga</sys:String>
     <sys:String x:Key="AddLabel">Dodaj</sys:String>
+    <sys:String x:Key="AddEventLabel">Dodaj doga&#273;aj</sys:String>
     <sys:String x:Key="AllLabel">Sve</sys:String>
     <sys:String x:Key="YesLabel">Da</sys:String>
     <sys:String x:Key="NoLabel">Ne</sys:String>
@@ -67,6 +68,9 @@
     <sys:String x:Key="SearchTagsLabel">Pretraži oznake</sys:String>
     <sys:String x:Key="SelectedTagsLabel">Izabrane oznake</sys:String>
     <sys:String x:Key="ClearMapLabel">O&#269;isti globalnu mapu</sys:String>
+    <sys:String x:Key="ClearMapConfirmTitle">O&#269;isti globalnu mapu</sys:String>
+    <sys:String x:Key="ClearMapConfirmMessage">Ukloniti sve doga&#273;aje sa mape?</sys:String>
+    <sys:String x:Key="ClearMapConfirmAction">O&#269;isti</sys:String>
     <sys:String x:Key="BackToListLabel">Vrati u listu</sys:String>
     <sys:String x:Key="BackToMapLabel">Nazad na mapu</sys:String>
     <sys:String x:Key="MapDragDropInstructionLabel">&#8593; Prevuci i pusti: postavi ili ukloni doga&#273;aj &#8595;</sys:String>

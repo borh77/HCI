@@ -9,6 +9,7 @@
     <sys:String x:Key="TagsLabel">Tags</sys:String>
     <sys:String x:Key="SearchLabel">Search</sys:String>
     <sys:String x:Key="AddLabel">Add</sys:String>
+    <sys:String x:Key="AddEventLabel">Add event</sys:String>
     <sys:String x:Key="AllLabel">All</sys:String>
     <sys:String x:Key="YesLabel">Yes</sys:String>
     <sys:String x:Key="NoLabel">No</sys:String>
@@ -67,6 +68,9 @@
     <sys:String x:Key="SearchTagsLabel">Search tags</sys:String>
     <sys:String x:Key="SelectedTagsLabel">Selected tags</sys:String>
     <sys:String x:Key="ClearMapLabel">Clear Global Map</sys:String>
+    <sys:String x:Key="ClearMapConfirmTitle">Clear Global Map</sys:String>
+    <sys:String x:Key="ClearMapConfirmMessage">Remove all events from the map?</sys:String>
+    <sys:String x:Key="ClearMapConfirmAction">Clear</sys:String>
     <sys:String x:Key="BackToListLabel">Back to list</sys:String>
     <sys:String x:Key="BackToMapLabel">Back to map</sys:String>
     <sys:String x:Key="MapDragDropInstructionLabel">&#8593; Drag &amp; Drop: place or remove an event &#8595;</sys:String>

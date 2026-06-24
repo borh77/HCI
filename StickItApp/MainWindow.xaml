@@ -28,14 +28,62 @@
             <Setter Property="FontSize" Value="11" />
         </Style>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36" />
-            <Setter Property="Margin" Value="8,4" />
-            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Height" Value="54" />
+            <Setter Property="Margin" Value="8,3" />
+            <Setter Property="Padding" Value="12,0" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlHoverBrush}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlSelectedBrush}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource SelectionBrush}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MenuIconStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="MenuLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+        <Style x:Key="MenuSectionLabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="14,14,14,5" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
         <Style x:Key="StatusTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
@@ -164,23 +212,73 @@
                 <Border Background="#66000000"
                         MouseDown="DrawerBackdrop_MouseDown" />
 
-                <Border Width="260"
+                <Border Width="248"
                         HorizontalAlignment="Left"
                         Background="{DynamicResource MenuBrush}"
                         BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="0,0,1,0">
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Disabled">
-                        <StackPanel Margin="0,76,0,12">
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource MapLabel}" Command="{Binding ShowMapCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource EventsLabel}" Command="{Binding ShowEventsCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource TypesLabel}" Command="{Binding ShowTypesCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource TagsLabel}" Command="{Binding ShowTagsCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource SearchLabel}" Command="{Binding ShowSearchCommand}" />
-                            <Separator Margin="8,10" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource NewEventLabel}" Command="{Binding NewEventCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource NewTypeLabel}" Command="{Binding NewTypeCommand}" />
-                            <Button Style="{StaticResource MenuButtonStyle}" Content="{DynamicResource NewTagLabel}" Command="{Binding NewTagCommand}" />
+                        <StackPanel Margin="0,74,0,12">
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding ShowMapCommand}" Tag="{Binding IsMapSelected}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE774;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource MapLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding ShowEventsCommand}" Tag="{Binding IsEventsSelected}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE8A7;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource EventsLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding ShowTypesCommand}" Tag="{Binding IsTypesSelected}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE8FD;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource TypesLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding ShowTagsCommand}" Tag="{Binding IsTagsSelected}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE8EC;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource TagsLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding ShowSearchCommand}" Tag="{Binding IsSearchSelected}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE721;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource SearchLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Separator Margin="10,10" />
+                            <StackPanel Orientation="Horizontal" Margin="14,14,14,5">
+                                <TextBlock FontFamily="Segoe MDL2 Assets"
+                                           FontSize="14"
+                                           Width="22"
+                                           Foreground="{DynamicResource MutedTextBrush}"
+                                           Text="&#xE710;" />
+                                <TextBlock Style="{StaticResource MenuSectionLabelStyle}"
+                                           Margin="0"
+                                           Text="{DynamicResource AddLabel}" />
+                            </StackPanel>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding NewEventCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE710;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource NewEventLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding NewTypeCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE710;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource NewTypeLabel}" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource MenuButtonStyle}" Command="{Binding NewTagCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource MenuIconStyle}" Text="&#xE710;" />
+                                    <TextBlock Style="{StaticResource MenuLabelStyle}" Text="{DynamicResource NewTagLabel}" />
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>

@@ -3,12 +3,13 @@ using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
 public sealed class MapViewModel : ObservableObject
 {
-    public const double IconSize = 48;
+    public const double IconSize = 64;
 
     private readonly MainWindowViewModel _shell;
     private readonly Action<string, bool>? _showStatus;
@@ -22,7 +23,10 @@ public sealed class MapViewModel : ObservableObject
         _showStatus = showStatus;
 
         ResetFilterCommand = new RelayCommand(ResetMapView);
+        ClearFilterCommand = new RelayCommand(ClearFilter);
+        ClearMessageCommand = new RelayCommand(ClearMessage);
         ClearMapCommand = new RelayCommand(ClearMap);
+        AddEventCommand = new RelayCommand(() => _shell.NavigateToEventEditor(null));
         SelectEventCommand = new RelayCommand(parameter =>
         {
             if (parameter is MapEventViewModel item)
@@ -56,6 +60,8 @@ public sealed class MapViewModel : ObservableObject
         {
             if (SetProperty(ref _filterText, value))
             {
+                OnPropertyChanged(nameof(HasFilterText));
+                OnPropertyChanged(nameof(IsResetVisible));
                 Refresh();
             }
         }
@@ -64,18 +70,43 @@ public sealed class MapViewModel : ObservableObject
     public string Message
     {
         get => _message;
-        private set => SetProperty(ref _message, value);
+        private set
+        {
+            if (SetProperty(ref _message, value))
+            {
+                OnPropertyChanged(nameof(HasMessage));
+                OnPropertyChanged(nameof(IsResetVisible));
+            }
+        }
     }
 
     public MapEventViewModel? SelectedEvent
     {
         get => _selectedEvent;
-        set => SetProperty(ref _selectedEvent, value);
+        set
+        {
+            if (SetProperty(ref _selectedEvent, value))
+            {
+                OnPropertyChanged(nameof(IsResetVisible));
+            }
+        }
     }
+
+    public bool HasFilterText => !string.IsNullOrWhiteSpace(FilterText);
+
+    public bool HasMessage => !string.IsNullOrWhiteSpace(Message);
+
+    public bool IsResetVisible => HasFilterText || HasMessage || SelectedEvent is not null;
 
     public ICommand ResetFilterCommand { get; }
 
+    public ICommand ClearFilterCommand { get; }
+
+    public ICommand ClearMessageCommand { get; }
+
     public ICommand ClearMapCommand { get; }
+
+    public ICommand AddEventCommand { get; }
 
     public ICommand SelectEventCommand { get; }
 
@@ -97,7 +128,6 @@ public sealed class MapViewModel : ObservableObject
         if (OverlapsAnotherEvent(item.Event, clampedX, clampedY))
         {
             Message = GetString("NoOverlapMessage");
-            _showStatus?.Invoke(Message, true);
             item.SyncFromEvent();
             return false;
         }
@@ -136,6 +166,17 @@ public sealed class MapViewModel : ObservableObject
         Refresh();
     }
 
+    private void ClearFilter()
+    {
+        FilterText = string.Empty;
+    }
+
+    private void ClearMessage()
+    {
+        Message = string.Empty;
+        _showStatus?.Invoke(string.Empty, false);
+    }
+
     private void CloseDetails()
     {
         SelectedEvent = null;
@@ -149,12 +190,15 @@ public sealed class MapViewModel : ObservableObject
         MappedEvents.Clear();
         UnplacedEvents.Clear();
 
-        foreach (Event eventItem in App.DataStore.Events.Where(MatchesFilter).OrderBy(item => item.Name ?? string.Empty))
+        foreach (Event eventItem in App.DataStore.Events.OrderBy(item => item.Name ?? string.Empty))
         {
             MapEventViewModel item = new(eventItem);
             if (eventItem.IsPlacedOnMap)
             {
-                MappedEvents.Add(item);
+                if (MatchesFilter(eventItem))
+                {
+                    MappedEvents.Add(item);
+                }
             }
             else
             {
@@ -175,8 +219,12 @@ public sealed class MapViewModel : ObservableObject
         }
 
         string query = FilterText.Trim();
+        EventType? type = App.DataStore.EventTypes.FirstOrDefault(item => item.Id == eventItem.TypeId);
         return (eventItem.Id ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               (eventItem.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase);
+               (eventItem.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               (eventItem.TypeId ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               (type?.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               (type?.Description ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool OverlapsAnotherEvent(Event movingEvent, double x, double y)
@@ -204,13 +252,11 @@ public sealed class MapViewModel : ObservableObject
 
     private void ClearMap()
     {
-        MessageBoxResult result = MessageBox.Show(
-            GetString("ClearMapConfirmation"),
-            GetString("ClearMapLabel"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
-
-        if (result != MessageBoxResult.Yes)
+        if (!AppDialogService.Confirm(
+                "ClearMapConfirmTitle",
+                "ClearMapConfirmMessage",
+                "ClearMapConfirmAction",
+                "CancelLabel"))
         {
             return;
         }
