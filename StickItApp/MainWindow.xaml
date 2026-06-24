@@ -71,21 +71,56 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0"
-                            Style="{StaticResource IconButtonStyle}"
-                            Content="{DynamicResource MenuLabel}"
-                            Command="{Binding ToggleMenuCommand}" />
+                    <Grid Grid.Column="0">
+                        <Button Content="{DynamicResource MenuLabel}"
+                                Command="{Binding ToggleMenuCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowMenuButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="&lt;"
+                                Command="{Binding BackCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowBackButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
 
                     <StackPanel Grid.Column="1"
                                 VerticalAlignment="Center"
                                 Margin="8,0">
-                        <TextBlock Text="{DynamicResource ApplicationName}"
+                        <TextBlock Text="{Binding TopBarTitle}"
                                    FontSize="18"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource TextBrush}" />
                         <TextBlock Text="{Binding CurrentPageTitle}"
                                    FontSize="11"
-                                   Foreground="{DynamicResource MutedTextBrush}" />
+                                   Foreground="{DynamicResource MutedTextBrush}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowMenuButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </StackPanel>
 
                     <Button Grid.Column="2"

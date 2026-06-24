@@ -69,6 +69,16 @@ public partial class MainWindow : Window
             if (_viewModel.CurrentPage is IShortcutAwarePage page)
             {
                 e.Handled = page.CancelOrBack();
+                if (e.Handled)
+                {
+                    return;
+                }
+            }
+
+            if (_viewModel.CanGoBack)
+            {
+                _viewModel.GoBack();
+                e.Handled = true;
             }
         }
     }
