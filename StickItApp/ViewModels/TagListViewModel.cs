@@ -4,6 +4,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -111,13 +112,13 @@ public sealed class TagListViewModel : ObservableObject
             return;
         }
 
-        MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteTagConfirmation"), tag.Id),
+        bool confirmed = AppDialogService.ConfirmText(
             GetString("DeleteTagTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            string.Format(GetString("DeleteTagConfirmation"), tag.Id),
+            GetString("DeleteLabel"),
+            GetString("CancelLabel"));
 
-        if (result != MessageBoxResult.Yes)
+        if (!confirmed)
         {
             return;
         }
@@ -131,7 +132,7 @@ public sealed class TagListViewModel : ObservableObject
 
         App.DataService.SaveAll(App.DataStore);
         TagsView.Refresh();
-        MessageBox.Show(GetString("TagDeletedMessage"), GetString("DeleteTagTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
+        AppDialogService.ShowInfo("DeleteTagTitle", "TagDeletedMessage");
         _showStatus?.Invoke($"Tag '{tag.Id}' deleted.", false);
     }
 

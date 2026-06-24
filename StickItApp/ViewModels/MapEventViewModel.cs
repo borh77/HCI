@@ -49,17 +49,17 @@ public sealed class MapEventViewModel : ObservableObject
 
     public string TypeColorHex => string.IsNullOrWhiteSpace(Type?.ColorHex) ? "#64748B" : Type.ColorHex;
 
+    public string CustomImagePath => ImagePathService.ToImageSourcePath(Event.IconPath);
+
+    public bool HasCustomImage => !string.IsNullOrWhiteSpace(CustomImagePath);
+
+    public string TypeIconPath => ImagePathService.ToImageSourcePath(Type?.IconKey);
+
     public string IconPath
     {
         get
         {
-            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
-            if (!string.IsNullOrWhiteSpace(eventIcon))
-            {
-                return eventIcon;
-            }
-
-            return ImagePathService.ToImageSourcePath(Type?.IconKey);
+            return HasCustomImage ? CustomImagePath : TypeIconPath;
         }
     }
 

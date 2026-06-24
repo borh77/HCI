@@ -10,6 +10,8 @@
         Background="Transparent"
         ShowInTaskbar="False">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
         <Style x:Key="DialogSecondaryButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource ContentBrush}" />
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
@@ -23,6 +25,23 @@
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DialogPrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SelectionBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#1E40AF" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -62,15 +81,20 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Border Width="34"
                         Height="34"
                         Margin="0,0,10,0"
-                        Background="#FEE2E2"
+                        Background="{Binding IconBackground}"
                         CornerRadius="17">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
-                               Text="&#xE7BA;"
-                               Foreground="#DC2626"
+                               Text="{Binding IconText}"
+                               Foreground="{Binding IconForeground}"
                                FontSize="17"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
@@ -81,7 +105,18 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            TextWrapping="Wrap" />
-            </StackPanel>
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Width="30"
+                        Height="30"
+                        Margin="8,-4,-4,0"
+                        Padding="0"
+                        Content="x"
+                        ToolTip="{DynamicResource CancelLabel}"
+                        Style="{StaticResource DialogSecondaryButtonStyle}"
+                        IsCancel="True"
+                        Click="Cancel_Click" />
+            </Grid>
 
             <TextBlock Grid.Row="1"
                        Margin="0,10,0,18"
@@ -91,6 +126,16 @@
                        TextWrapping="Wrap" />
 
             <Grid Grid.Row="2">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMessageOnly}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="10" />
@@ -110,6 +155,23 @@
                         Content="{Binding ConfirmText}"
                         Click="Confirm_Click" />
             </Grid>
+
+            <Button Grid.Row="2"
+                    MinHeight="40"
+                    Content="{Binding ConfirmText}"
+                    IsDefault="True"
+                    Click="Confirm_Click">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogPrimaryButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMessageOnly}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
     </Border>
 </Window>

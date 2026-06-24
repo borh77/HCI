@@ -284,13 +284,13 @@ public sealed class MapViewModel : ObservableObject
         string eventId = SelectedEvent.Id;
         string eventName = SelectedEvent.Name;
 
-        MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteEventConfirmation"), eventName),
+        bool confirmed = AppDialogService.ConfirmText(
             GetString("DeleteEventTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            string.Format(GetString("DeleteEventConfirmation"), eventName),
+            GetString("DeleteLabel"),
+            GetString("CancelLabel"));
 
-        if (result != MessageBoxResult.Yes)
+        if (!confirmed)
         {
             return;
         }

@@ -10,9 +10,13 @@
     <sys:String x:Key="SearchLabel">Search</sys:String>
     <sys:String x:Key="AddLabel">Add</sys:String>
     <sys:String x:Key="AddEventLabel">Add event</sys:String>
+    <sys:String x:Key="AutofillExampleLabel">Autofill example</sys:String>
+    <sys:String x:Key="AutofillReplaceConfirmation">Replace current form data with example data?</sys:String>
+    <sys:String x:Key="ExampleDataFilledMessage">Example data filled. Click Save to create it.</sys:String>
     <sys:String x:Key="AllLabel">All</sys:String>
     <sys:String x:Key="YesLabel">Yes</sys:String>
     <sys:String x:Key="NoLabel">No</sys:String>
+    <sys:String x:Key="OkLabel">OK</sys:String>
     <sys:String x:Key="NewEventLabel">New Event</sys:String>
     <sys:String x:Key="NewTypeLabel">New Type</sys:String>
     <sys:String x:Key="NewTagLabel">New Tag</sys:String>
@@ -93,6 +97,9 @@
     <sys:String x:Key="DeleteEventConfirmation">Delete event '{0}'?</sys:String>
     <sys:String x:Key="DeleteTypeConfirmation">Delete type '{0}'?</sys:String>
     <sys:String x:Key="DeleteTagConfirmation">Delete tag '{0}'? Event-tag links will be removed, but events will stay.</sys:String>
+    <sys:String x:Key="DuplicateEventTitle">Possible duplicate event</sys:String>
+    <sys:String x:Key="DuplicateEventMessage">An event with the same name, date, type, and location already exists. Do you still want to create it?</sys:String>
+    <sys:String x:Key="CreateAnywayLabel">Create anyway</sys:String>
     <sys:String x:Key="ClearMapConfirmation">Remove all events from the map?</sys:String>
     <sys:String x:Key="TypeInUseMessage">This type is used by one or more events and cannot be deleted.</sys:String>
     <sys:String x:Key="TypeDeletedMessage">Type deleted.</sys:String>

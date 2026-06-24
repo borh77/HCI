@@ -10,9 +10,13 @@
     <sys:String x:Key="SearchLabel">Pretraga</sys:String>
     <sys:String x:Key="AddLabel">Dodaj</sys:String>
     <sys:String x:Key="AddEventLabel">Dodaj doga&#273;aj</sys:String>
+    <sys:String x:Key="AutofillExampleLabel">Popuni primer</sys:String>
+    <sys:String x:Key="AutofillReplaceConfirmation">Zameniti trenutno unesene podatke primerom?</sys:String>
+    <sys:String x:Key="ExampleDataFilledMessage">Primer je popunjen. Kliknite Sa&#269;uvaj da ga kreirate.</sys:String>
     <sys:String x:Key="AllLabel">Sve</sys:String>
     <sys:String x:Key="YesLabel">Da</sys:String>
     <sys:String x:Key="NoLabel">Ne</sys:String>
+    <sys:String x:Key="OkLabel">U redu</sys:String>
     <sys:String x:Key="NewEventLabel">Novi događaj</sys:String>
     <sys:String x:Key="NewTypeLabel">Novi tip</sys:String>
     <sys:String x:Key="NewTagLabel">Nova oznaka</sys:String>
@@ -93,6 +97,9 @@
     <sys:String x:Key="DeleteEventConfirmation">Obrisati događaj '{0}'?</sys:String>
     <sys:String x:Key="DeleteTypeConfirmation">Obrisati tip '{0}'?</sys:String>
     <sys:String x:Key="DeleteTagConfirmation">Obrisati oznaku '{0}'? Veze sa događajima će biti uklonjene, ali događaji ostaju.</sys:String>
+    <sys:String x:Key="DuplicateEventTitle">Mogu&#263;i duplikat doga&#273;aja</sys:String>
+    <sys:String x:Key="DuplicateEventMessage">Doga&#273;aj sa istim nazivom, datumom, tipom i lokacijom ve&#263; postoji. Da li ipak &#382;elite da ga kreirate?</sys:String>
+    <sys:String x:Key="CreateAnywayLabel">Ipak kreiraj</sys:String>
     <sys:String x:Key="ClearMapConfirmation">Ukloniti sve događaje sa mape?</sys:String>
     <sys:String x:Key="TypeInUseMessage">Ovaj tip koristi jedan ili više događaja i ne može se obrisati.</sys:String>
     <sys:String x:Key="TypeDeletedMessage">Tip je obrisan.</sys:String>

@@ -252,14 +252,44 @@
                                         PreviewMouseLeftButtonDown="EventCard_PreviewMouseLeftButtonDown"
                                         PreviewMouseMove="EventCard_PreviewMouseMove">
                                     <StackPanel HorizontalAlignment="Center">
-                                        <Border Style="{StaticResource EventIconFrameStyle}"
-                                                Width="56"
+                                        <Border Width="56"
                                                 Height="56"
-                                                CornerRadius="11"
-                                                Background="{Binding TypeColorHex}">
-                                            <Grid>
-                                                <Image Source="{Binding IconPath}"
-                                                       Style="{StaticResource EventIconImageStyle}" />
+                                                CornerRadius="11">
+                                            <Border.Style>
+                                                <Style TargetType="Border" BasedOn="{StaticResource EventIconFrameStyle}">
+                                                    <Setter Property="Background" Value="{Binding TypeColorHex}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource ContentBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Grid ClipToBounds="True">
+                                                <Image Source="{Binding CustomImagePath}"
+                                                       Stretch="UniformToFill">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <Image Source="{Binding TypeIconPath}">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image" BasedOn="{StaticResource EventIconImageStyle}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
                                                 <TextBlock Text="{Binding Initial}"
                                                            Style="{StaticResource EventIconInitialStyle}" />
                                             </Grid>
@@ -434,10 +464,42 @@
                                     PreviewMouseMove="EventCard_PreviewMouseMove"
                                     Cursor="Hand">
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
-                                    <Border Style="{StaticResource EventIconFrameStyle}">
-                                        <Grid>
-                                            <Image Source="{Binding IconPath}"
-                                                   Style="{StaticResource EventIconImageStyle}" />
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource EventIconFrameStyle}">
+                                                <Setter Property="Background" Value="{Binding TypeColorHex}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                        <Setter Property="Background" Value="{DynamicResource ContentBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid ClipToBounds="True">
+                                            <Image Source="{Binding CustomImagePath}"
+                                                   Stretch="UniformToFill">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                            <Image Source="{Binding TypeIconPath}">
+                                                <Image.Style>
+                                                    <Style TargetType="Image" BasedOn="{StaticResource EventIconImageStyle}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
                                             <TextBlock Text="{Binding Initial}"
                                                        Style="{StaticResource EventIconInitialStyle}" />
                                         </Grid>

@@ -35,6 +35,7 @@ public sealed class TypeEditorViewModel : ObservableObject
         CancelCommand = new RelayCommand(_backToList);
         ChangeImageCommand = new RelayCommand(ChangeImage);
         RemoveImageCommand = new RelayCommand(() => IconKey = DefaultIconOptions.First().Path);
+        AutofillExampleCommand = new RelayCommand(AutofillExample);
         SelectDefaultIconCommand = new RelayCommand(parameter =>
         {
             if (parameter is TypeIconOption option)
@@ -52,6 +53,8 @@ public sealed class TypeEditorViewModel : ObservableObject
     }
 
     public string PageTitle => _originalId is null ? GetString("NewTypeLabel") : GetString("EditTypeLabel");
+
+    public bool IsCreateMode => _originalId is null;
 
     public IReadOnlyList<TypeIconOption> DefaultIconOptions { get; } =
     [
@@ -118,6 +121,30 @@ public sealed class TypeEditorViewModel : ObservableObject
     public ICommand RemoveImageCommand { get; }
 
     public ICommand SelectDefaultIconCommand { get; }
+
+    public ICommand AutofillExampleCommand { get; }
+
+    private void AutofillExample()
+    {
+        if (!IsCreateMode)
+        {
+            return;
+        }
+
+        if (HasFormData() && !ConfirmReplace())
+        {
+            return;
+        }
+
+        Code = CreateUniqueCode("TECH", App.DataStore.EventTypes.Select(item => item.Id));
+        Name = "Technology Conference";
+        Description = "Events focused on technology, innovation, startups, robotics, software, and digital creativity.";
+        IconKey = DefaultIconOptions.FirstOrDefault(option =>
+            option.Path.Contains("launch", StringComparison.OrdinalIgnoreCase) ||
+            option.Path.Contains("conference", StringComparison.OrdinalIgnoreCase))?.Path ??
+            DefaultIconOptions.First().Path;
+        ValidationMessage = GetString("ExampleDataFilledMessage");
+    }
 
     private void Save()
     {
@@ -223,6 +250,41 @@ public sealed class TypeEditorViewModel : ObservableObject
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private static string CreateUniqueCode(string baseCode, IEnumerable<string> existingCodes)
+    {
+        HashSet<string> existing = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (!existing.Contains(baseCode))
+        {
+            return baseCode;
+        }
+
+        int suffix = 2;
+        while (existing.Contains($"{baseCode}-{suffix}"))
+        {
+            suffix++;
+        }
+
+        return $"{baseCode}-{suffix}";
+    }
+
+    private bool HasFormData()
+    {
+        return !string.IsNullOrWhiteSpace(Code) ||
+               !string.IsNullOrWhiteSpace(Name) ||
+               !string.IsNullOrWhiteSpace(Description) ||
+               !string.Equals(IconKey, DefaultIconOptions.First().Path, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool ConfirmReplace()
+    {
+        return AppDialogService.ConfirmText(
+            GetString("AutofillExampleLabel"),
+            GetString("AutofillReplaceConfirmation"),
+            GetString("AutofillExampleLabel"),
+            GetString("CancelLabel"),
+            DialogKind.Info);
     }
 
     private void RefreshIconSelection()

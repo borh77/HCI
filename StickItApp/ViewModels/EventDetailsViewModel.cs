@@ -52,15 +52,17 @@ public sealed class EventDetailsViewModel : ObservableObject
     {
         get
         {
-            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
-            if (!string.IsNullOrWhiteSpace(eventIcon))
-            {
-                return eventIcon;
-            }
-
-            return ImagePathService.ToImageSourcePath(Type?.IconKey);
+            return HasCustomImage ? CustomImagePath : TypeIconPath;
         }
     }
+
+    public string CustomImagePath => ImagePathService.ToImageSourcePath(Event.IconPath);
+
+    public bool HasCustomImage => !string.IsNullOrWhiteSpace(CustomImagePath);
+
+    public string TypeIconPath => ImagePathService.ToImageSourcePath(Type?.IconKey);
+
+    public string TypeColorHex => Type?.ColorHex ?? "#64748B";
 
     public ICommand BackCommand { get; }
 
@@ -70,13 +72,13 @@ public sealed class EventDetailsViewModel : ObservableObject
 
     private void Delete()
     {
-        MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteEventConfirmation"), Event.Name),
+        bool confirmed = AppDialogService.ConfirmText(
             GetString("DeleteEventTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            string.Format(GetString("DeleteEventConfirmation"), Event.Name),
+            GetString("DeleteLabel"),
+            GetString("CancelLabel"));
 
-        if (result != MessageBoxResult.Yes)
+        if (!confirmed)
         {
             return;
         }

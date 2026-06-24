@@ -123,9 +123,41 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Border Grid.Column="0" Width="42" Height="42" Background="{Binding TypeColorHex}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6">
-                                    <Image Source="{Binding IconPath}" Stretch="Uniform" Margin="5" />
-                                </Border>
+                                <Grid Grid.Column="0" Width="42" Height="42">
+                                    <Border Background="{DynamicResource ContentBrush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            ClipToBounds="True">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Image Source="{Binding CustomImagePath}" Stretch="UniformToFill" />
+                                    </Border>
+                                    <Border Background="{Binding TypeColorHex}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="6">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasCustomImage}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Image Source="{Binding TypeIconPath}" Stretch="Uniform" Margin="5" />
+                                    </Border>
+                                </Grid>
 
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="{Binding Id}" FontSize="11" Foreground="{DynamicResource MutedTextBrush}" />

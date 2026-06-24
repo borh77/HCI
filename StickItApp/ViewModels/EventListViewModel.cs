@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -141,13 +142,13 @@ public sealed class EventListViewModel : ObservableObject
             return;
         }
 
-        MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteEventConfirmation"), item.Name),
+        bool confirmed = AppDialogService.ConfirmText(
             GetString("DeleteEventTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            string.Format(GetString("DeleteEventConfirmation"), item.Name),
+            GetString("DeleteLabel"),
+            GetString("CancelLabel"));
 
-        if (result != MessageBoxResult.Yes)
+        if (!confirmed)
         {
             return;
         }

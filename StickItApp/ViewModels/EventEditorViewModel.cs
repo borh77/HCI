@@ -61,9 +61,12 @@ public sealed class EventEditorViewModel : ObservableObject
         RemoveImageCommand = new RelayCommand(() => IconPath = string.Empty);
         AddPreviousDateCommand = new RelayCommand(AddPreviousDate);
         RemovePreviousDateCommand = new RelayCommand(RemovePreviousDate);
+        AutofillExampleCommand = new RelayCommand(AutofillExample);
     }
 
     public string PageTitle => _originalId is null ? GetString("NewEventLabel") : GetString("EditEventLabel");
+
+    public bool IsCreateMode => _originalId is null;
 
     public IReadOnlyList<AttendanceCategory> AttendanceOptions { get; } = Enum.GetValues<AttendanceCategory>();
 
@@ -132,6 +135,7 @@ public sealed class EventEditorViewModel : ObservableObject
             {
                 OnPropertyChanged(nameof(EffectiveIconPreviewPath));
                 OnPropertyChanged(nameof(HasEffectiveIconPreview));
+                OnPropertyChanged(nameof(TypeColorHex));
             }
         }
     }
@@ -188,6 +192,8 @@ public sealed class EventEditorViewModel : ObservableObject
 
     public bool HasCustomImage => !string.IsNullOrWhiteSpace(IconPath);
 
+    public string TypeColorHex => SelectedType?.ColorHex ?? "#64748B";
+
     public string SelectedImageFileName => string.IsNullOrWhiteSpace(IconPath)
         ? GetString("EventImageFallbackShortLabel")
         : Path.GetFileName(IconPath);
@@ -241,6 +247,58 @@ public sealed class EventEditorViewModel : ObservableObject
     public ICommand AddPreviousDateCommand { get; }
 
     public ICommand RemovePreviousDateCommand { get; }
+
+    public ICommand AutofillExampleCommand { get; }
+
+    private void AutofillExample()
+    {
+        if (!IsCreateMode)
+        {
+            return;
+        }
+
+        if (HasFormData() && !ConfirmReplace())
+        {
+            return;
+        }
+
+        Code = CreateUniqueCode("EVT-TECHNOVA-2026", App.DataStore.Events.Select(item => item.Id));
+        Name = "TechNova Expo 2026";
+        City = "Tokyo";
+        Country = "Japan";
+        Description = "International technology expo focused on robotics, AI, student projects, and startup showcases.";
+        AverageCost = 850000;
+        Attendance = AttendanceCategory.Over10000;
+        IsCharitable = false;
+        CurrentStart = new DateTime(2026, 9, 15);
+        CurrentEnd = new DateTime(2026, 9, 18);
+        PreviousStart = new DateTime(2025, 9, 16);
+        PreviousEnd = new DateTime(2025, 9, 19);
+        IconPath = string.Empty;
+
+        SelectedType = App.DataStore.EventTypes.FirstOrDefault(type =>
+            string.Equals(type.Id, "TECH", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(type.Name, "Technology Conference", StringComparison.OrdinalIgnoreCase)) ??
+            App.DataStore.EventTypes.FirstOrDefault();
+
+        SelectedTags.Clear();
+        foreach (Tag tag in App.DataStore.Tags.Where(IsExampleEventTag).Take(2))
+        {
+            SelectedTags.Add(tag);
+        }
+
+        PreviousDates.Clear();
+        PreviousDates.Add(new PreviousDateEditorItem
+        {
+            Start = PreviousStart.Value,
+            End = PreviousEnd.Value
+        });
+
+        SelectedAvailableTag = null;
+        TagSearchText = string.Empty;
+        AvailableTagsView.Refresh();
+        ValidationMessage = GetString("ExampleDataFilledMessage");
+    }
 
     private void LoadEvent(Event eventItem)
     {
@@ -378,6 +436,11 @@ public sealed class EventEditorViewModel : ObservableObject
     private void Save()
     {
         if (!Validate())
+        {
+            return;
+        }
+
+        if (_originalId is null && HasDuplicateEvent() && !ConfirmDuplicateCreate())
         {
             return;
         }
@@ -520,6 +583,44 @@ public sealed class EventEditorViewModel : ObservableObject
         return true;
     }
 
+    private bool HasDuplicateEvent()
+    {
+        string normalizedName = NormalizeForDuplicate(Name);
+        string normalizedCity = NormalizeForDuplicate(City);
+        string normalizedCountry = NormalizeForDuplicate(Country);
+        string typeId = SelectedType?.Id ?? string.Empty;
+        DateTime start = CurrentStart!.Value.Date;
+        DateTime end = CurrentEnd!.Value.Date;
+
+        return App.DataStore.Events.Any(eventItem =>
+        {
+            DateTime eventStart = eventItem.CurrentStart == default ? eventItem.Date : eventItem.CurrentStart;
+            DateTime eventEnd = eventItem.CurrentEnd == default ? eventItem.Date : eventItem.CurrentEnd;
+
+            return !string.Equals(eventItem.Id, _originalId, StringComparison.Ordinal) &&
+                   string.Equals(NormalizeForDuplicate(eventItem.Name), normalizedName, StringComparison.Ordinal) &&
+                   string.Equals(eventItem.TypeId, typeId, StringComparison.OrdinalIgnoreCase) &&
+                   eventStart.Date == start &&
+                   eventEnd.Date == end &&
+                   string.Equals(NormalizeForDuplicate(eventItem.City), normalizedCity, StringComparison.Ordinal) &&
+                   string.Equals(NormalizeForDuplicate(eventItem.Country), normalizedCountry, StringComparison.Ordinal);
+        });
+    }
+
+    private static bool ConfirmDuplicateCreate()
+    {
+        return AppDialogService.Confirm(
+            "DuplicateEventTitle",
+            "DuplicateEventMessage",
+            "CreateAnywayLabel",
+            "CancelLabel");
+    }
+
+    private static string NormalizeForDuplicate(string? value)
+    {
+        return (value ?? string.Empty).Trim().ToUpperInvariant();
+    }
+
     private static string MakeRelativeWhenPossible(string path)
     {
         string basePath = AppContext.BaseDirectory;
@@ -531,6 +632,61 @@ public sealed class EventEditorViewModel : ObservableObject
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private static string CreateUniqueCode(string baseCode, IEnumerable<string> existingCodes)
+    {
+        HashSet<string> existing = existingCodes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (!existing.Contains(baseCode))
+        {
+            return baseCode;
+        }
+
+        int suffix = 2;
+        while (existing.Contains($"{baseCode}-{suffix}"))
+        {
+            suffix++;
+        }
+
+        return $"{baseCode}-{suffix}";
+    }
+
+    private static bool IsExampleEventTag(Tag tag)
+    {
+        string value = $"{tag.Id} {tag.Name}".ToUpperInvariant();
+        return value.Contains("INNOVATION", StringComparison.Ordinal) ||
+               value.Contains("STUDENT", StringComparison.Ordinal) ||
+               value.Contains("URBAN", StringComparison.Ordinal) ||
+               value.Contains("TECH", StringComparison.Ordinal);
+    }
+
+    private bool HasFormData()
+    {
+        return !string.IsNullOrWhiteSpace(Code) ||
+               !string.IsNullOrWhiteSpace(Name) ||
+               !string.IsNullOrWhiteSpace(City) ||
+               !string.IsNullOrWhiteSpace(Country) ||
+               !string.IsNullOrWhiteSpace(Description) ||
+               AverageCost != 0 ||
+               IsCharitable ||
+               SelectedType is not null ||
+               SelectedTags.Count > 0 ||
+               PreviousDates.Count > 0 ||
+               !string.IsNullOrWhiteSpace(IconPath) ||
+               CurrentStart != DateTime.Today ||
+               CurrentEnd != DateTime.Today ||
+               PreviousStart != DateTime.Today ||
+               PreviousEnd != DateTime.Today;
+    }
+
+    private static bool ConfirmReplace()
+    {
+        return AppDialogService.ConfirmText(
+            GetString("AutofillExampleLabel"),
+            GetString("AutofillReplaceConfirmation"),
+            GetString("AutofillExampleLabel"),
+            GetString("CancelLabel"),
+            DialogKind.Info);
     }
 
     private static bool IsSupportedImageExtension(string extension)

@@ -4,6 +4,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -112,21 +113,17 @@ public sealed class TypeListViewModel : ObservableObject
 
         if (App.DataStore.Events.Any(item => item.TypeId == type.Id))
         {
-            MessageBox.Show(
-                GetString("TypeInUseMessage"),
-                GetString("DeleteTypeTitle"),
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            AppDialogService.ShowInfo("DeleteTypeTitle", "TypeInUseMessage");
             return;
         }
 
-        MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteTypeConfirmation"), type.Name),
+        bool confirmed = AppDialogService.ConfirmText(
             GetString("DeleteTypeTitle"),
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+            string.Format(GetString("DeleteTypeConfirmation"), type.Name),
+            GetString("DeleteLabel"),
+            GetString("CancelLabel"));
 
-        if (result != MessageBoxResult.Yes)
+        if (!confirmed)
         {
             return;
         }
@@ -134,7 +131,7 @@ public sealed class TypeListViewModel : ObservableObject
         App.DataStore.EventTypes.Remove(type);
         App.DataService.SaveAll(App.DataStore);
         TypesView.Refresh();
-        MessageBox.Show(GetString("TypeDeletedMessage"), GetString("DeleteTypeTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
+        AppDialogService.ShowInfo("DeleteTypeTitle", "TypeDeletedMessage");
         _showStatus?.Invoke($"Type '{type.Name}' deleted.", false);
     }
 

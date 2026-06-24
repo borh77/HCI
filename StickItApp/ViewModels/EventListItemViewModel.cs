@@ -42,14 +42,17 @@ public sealed class EventListItemViewModel
 
     public EventType? Type => App.DataStore.EventTypes.FirstOrDefault(type => type.Id == Event.TypeId);
 
+    public string CustomImagePath => ImagePathService.ToImageSourcePath(Event.IconPath);
+
+    public bool HasCustomImage => !string.IsNullOrWhiteSpace(CustomImagePath);
+
+    public string TypeIconPath => ImagePathService.ToImageSourcePath(Type?.IconKey);
+
     public string IconPath
     {
         get
         {
-            string eventIcon = ImagePathService.ToImageSourcePath(Event.IconPath);
-            return !string.IsNullOrWhiteSpace(eventIcon)
-                ? eventIcon
-                : ImagePathService.ToImageSourcePath(Type?.IconKey);
+            return HasCustomImage ? CustomImagePath : TypeIconPath;
         }
     }
 
