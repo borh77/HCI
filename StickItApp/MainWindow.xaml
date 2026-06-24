@@ -85,6 +85,39 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
+        <Style x:Key="HeaderTitleMenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="6,4" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlHoverBrush}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="StatusTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
             <Style.Triggers>
@@ -120,8 +153,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0">
-                        <Button Content="{DynamicResource MenuLabel}"
-                                Command="{Binding ToggleMenuCommand}">
+                        <Button Command="{Binding ToggleMenuCommand}"
+                                ToolTip="{DynamicResource MenuLabel}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -132,9 +165,13 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
+                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                       FontSize="18"
+                                       Text="&#xE700;" />
                         </Button>
                         <Button Content="&lt;"
-                                Command="{Binding BackCommand}">
+                                Command="{Binding BackCommand}"
+                                ToolTip="{DynamicResource BackLabel}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -148,18 +185,12 @@
                         </Button>
                     </Grid>
 
-                    <StackPanel Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Margin="8,0">
-                        <TextBlock Text="{Binding TopBarTitle}"
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextBrush}" />
-                        <TextBlock Text="{Binding CurrentPageTitle}"
-                                   FontSize="11"
-                                   Foreground="{DynamicResource MutedTextBrush}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
+                    <Grid Grid.Column="1"
+                          VerticalAlignment="Center"
+                          Margin="8,0">
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding ShowMenuButton}" Value="True">
@@ -167,9 +198,44 @@
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
+                            </StackPanel.Style>
+                            <TextBlock Text="{Binding TopBarTitle}"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource TextBrush}" />
+                            <TextBlock Text="{Binding CurrentPageTitle}"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource MutedTextBrush}" />
+                        </StackPanel>
+
+                        <Button Command="{Binding ToggleMenuCommand}"
+                                ToolTip="{DynamicResource MenuLabel}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource HeaderTitleMenuButtonStyle}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowBackButton}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding CurrentPageTitle}"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="{DynamicResource TextBrush}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+                                <TextBlock FontFamily="Segoe MDL2 Assets"
+                                           Text="&#xE70D;"
+                                           Margin="6,2,0,0"
+                                           FontSize="12"
+                                           Foreground="{DynamicResource MutedTextBrush}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
 
                     <Button Grid.Column="2"
                             Style="{StaticResource IconButtonStyle}"
