@@ -12,6 +12,8 @@ public sealed class MainWindowViewModel : ObservableObject
 {
     private sealed record NavigationEntry(UserControl Page, string TitleKey, bool IsMainPage);
 
+    private static readonly TimeSpan StatusDisplayDuration = TimeSpan.FromSeconds(3);
+
     private readonly Stack<NavigationEntry> _backStack = [];
     private bool _isMenuOpen;
     private UserControl _currentPage;
@@ -21,6 +23,7 @@ public sealed class MainWindowViewModel : ObservableObject
     private bool _isDarkTheme;
     private string _statusMessage = string.Empty;
     private bool _isStatusError;
+    private CancellationTokenSource? _statusClearCancellation;
 
     public MainWindowViewModel()
     {
@@ -215,8 +218,44 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public void SetStatus(string message, bool isError = false)
     {
+        _statusClearCancellation?.Cancel();
+        _statusClearCancellation?.Dispose();
+        _statusClearCancellation = null;
+
         StatusMessage = message;
         IsStatusError = isError;
+        OnPropertyChanged(nameof(HasStatusMessage));
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return;
+        }
+
+        CancellationTokenSource cancellation = new();
+        _statusClearCancellation = cancellation;
+        _ = ClearStatusAfterDelayAsync(cancellation);
+    }
+
+    private async Task ClearStatusAfterDelayAsync(CancellationTokenSource cancellation)
+    {
+        try
+        {
+            await Task.Delay(StatusDisplayDuration, cancellation.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        if (!ReferenceEquals(_statusClearCancellation, cancellation))
+        {
+            return;
+        }
+
+        _statusClearCancellation.Dispose();
+        _statusClearCancellation = null;
+        StatusMessage = string.Empty;
+        IsStatusError = false;
         OnPropertyChanged(nameof(HasStatusMessage));
     }
 

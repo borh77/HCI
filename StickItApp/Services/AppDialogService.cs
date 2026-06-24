@@ -12,6 +12,8 @@ public enum DialogKind
 
 public static class AppDialogService
 {
+    private static Window? _activeMessageDialog;
+
     public static bool Confirm(string titleKey, string messageKey, string confirmKey, string cancelKey)
     {
         return ConfirmText(GetString(titleKey), GetString(messageKey), GetString(confirmKey), GetString(cancelKey));
@@ -46,9 +48,33 @@ public static class AppDialogService
 
     public static void ShowMessageText(string title, string message, DialogKind kind = DialogKind.Info)
     {
+        CloseActiveMessageDialog();
         ConfirmationDialog dialog = new(title, message, GetString("OkLabel"), string.Empty, kind, true);
         dialog.Owner = GetOwner();
-        dialog.ShowDialog();
+        _activeMessageDialog = dialog;
+        dialog.Closed += (_, _) =>
+        {
+            if (ReferenceEquals(_activeMessageDialog, dialog))
+            {
+                _activeMessageDialog = null;
+            }
+        };
+        dialog.Show();
+    }
+
+    private static void CloseActiveMessageDialog()
+    {
+        if (_activeMessageDialog is null)
+        {
+            return;
+        }
+
+        Window dialog = _activeMessageDialog;
+        _activeMessageDialog = null;
+        if (dialog.IsVisible)
+        {
+            dialog.Close();
+        }
     }
 
     private static Window? GetOwner()
