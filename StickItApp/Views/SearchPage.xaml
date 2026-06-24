@@ -25,10 +25,31 @@
                        Foreground="{DynamicResource TextBrush}" />
 
             <TextBlock Text="{DynamicResource NameLabel}" Margin="0,8,0,2" Foreground="{DynamicResource TextBrush}" />
-            <TextBox x:Name="PrimarySearchBox"
-                     Height="30"
-                     Padding="8,3"
-                     Text="{Binding EventName, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid>
+                <TextBox x:Name="PrimarySearchBox"
+                         Height="30"
+                         Padding="8,3"
+                         ToolTip="{DynamicResource SearchEventNamePlaceholder}"
+                         Text="{Binding EventName, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="9,0"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="12"
+                           IsHitTestVisible="False"
+                           Text="{DynamicResource SearchEventNamePlaceholder}"
+                           TextTrimming="CharacterEllipsis">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=PrimarySearchBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <Grid Margin="0,6,0,0">
                 <Grid.ColumnDefinitions>
@@ -37,11 +58,59 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
                     <TextBlock Text="{DynamicResource DescriptionLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <TextBox Height="30" Padding="8,3" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid>
+                        <TextBox x:Name="DescriptionSearchBox"
+                                 Height="30"
+                                 Padding="8,3"
+                                 ToolTip="{DynamicResource SearchDescriptionPlaceholder}"
+                                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="9,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="11"
+                                   IsHitTestVisible="False"
+                                   Text="{DynamicResource SearchDescriptionPlaceholder}"
+                                   TextTrimming="CharacterEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=DescriptionSearchBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource TagsLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <TextBox Height="30" Padding="8,3" Text="{Binding TagsSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid>
+                        <TextBox x:Name="TagsSearchBox"
+                                 Height="30"
+                                 Padding="8,3"
+                                 ToolTip="{DynamicResource SearchTagsPlaceholder}"
+                                 Text="{Binding TagsSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="9,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="11"
+                                   IsHitTestVisible="False"
+                                   Text="{DynamicResource SearchTagsPlaceholder}"
+                                   TextTrimming="CharacterEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=TagsSearchBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
                 </StackPanel>
             </Grid>
 
@@ -79,7 +148,31 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
                     <TextBlock Text="{DynamicResource LocationLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <TextBox Height="30" Padding="8,3" Text="{Binding LocationText, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid>
+                        <TextBox x:Name="LocationSearchBox"
+                                 Height="30"
+                                 Padding="8,3"
+                                 ToolTip="{DynamicResource SearchLocationPlaceholder}"
+                                 Text="{Binding LocationText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="9,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="11"
+                                   IsHitTestVisible="False"
+                                   Text="{DynamicResource SearchLocationPlaceholder}"
+                                   TextTrimming="CharacterEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=LocationSearchBox}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource CharitableLabel}" Foreground="{DynamicResource TextBrush}" />

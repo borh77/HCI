@@ -31,7 +31,14 @@
     <sys:String x:Key="LightThemeLabel">Svetla</sys:String>
     <sys:String x:Key="DarkThemeLabel">Tamna</sys:String>
     <sys:String x:Key="EventListFilterPlaceholder">Filtriraj po nazivu, gradu, tipu, oznaci, datumu...</sys:String>
-    <sys:String x:Key="EventMapPlaceholder">Filtriraj doga&#273;aje po nazivu, gradu, tipu, oznaci...</sys:String>
+    <sys:String x:Key="EventMapPlaceholder">Filtriraj doga&#273;aje na mapi po nazivu, gradu, tipu, oznaci...</sys:String>
+    <sys:String x:Key="SearchEventNamePlaceholder">npr. EXIT 2026</sys:String>
+    <sys:String x:Key="SearchDescriptionPlaceholder">npr. muzika, konferencija, humanitarno...</sys:String>
+    <sys:String x:Key="SearchTagsPlaceholder">npr. student, no&#263;, otvoreno</sys:String>
+    <sys:String x:Key="SearchLocationPlaceholder">npr. Novi Sad, Srbija</sys:String>
+    <sys:String x:Key="TypeListFilterPlaceholder">Filtriraj tipove po id-u, nazivu, opisu...</sys:String>
+    <sys:String x:Key="TagListFilterPlaceholder">Filtriraj oznake po id-u, nazivu, opisu, boji...</sys:String>
+    <sys:String x:Key="EventEditorTagSearchPlaceholder">Pretra&#382;i oznake za dodavanje...</sys:String>
     <sys:String x:Key="EventEditorLabel">Uređivanje događaja</sys:String>
     <sys:String x:Key="EventDetailsLabel">Detalji događaja</sys:String>
     <sys:String x:Key="TypeEditorLabel">Uređivanje tipa</sys:String>

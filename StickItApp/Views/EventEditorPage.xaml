@@ -92,7 +92,31 @@
             <Button Margin="0,6,0,0" MinHeight="30" Content="{DynamicResource AddNewTypeLabel}" Command="{Binding AddTypeCommand}" />
 
             <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
-            <TextBox x:Name="TagSearchTextBox" Height="32" Padding="8,4" Text="{Binding TagSearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid>
+                <TextBox x:Name="TagSearchTextBox"
+                         Height="32"
+                         Padding="8,4"
+                         ToolTip="{DynamicResource EventEditorTagSearchPlaceholder}"
+                         Text="{Binding TagSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="9,0"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="12"
+                           IsHitTestVisible="False"
+                           Text="{DynamicResource EventEditorTagSearchPlaceholder}"
+                           TextTrimming="CharacterEllipsis">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=TagSearchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
             <Grid Margin="0,6,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
