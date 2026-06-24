@@ -30,6 +30,7 @@
     <sys:String x:Key="FilterLabel">Filtriraj</sys:String>
     <sys:String x:Key="LightThemeLabel">Svetla</sys:String>
     <sys:String x:Key="DarkThemeLabel">Tamna</sys:String>
+    <sys:String x:Key="EventListFilterPlaceholder">Filtriraj po nazivu, gradu, tipu, oznaci, datumu...</sys:String>
     <sys:String x:Key="EventMapPlaceholder">Filtriraj doga&#273;aje po nazivu, gradu, tipu, oznaci...</sys:String>
     <sys:String x:Key="EventEditorLabel">Uređivanje događaja</sys:String>
     <sys:String x:Key="EventDetailsLabel">Detalji događaja</sys:String>

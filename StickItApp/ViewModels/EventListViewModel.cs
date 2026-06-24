@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -101,16 +102,173 @@ public sealed class EventListViewModel : ObservableObject
         }
 
         string query = FilterText.Trim();
-        return Contains(eventItem.Id, query) ||
-               Contains(eventItem.Name, query) ||
-               Contains(eventItem.Description, query) ||
-               Contains(eventItem.City, query) ||
-               Contains(eventItem.Country, query);
+        Event eventModel = eventItem.Event;
+        EventType? type = App.DataStore.EventTypes.FirstOrDefault(typeItem => typeItem.Id == eventModel.TypeId);
+
+        return MatchesAny(
+                   query,
+                   eventModel.Id,
+                   $"#{eventModel.Id}",
+                   eventModel.Name,
+                   eventModel.City,
+                   eventModel.Country,
+                   GetLocationSearchValue(eventModel),
+                   eventModel.Description,
+                   eventModel.TypeId,
+                   type?.Id,
+                   type?.Name,
+                   type?.Description,
+                   eventModel.AverageCost.ToString(CultureInfo.CurrentCulture),
+                   eventModel.AverageCost.ToString(CultureInfo.InvariantCulture)) ||
+               MatchesAny(query, GetAttendanceSearchValues(eventModel)) ||
+               MatchesCharitable(query, eventModel) ||
+               MatchesAny(query, GetDateSearchValues(eventModel)) ||
+               MatchesAny(query, GetTagSearchValues(eventModel)) ||
+               MatchesMapPlacement(query, eventModel);
     }
 
-    private static bool Contains(string value, string query)
+    private static bool Matches(string? value, string query)
     {
-        return value.Contains(query, StringComparison.OrdinalIgnoreCase);
+        return !string.IsNullOrWhiteSpace(value) &&
+               value.Contains(query, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool MatchesAny(string query, params string?[] values)
+    {
+        return values.Any(value => Matches(value, query));
+    }
+
+    private static string? GetLocationSearchValue(Event eventItem)
+    {
+        if (string.IsNullOrWhiteSpace(eventItem.City) && string.IsNullOrWhiteSpace(eventItem.Country))
+        {
+            return null;
+        }
+
+        return $"{eventItem.City}, {eventItem.Country}".Trim(' ', ',');
+    }
+
+    private static string?[] GetAttendanceSearchValues(Event eventItem)
+    {
+        return eventItem.Attendance switch
+        {
+            AttendanceCategory.UpTo1000 => [eventItem.Attendance.ToString(), "1000", "<= 1000", "Up to 1000"],
+            AttendanceCategory.From1000To5000 => [eventItem.Attendance.ToString(), "1000-5000", "1000 to 5000"],
+            AttendanceCategory.From5000To10000 => [eventItem.Attendance.ToString(), "5000-10000", "5000 to 10000"],
+            AttendanceCategory.Over10000 => [eventItem.Attendance.ToString(), "10000+", "> 10000", "Over 10000"],
+            _ => [eventItem.Attendance.ToString()]
+        };
+    }
+
+    private static string?[] GetCharitableSearchValues(Event eventItem)
+    {
+        return eventItem.IsCharitable
+            ? ["true", "yes", "charitable", "charity", "humanitarno", "dobrotvorno", "da"]
+            : ["false", "no", "not charitable", "not charity", "nije humanitarno", "nije dobrotvorno", "ne"];
+    }
+
+    private static bool MatchesCharitable(string query, Event eventItem)
+    {
+        string normalizedQuery = query.Trim().ToLowerInvariant();
+        string[] charitableValues = ["true", "yes", "charitable", "charity", "humanitarno", "dobrotvorno", "da"];
+        string[] nonCharitableValues = ["false", "no", "not charitable", "not charity", "nije humanitarno", "nije dobrotvorno", "ne"];
+
+        if (charitableValues.Contains(normalizedQuery))
+        {
+            return eventItem.IsCharitable;
+        }
+
+        if (nonCharitableValues.Contains(normalizedQuery))
+        {
+            return !eventItem.IsCharitable;
+        }
+
+        return MatchesAny(query, GetCharitableSearchValues(eventItem));
+    }
+
+    private static string?[] GetDateSearchValues(Event eventItem)
+    {
+        List<string?> values = [];
+        AddDateSearchValues(values, eventItem.Date);
+        AddDateSearchValues(values, eventItem.CurrentStart);
+        AddDateSearchValues(values, eventItem.CurrentEnd);
+
+        foreach (PreviousDate previousDate in App.DataStore.PreviousDates.Where(item => item.EventId == eventItem.Id))
+        {
+            AddDateSearchValues(values, previousDate.Date);
+            AddDateSearchValues(values, previousDate.Start);
+            AddDateSearchValues(values, previousDate.End);
+        }
+
+        return [.. values];
+    }
+
+    private static void AddDateSearchValues(List<string?> values, DateTime date)
+    {
+        if (date == default)
+        {
+            return;
+        }
+
+        values.AddRange(FormatDateForSearch(date));
+    }
+
+    private static string?[] FormatDateForSearch(DateTime date)
+    {
+        return
+        [
+            date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+            date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+            date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            date.ToString("yyyy", CultureInfo.InvariantCulture)
+        ];
+    }
+
+    private static string?[] GetTagSearchValues(Event eventItem)
+    {
+        return
+        [
+            .. App.DataStore.EventTags
+                .Where(relation => relation.EventId == eventItem.Id)
+                .SelectMany(relation =>
+                {
+                    Tag? tag = App.DataStore.Tags.FirstOrDefault(item => item.Id == relation.TagId);
+                    return new[]
+                    {
+                        relation.TagId,
+                        tag?.Id,
+                        tag?.Name,
+                        tag?.Description,
+                        tag?.ColorHex
+                    };
+                })
+        ];
+    }
+
+    private static bool MatchesMapPlacement(string query, Event eventItem)
+    {
+        string normalizedQuery = query.Trim().ToLowerInvariant();
+        string[] placedValues = ["placed", "on map", "mapped", "na mapi"];
+        string[] unplacedValues = ["unplaced", "not placed", "not on map", "nije na mapi"];
+
+        if (placedValues.Contains(normalizedQuery))
+        {
+            return eventItem.IsPlacedOnMap;
+        }
+
+        if (unplacedValues.Contains(normalizedQuery))
+        {
+            return !eventItem.IsPlacedOnMap;
+        }
+
+        return MatchesAny(query, GetMapPlacementSearchValues(eventItem));
+    }
+
+    private static string?[] GetMapPlacementSearchValues(Event eventItem)
+    {
+        return eventItem.IsPlacedOnMap
+            ? ["placed", "on map", "mapped", "na mapi"]
+            : ["unplaced", "not placed", "not on map", "nije na mapi"];
     }
 
     private void ApplySort()
