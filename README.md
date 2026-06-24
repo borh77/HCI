@@ -1,6 +1,6 @@
 # StickItApp
 
-StickItApp is a WPF desktop application for the HCI project topic: managing events, event types, tags, and a visual event map. The app is prepared for assignment **G 5 Y**.
+StickItApp is a WPF desktop application for the HCI project topic: managing events, event types, tags, and a global event map. The app is prepared for assignment **G 5 Y**.
 
 ## Implemented features
 
@@ -14,8 +14,8 @@ StickItApp is a WPF desktop application for the HCI project topic: managing even
 - Event, type, and tag search/filter/reset/sort flows.
 - Type and tag filters search code/id, name, and description.
 - Advanced search by event name, description, tags, type, attendance, location, and charitable status.
-- Map uses a fixed selected image asset, supports placing events, moving events, returning events to the unplaced list, removing selected events, clearing the map, and preventing overlap with a visible friendly error.
-- Clicking an event on the map shows useful details and actions: Details, Edit, Delete, and Back to list.
+- Global Map uses a selected image asset, supports placing events, moving events, returning events to the unplaced list, removing selected events, clearing the map, and preventing overlap with a visible friendly error.
+- Clicking an event on the global map shows useful details and actions: Details, Edit, Delete, and Back to list.
 - EN/SR language switch for the main visible labels.
 - Light/dark theme switch with persisted settings.
 - Confirmation dialogs before deleting events, types, tags, and before clearing the map.
@@ -26,7 +26,7 @@ The app uses `CsvDataService` and stores CSV files in the runtime `Data` directo
 
 `StickItApp/bin/Debug/net8.0-windows/Data`
 
-On startup, the service creates missing CSV files with headers. If the original generic sample data is detected, it is replaced with the StickItApp wireframe sample data. User-created data is loaded from CSV and saved back after create, update, delete, map, and personalization changes.
+On startup, the service creates missing CSV files with headers. If the original generic sample data is detected, it is replaced with the StickItApp wireframe sample data. User-created data is loaded from CSV and saved back after create, update, delete, global map, and personalization changes.
 
 CSV files:
 
@@ -37,11 +37,11 @@ CSV files:
 - `previous_dates.csv`
 - `settings.csv`
 
-## Fixed map behavior
+## Global Map behavior
 
-The map is a fixed selected image: `StickItApp/Assets/Maps/event_map.png`.
+The Global Map uses a selected image: `StickItApp/Assets/Maps/event_map.png`.
 
-By design, the map does not support scrolling or zooming. Event icons are placed on a fixed `Canvas` overlay above the image, using `Canvas.Left` and `Canvas.Top`. The app clamps coordinates to the image boundaries, prevents icon overlap, and persists each event position plus `IsPlacedOnMap` in `events.csv`.
+By design, the Global Map does not support scrolling or zooming. Event icons are placed on a `Canvas` overlay above the image, using `Canvas.Left` and `Canvas.Top`. The app clamps coordinates to the image boundaries, prevents icon overlap, and persists each event position plus `IsPlacedOnMap` in `events.csv`.
 
 ## Sample data
 
@@ -55,17 +55,17 @@ Events:
 
 Types:
 
-- Music Festival
-- Sports Event
-- Movie Awards
-- Tech Conference
-- Cultural Fair
+- Concert
+- Conference
+- Festival
+- Sports event
+- Cultural event
 
 Tags:
 
 - Family
-- Night
 - Outdoor
+- Indoor
 - Student
 - Urban
 
@@ -84,11 +84,10 @@ The project targets `net8.0-windows` and uses WPF.
 
 - `Ctrl+F`: focus the primary search/filter field on supported pages.
 - `Esc`: close the selected map details panel or return/cancel on supported pages.
-- Reset buttons are available on list, search, and map screens for filter cleanup.
+- Reset buttons are available on list, search, and global map screens for filter cleanup.
 
 ## Personalization
 
 - Language can be switched between EN and SR from the top bar.
 - Theme can be switched between light and dark from the top bar.
 - Language, theme, last sort mode, and last search text are persisted in `settings.csv`.
-

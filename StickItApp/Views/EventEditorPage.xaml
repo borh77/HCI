@@ -40,14 +40,26 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <ComboBox Height="32" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding Attendance}" />
+                    <ComboBox Height="32" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding Attendance}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
 
             <CheckBox Content="{DynamicResource IsCharitableLabel}" Margin="0,10,0,0" Foreground="{DynamicResource TextBrush}" IsChecked="{Binding IsCharitable}" />
 
             <TextBlock Text="{DynamicResource TypeLabel}" Margin="0,10,0,3" Foreground="{DynamicResource TextBrush}" />
-            <ComboBox Height="32" ItemsSource="{Binding EventTypes}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name" />
+            <ComboBox Height="32" ItemsSource="{Binding EventTypes}" SelectedItem="{Binding SelectedType}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Button Margin="0,6,0,0" MinHeight="30" Content="{DynamicResource AddNewTypeLabel}" Command="{Binding AddTypeCommand}" />
 
             <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
@@ -57,7 +69,13 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding AvailableTagsView}" SelectedItem="{Binding SelectedAvailableTag}" DisplayMemberPath="Name" />
+                <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding AvailableTagsView}" SelectedItem="{Binding SelectedAvailableTag}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Button Grid.Column="1" Margin="6,0,0,0" MinHeight="32" Content="{DynamicResource AddLabel}" Command="{Binding AddSelectedTagCommand}" />
             </Grid>
             <Button Margin="0,6,0,0" MinHeight="30" Content="{DynamicResource AddNewTagLabel}" Command="{Binding AddTagCommand}" />
@@ -70,7 +88,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" />
+                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" Foreground="{DynamicResource TextBrush}" />
                                 <Button Grid.Column="1" Content="x" Command="{Binding DataContext.RemoveSelectedTagCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
                             </Grid>
                         </Border>

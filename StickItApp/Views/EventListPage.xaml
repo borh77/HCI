@@ -29,7 +29,13 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}" />
+                <ComboBox Grid.Column="0" Height="32" ItemsSource="{Binding SortModes}" SelectedItem="{Binding SelectedSortMode}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Button Grid.Column="1" Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource ResetFilterLabel}" Content="{DynamicResource ResetLabel}" Command="{Binding ResetFilterCommand}" />
             </Grid>
         </StackPanel>
@@ -54,7 +60,7 @@
                                     <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
                                     <TextBlock Text="{Binding Location}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
                                     <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
-                                    <TextBlock Text="{Binding Attendance}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding AttendanceDisplay}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
 
                                     <WrapPanel HorizontalAlignment="Right" Margin="0,6,0,0">
                                         <Button Style="{StaticResource SmallButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Content="{DynamicResource DetailsLabel}" Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />

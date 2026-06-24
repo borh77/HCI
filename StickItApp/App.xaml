@@ -1,9 +1,11 @@
 <Application x:Class="StickItApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:StickItApp.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <converters:LocalizedDisplayConverter x:Key="LocalizedDisplayConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Themes/LightTheme.xaml" />
                 <ResourceDictionary Source="Resources/Languages/Strings.en.xaml" />

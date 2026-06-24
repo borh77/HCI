@@ -1,5 +1,6 @@
 using System.IO;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -41,7 +42,7 @@ public sealed class MapEventViewModel : ObservableObject
 
     public EventType? Type => App.DataStore.EventTypes.FirstOrDefault(type => type.Id == Event.TypeId);
 
-    public string TypeName => Type?.Name ?? "-";
+    public string TypeName => Type is null ? "-" : DisplayTextService.ToDisplayText(Type);
 
     public string TypeColorHex => Type?.ColorHex ?? "#64748B";
 

@@ -39,7 +39,13 @@
                 <ComboBox Grid.Column="0"
                           Height="32"
                           ItemsSource="{Binding SortModes}"
-                          SelectedItem="{Binding SelectedSortMode}" />
+                          SelectedItem="{Binding SelectedSortMode}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Button Grid.Column="1"
                         Style="{StaticResource SmallButtonStyle}"
                         ToolTip="{DynamicResource ResetFilterLabel}"
@@ -87,7 +93,7 @@
                                     <TextBlock Text="{Binding Id}"
                                                FontSize="11"
                                                Foreground="{DynamicResource MutedTextBrush}" />
-                                    <TextBlock Text="{Binding Name}"
+                                    <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}"
                                                FontSize="16"
                                                FontWeight="SemiBold"
                                                Foreground="{DynamicResource TextBrush}" />

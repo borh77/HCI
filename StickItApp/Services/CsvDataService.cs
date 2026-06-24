@@ -636,61 +636,61 @@ public sealed class CsvDataService
     {
         CsvDataStore store = new();
 
-        EventType musicFestival = new()
+        EventType concert = new()
         {
-            Id = "TYPE-MUSIC",
-            Name = "Music Festival",
+            Id = "TYPE-CONCERT",
+            Name = "Concert",
             IconKey = string.Empty,
             ColorHex = "#7C3AED",
-            Description = "Large multi-day concerts and festival programs."
+            Description = "Live music event with performers and an audience."
+        };
+        EventType conference = new()
+        {
+            Id = "TYPE-CONFERENCE",
+            Name = "Conference",
+            IconKey = string.Empty,
+            ColorHex = "#059669",
+            Description = "Professional or academic event with talks and sessions."
+        };
+        EventType festival = new()
+        {
+            Id = "TYPE-FESTIVAL",
+            Name = "Festival",
+            IconKey = string.Empty,
+            ColorHex = "#DB2777",
+            Description = "Multi-day public program with music, film, or culture."
         };
         EventType sportsEvent = new()
         {
             Id = "TYPE-SPORTS",
-            Name = "Sports Event",
+            Name = "Sports event",
             IconKey = string.Empty,
             ColorHex = "#2563EB",
-            Description = "Competitive sports events with spectators."
+            Description = "Competitive sports event with spectators."
         };
-        EventType movieAwards = new()
-        {
-            Id = "TYPE-MOVIE",
-            Name = "Movie Awards",
-            IconKey = string.Empty,
-            ColorHex = "#DB2777",
-            Description = "Film premieres, ceremonies, and award shows."
-        };
-        EventType techConference = new()
-        {
-            Id = "TYPE-TECH",
-            Name = "Tech Conference",
-            IconKey = string.Empty,
-            ColorHex = "#059669",
-            Description = "Professional conferences focused on technology."
-        };
-        EventType culturalFair = new()
+        EventType culturalEvent = new()
         {
             Id = "TYPE-CULTURE",
-            Name = "Cultural Fair",
+            Name = "Cultural event",
             IconKey = string.Empty,
             ColorHex = "#D97706",
-            Description = "Public culture, tradition, food, and city events."
+            Description = "Public event focused on culture, film, food, or tradition."
         };
 
-        store.EventTypes.Add(musicFestival);
+        store.EventTypes.Add(concert);
+        store.EventTypes.Add(conference);
+        store.EventTypes.Add(festival);
         store.EventTypes.Add(sportsEvent);
-        store.EventTypes.Add(movieAwards);
-        store.EventTypes.Add(techConference);
-        store.EventTypes.Add(culturalFair);
+        store.EventTypes.Add(culturalEvent);
 
         Tag family = new() { Id = "TAG-FAMILY", Name = "Family", ColorHex = "#EC4899", Description = "Appropriate or interesting for families." };
-        Tag night = new() { Id = "TAG-NIGHT", Name = "Night", ColorHex = "#6366F1", Description = "Evening or late-night program." };
+        Tag indoor = new() { Id = "TAG-INDOOR", Name = "Indoor", ColorHex = "#6366F1", Description = "Takes place mainly indoors." };
         Tag outdoor = new() { Id = "TAG-OUTDOOR", Name = "Outdoor", ColorHex = "#10B981", Description = "Takes place mainly outdoors." };
         Tag student = new() { Id = "TAG-STUDENT", Name = "Student", ColorHex = "#F59E0B", Description = "Useful for student visitors and budgets." };
         Tag urban = new() { Id = "TAG-URBAN", Name = "Urban", ColorHex = "#64748B", Description = "Major city event with dense public activity." };
 
         store.Tags.Add(family);
-        store.Tags.Add(night);
+        store.Tags.Add(indoor);
         store.Tags.Add(outdoor);
         store.Tags.Add(student);
         store.Tags.Add(urban);
@@ -709,14 +709,14 @@ public sealed class CsvDataService
             averageCost: 180,
             attendance: AttendanceCategory.Over10000,
             isCharitable: false,
-            typeId: musicFestival.Id,
+            typeId: festival.Id,
             x: 76,
             y: 132,
             isPlacedOnMap: true,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [night.Id, outdoor.Id, student.Id],
+            tagIds: [outdoor.Id, student.Id, urban.Id],
             previousDates: [(new DateTime(2025, 7, 10), new DateTime(2025, 7, 13))]);
 
         AddSampleEvent(
@@ -738,7 +738,7 @@ public sealed class CsvDataService
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [urban.Id, night.Id],
+            tagIds: [urban.Id, indoor.Id],
             previousDates: [(new DateTime(2025, 6, 5), new DateTime(2025, 6, 22))]);
 
         AddSampleEvent(
@@ -753,14 +753,14 @@ public sealed class CsvDataService
             averageCost: 650,
             attendance: AttendanceCategory.From5000To10000,
             isCharitable: true,
-            typeId: movieAwards.Id,
+            typeId: culturalEvent.Id,
             x: 0,
             y: 0,
             isPlacedOnMap: false,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [night.Id, urban.Id],
+            tagIds: [indoor.Id, urban.Id],
             previousDates: [(new DateTime(2025, 3, 2), new DateTime(2025, 3, 2))]);
 
         AddSampleEvent(
@@ -775,7 +775,7 @@ public sealed class CsvDataService
             averageCost: 240,
             attendance: AttendanceCategory.Over10000,
             isCharitable: false,
-            typeId: culturalFair.Id,
+            typeId: culturalEvent.Id,
             x: 0,
             y: 0,
             isPlacedOnMap: false,
@@ -797,7 +797,7 @@ public sealed class CsvDataService
             averageCost: 420,
             attendance: AttendanceCategory.From5000To10000,
             isCharitable: false,
-            typeId: movieAwards.Id,
+            typeId: festival.Id,
             x: 0,
             y: 0,
             isPlacedOnMap: false,
@@ -820,7 +820,17 @@ public sealed class CsvDataService
 
     private static bool IsOriginalSampleData(CsvDataStore store)
     {
-        string[] originalTypeIds = ["TYPE-REMINDER", "TYPE-BIRTHDAY", "TYPE-MEETING", "TYPE-EXAM", "TYPE-PERSONAL"];
+        string[] originalTypeIds =
+        [
+            "TYPE-REMINDER",
+            "TYPE-BIRTHDAY",
+            "TYPE-MEETING",
+            "TYPE-EXAM",
+            "TYPE-PERSONAL",
+            "TYPE-MUSIC",
+            "TYPE-MOVIE",
+            "TYPE-TECH"
+        ];
         string[] originalEventIds = ["EVT-HCI-EXAM", "EVT-DOCS", "EVT-BIRTHDAY", "EVT-MEETING", "EVT-STICKY-NOTES"];
 
         return store.EventTypes.Any(type => originalTypeIds.Contains(type.Id)) ||

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -35,6 +36,10 @@ public sealed class EventDetailsViewModel : ObservableObject
     public Event Event { get; }
 
     public EventType? Type => App.DataStore.EventTypes.FirstOrDefault(type => type.Id == Event.TypeId);
+
+    public string TypeDisplayName => Type is null ? "-" : DisplayTextService.ToDisplayText(Type);
+
+    public string AttendanceDisplay => DisplayTextService.ToDisplayText(Event.Attendance);
 
     public ObservableCollection<Tag> Tags { get; }
 

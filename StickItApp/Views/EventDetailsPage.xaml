@@ -30,7 +30,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
                 <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding Event.Attendance}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding AttendanceDisplay}" Foreground="{DynamicResource TextBrush}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{DynamicResource CharitableLabel}" Foreground="{DynamicResource TextBrush}" />
@@ -40,14 +40,14 @@
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Text="{DynamicResource TypeLabel}" Foreground="{DynamicResource TextBrush}" />
                 <TextBlock Text=": " Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding Type.Name}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding TypeDisplayName}" Foreground="{DynamicResource TextBrush}" />
             </StackPanel>
 
             <TextBlock Text="{DynamicResource TagsLabel}" Margin="0,12,0,4" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
             <ItemsControl ItemsSource="{Binding Tags}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" />
+                        <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" Foreground="{DynamicResource TextBrush}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

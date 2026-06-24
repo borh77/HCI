@@ -1,4 +1,5 @@
 using StickItApp.Models;
+using StickItApp.Services;
 
 namespace StickItApp.ViewModels;
 
@@ -22,6 +23,8 @@ public sealed class EventListItemViewModel
     public string Country => Event.Country;
 
     public AttendanceCategory Attendance => Event.Attendance;
+
+    public string AttendanceDisplay => DisplayTextService.ToDisplayText(Event.Attendance);
 
     public DateTime CurrentStart => Event.CurrentStart == default ? Event.Date : Event.CurrentStart;
 

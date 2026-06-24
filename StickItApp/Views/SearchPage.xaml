@@ -52,11 +52,23 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
                     <TextBlock Text="{DynamicResource TypeLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <ComboBox Height="30" ItemsSource="{Binding TypeOptions}" SelectedItem="{Binding SelectedType}" DisplayMemberPath="Name" />
+                    <ComboBox Height="30" ItemsSource="{Binding TypeOptions}" SelectedItem="{Binding SelectedType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <ComboBox Height="30" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding SelectedAttendance}" />
+                    <ComboBox Height="30" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding SelectedAttendance}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
 
@@ -71,7 +83,13 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource CharitableLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <ComboBox Height="30" ItemsSource="{Binding CharitableOptions}" SelectedItem="{Binding SelectedCharitable}" />
+                    <ComboBox Height="30" ItemsSource="{Binding CharitableOptions}" SelectedItem="{Binding SelectedCharitable}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
 
@@ -114,7 +132,7 @@
                                     <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
                                     <TextBlock Text="{Binding Location}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
                                     <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
-                                    <TextBlock Text="{Binding Attendance}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding AttendanceDisplay}" FontSize="12" Foreground="{DynamicResource MutedTextBrush}" />
 
                                     <WrapPanel HorizontalAlignment="Right" Margin="0,6,0,0">
                                         <Button Style="{StaticResource SmallButtonStyle}"

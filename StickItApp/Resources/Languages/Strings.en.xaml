@@ -3,12 +3,15 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="ApplicationName">StickItApp</sys:String>
     <sys:String x:Key="MenuLabel">Menu</sys:String>
-    <sys:String x:Key="MapLabel">Map</sys:String>
+    <sys:String x:Key="MapLabel">Global Map</sys:String>
     <sys:String x:Key="EventsLabel">Events</sys:String>
     <sys:String x:Key="TypesLabel">Types</sys:String>
     <sys:String x:Key="TagsLabel">Tags</sys:String>
     <sys:String x:Key="SearchLabel">Search</sys:String>
     <sys:String x:Key="AddLabel">Add</sys:String>
+    <sys:String x:Key="AllLabel">All</sys:String>
+    <sys:String x:Key="YesLabel">Yes</sys:String>
+    <sys:String x:Key="NoLabel">No</sys:String>
     <sys:String x:Key="NewEventLabel">New Event</sys:String>
     <sys:String x:Key="NewTypeLabel">New Type</sys:String>
     <sys:String x:Key="NewTagLabel">New Tag</sys:String>
@@ -63,10 +66,10 @@
     <sys:String x:Key="ChooseTypeLabel">Choose type</sys:String>
     <sys:String x:Key="SearchTagsLabel">Search tags</sys:String>
     <sys:String x:Key="SelectedTagsLabel">Selected tags</sys:String>
-    <sys:String x:Key="ClearMapLabel">Clear Map</sys:String>
+    <sys:String x:Key="ClearMapLabel">Clear Global Map</sys:String>
     <sys:String x:Key="BackToListLabel">Back to list</sys:String>
     <sys:String x:Key="ResetFilterLabel">Reset Filter</sys:String>
-    <sys:String x:Key="FixedEventMapLabel">Fixed event map</sys:String>
+    <sys:String x:Key="FixedEventMapLabel">Selected global event map</sys:String>
     <sys:String x:Key="NoOverlapMessage">This spot is already taken. Move the event a little so map pins do not overlap.</sys:String>
     <sys:String x:Key="DeleteEventTitle">Delete event</sys:String>
     <sys:String x:Key="DeleteTypeTitle">Delete type</sys:String>
@@ -78,4 +81,16 @@
     <sys:String x:Key="TypeInUseMessage">This type is used by one or more events and cannot be deleted.</sys:String>
     <sys:String x:Key="TypeDeletedMessage">Type deleted.</sys:String>
     <sys:String x:Key="TagDeletedMessage">Tag deleted. Related event-tag links were removed.</sys:String>
+    <sys:String x:Key="Demo_AttendanceUpTo1000">Attendance up to 1000</sys:String>
+    <sys:String x:Key="Demo_AttendanceOver1000">Attendance over 1000</sys:String>
+    <sys:String x:Key="Demo_Urban">Urban</sys:String>
+    <sys:String x:Key="Demo_Outdoor">Outdoor</sys:String>
+    <sys:String x:Key="Demo_Indoor">Indoor</sys:String>
+    <sys:String x:Key="Demo_Concert">Concert</sys:String>
+    <sys:String x:Key="Demo_Conference">Conference</sys:String>
+    <sys:String x:Key="Demo_Festival">Festival</sys:String>
+    <sys:String x:Key="Demo_Sportsevent">Sports event</sys:String>
+    <sys:String x:Key="Demo_Culturalevent">Cultural event</sys:String>
+    <sys:String x:Key="Demo_Family">Family</sys:String>
+    <sys:String x:Key="Demo_Student">Student</sys:String>
 </ResourceDictionary>
