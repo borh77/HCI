@@ -283,7 +283,8 @@ public sealed class EventEditorViewModel : ObservableObject
         string query = TagSearchText.Trim();
         return tag.Id.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                tag.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               tag.Description.Contains(query, StringComparison.OrdinalIgnoreCase);
+               tag.Description.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               tag.ColorHex.Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
     private void AddSelectedTag()
@@ -514,4 +515,5 @@ public sealed class EventEditorViewModel : ObservableObject
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
+
 }

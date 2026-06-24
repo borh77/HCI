@@ -42,7 +42,7 @@ public sealed class TagListViewModel : ObservableObject
 
     public ICollectionView TagsView { get; }
 
-    public IReadOnlyList<string> SortModes { get; } = ["Code", "Name"];
+    public IReadOnlyList<string> SortModes { get; } = ["Code", "Description"];
 
     public string FilterText
     {
@@ -86,7 +86,8 @@ public sealed class TagListViewModel : ObservableObject
         string query = FilterText.Trim();
         return Contains(tag.Id, query) ||
                Contains(tag.Name, query) ||
-               Contains(tag.Description, query);
+               Contains(tag.Description, query) ||
+               Contains(tag.ColorHex, query);
     }
 
     private static bool Contains(string value, string query)
@@ -98,7 +99,7 @@ public sealed class TagListViewModel : ObservableObject
     {
         TagsView.SortDescriptions.Clear();
         TagsView.SortDescriptions.Add(new SortDescription(
-            SelectedSortMode == "Name" ? nameof(Tag.Name) : nameof(Tag.Id),
+            SelectedSortMode == "Description" ? nameof(Tag.Description) : nameof(Tag.Id),
             ListSortDirection.Ascending));
         TagsView.Refresh();
     }
@@ -111,7 +112,7 @@ public sealed class TagListViewModel : ObservableObject
         }
 
         MessageBoxResult result = MessageBox.Show(
-            string.Format(GetString("DeleteTagConfirmation"), tag.Name),
+            string.Format(GetString("DeleteTagConfirmation"), tag.Id),
             GetString("DeleteTagTitle"),
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
@@ -131,7 +132,7 @@ public sealed class TagListViewModel : ObservableObject
         App.DataService.SaveAll(App.DataStore);
         TagsView.Refresh();
         MessageBox.Show(GetString("TagDeletedMessage"), GetString("DeleteTagTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
-        _showStatus?.Invoke($"Tag '{tag.Name}' deleted.", false);
+        _showStatus?.Invoke($"Tag '{tag.Id}' deleted.", false);
     }
 
     private static string GetString(string resourceKey)

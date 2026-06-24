@@ -180,7 +180,7 @@ public sealed class CsvDataService
             tags.Add(new Tag
             {
                 Id = row[0],
-                Name = row[1],
+                Name = string.IsNullOrWhiteSpace(row[1]) ? row[0] : row[1],
                 ColorHex = row[2],
                 Description = row.Count >= 4 ? row[3] : string.Empty
             });

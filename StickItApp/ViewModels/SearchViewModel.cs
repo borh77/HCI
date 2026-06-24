@@ -155,7 +155,8 @@ public sealed class SearchViewModel : ObservableObject
         return tags.Any(tag =>
             tag.Id.Contains(trimmedQuery, StringComparison.OrdinalIgnoreCase) ||
             tag.Name.Contains(trimmedQuery, StringComparison.OrdinalIgnoreCase) ||
-            tag.Description.Contains(trimmedQuery, StringComparison.OrdinalIgnoreCase));
+            tag.Description.Contains(trimmedQuery, StringComparison.OrdinalIgnoreCase) ||
+            tag.ColorHex.Contains(trimmedQuery, StringComparison.OrdinalIgnoreCase));
     }
 
     private bool MatchesType(Event eventItem)

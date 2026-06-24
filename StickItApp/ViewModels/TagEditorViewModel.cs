@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using StickItApp.Commands;
 using StickItApp.Models;
 
@@ -11,7 +12,6 @@ public sealed partial class TagEditorViewModel : ObservableObject
     private readonly Action _backToList;
     private readonly string? _originalId;
     private string _code = string.Empty;
-    private string _name = string.Empty;
     private string _description = string.Empty;
     private string _colorHex = "#FFB300";
     private string _validationMessage = string.Empty;
@@ -24,7 +24,6 @@ public sealed partial class TagEditorViewModel : ObservableObject
         if (tag is not null)
         {
             _code = tag.Id;
-            _name = tag.Name;
             _description = tag.Description;
             _colorHex = tag.ColorHex;
         }
@@ -55,13 +54,19 @@ public sealed partial class TagEditorViewModel : ObservableObject
     public string Code
     {
         get => _code;
-        set => SetProperty(ref _code, value.Trim());
+        set
+        {
+            if (SetProperty(ref _code, value.Trim()))
+            {
+                OnPropertyChanged(nameof(Name));
+            }
+        }
     }
 
     public string Name
     {
-        get => _name;
-        set => SetProperty(ref _name, value);
+        get => Code;
+        set => Code = value;
     }
 
     public string Description
@@ -73,7 +78,25 @@ public sealed partial class TagEditorViewModel : ObservableObject
     public string ColorHex
     {
         get => _colorHex;
-        set => SetProperty(ref _colorHex, value.Trim());
+        set
+        {
+            if (SetProperty(ref _colorHex, value.Trim()))
+            {
+                OnPropertyChanged(nameof(SelectedColor));
+            }
+        }
+    }
+
+    public Color? SelectedColor
+    {
+        get => TryParseColor(ColorHex);
+        set
+        {
+            if (value is Color color)
+            {
+                ColorHex = ToHex(color);
+            }
+        }
     }
 
     public string ValidationMessage
@@ -100,9 +123,9 @@ public sealed partial class TagEditorViewModel : ObservableObject
             App.DataStore.Tags.Add(new Tag
             {
                 Id = Code,
-                Name = Name.Trim(),
+                Name = Code,
                 Description = Description.Trim(),
-                ColorHex = ColorHex
+                ColorHex = ColorHex.ToUpperInvariant()
             });
         }
         else
@@ -110,7 +133,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
             Tag? tag = App.DataStore.Tags.FirstOrDefault(item => item.Id == _originalId);
             if (tag is null)
             {
-                ValidationMessage = "The selected tag no longer exists.";
+                ValidationMessage = GetString("TagMissingMessage");
                 return;
             }
 
@@ -123,9 +146,9 @@ public sealed partial class TagEditorViewModel : ObservableObject
             }
 
             tag.Id = Code;
-            tag.Name = Name.Trim();
+            tag.Name = Code;
             tag.Description = Description.Trim();
-            tag.ColorHex = ColorHex;
+            tag.ColorHex = ColorHex.ToUpperInvariant();
         }
 
         App.DataService.SaveAll(App.DataStore);
@@ -136,7 +159,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(Code))
         {
-            ValidationMessage = "Code is required.";
+            ValidationMessage = GetString("CodeRequiredMessage");
             return false;
         }
 
@@ -146,25 +169,19 @@ public sealed partial class TagEditorViewModel : ObservableObject
 
         if (duplicate)
         {
-            ValidationMessage = "Code must be unique.";
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(Name))
-        {
-            ValidationMessage = "Name is required.";
+            ValidationMessage = GetString("CodeUniqueMessage");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(Description))
         {
-            ValidationMessage = "Description is required.";
+            ValidationMessage = GetString("DescriptionRequiredMessage");
             return false;
         }
 
         if (!HexColorRegex().IsMatch(ColorHex))
         {
-            ValidationMessage = "ColorHex must be a valid color, for example #FFB300.";
+            ValidationMessage = GetString("ColorHexInvalidMessage");
             return false;
         }
 
@@ -178,5 +195,31 @@ public sealed partial class TagEditorViewModel : ObservableObject
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private static Color? TryParseColor(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        try
+        {
+            return (Color?)ColorConverter.ConvertFromString(value);
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+        catch (NotSupportedException)
+        {
+            return null;
+        }
+    }
+
+    private static string ToHex(Color color)
+    {
+        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
     }
 }

@@ -40,10 +40,15 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="5,0,0,0">
                     <TextBlock Text="{DynamicResource AttendanceLabel}" Foreground="{DynamicResource TextBrush}" />
-                    <ComboBox Height="32" ItemsSource="{Binding AttendanceOptions}" SelectedItem="{Binding Attendance}">
+                    <ComboBox Height="32"
+                              MaxDropDownHeight="150"
+                              ItemsSource="{Binding AttendanceOptions}"
+                              SelectedItem="{Binding Attendance}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
+                                <TextBlock MinHeight="22"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Converter={StaticResource LocalizedDisplayConverter}}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>

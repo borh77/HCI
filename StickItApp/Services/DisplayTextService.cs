@@ -13,7 +13,7 @@ public static class DisplayTextService
             EventType type when string.IsNullOrWhiteSpace(type.Id) && string.Equals(type.Name, "All", StringComparison.OrdinalIgnoreCase) =>
                 ResourceOrFallback("AllLabel", "All"),
             EventType type => ResourceOrFallback($"Demo_{NormalizeKey(type.Name)}", type.Name),
-            Tag tag => ResourceOrFallback($"Demo_{NormalizeKey(tag.Name)}", tag.Name),
+            Tag tag => string.IsNullOrWhiteSpace(tag.Id) ? tag.Name : tag.Id,
             AttendanceCategory attendance => AttendanceToDisplayText(attendance),
             string text => StringToDisplayText(text),
             _ => value.ToString() ?? string.Empty
@@ -22,9 +22,14 @@ public static class DisplayTextService
 
     private static string AttendanceToDisplayText(AttendanceCategory attendance)
     {
-        return attendance == AttendanceCategory.UpTo1000
-            ? ResourceOrFallback("Demo_AttendanceUpTo1000", "Attendance up to 1000")
-            : ResourceOrFallback("Demo_AttendanceOver1000", "Attendance over 1000");
+        return attendance switch
+        {
+            AttendanceCategory.UpTo1000 => ResourceOrFallback("Demo_AttendanceUpTo1000", "<= 1000"),
+            AttendanceCategory.From1000To5000 => ResourceOrFallback("Demo_AttendanceFrom1000To5000", "1000-5000"),
+            AttendanceCategory.From5000To10000 => ResourceOrFallback("Demo_AttendanceFrom5000To10000", "5000-10000"),
+            AttendanceCategory.Over10000 => ResourceOrFallback("Demo_AttendanceOver10000", "> 10000"),
+            _ => attendance.ToString()
+        };
     }
 
     private static string StringToDisplayText(string text)
@@ -41,12 +46,13 @@ public static class DisplayTextService
             "No" => ResourceOrFallback("NoLabel", "No"),
             "Name" => ResourceOrFallback("NameLabel", "Name"),
             "Code" => ResourceOrFallback("CodeLabel", "Code"),
+            "Description" => ResourceOrFallback("DescriptionLabel", "Description"),
             "City" => ResourceOrFallback("CityLabel", "City"),
             "Attendance" => ResourceOrFallback("AttendanceLabel", "Attendance"),
-            nameof(AttendanceCategory.UpTo1000) => ResourceOrFallback("Demo_AttendanceUpTo1000", "Attendance up to 1000"),
-            nameof(AttendanceCategory.From1000To5000) => ResourceOrFallback("Demo_AttendanceOver1000", "Attendance over 1000"),
-            nameof(AttendanceCategory.From5000To10000) => ResourceOrFallback("Demo_AttendanceOver1000", "Attendance over 1000"),
-            nameof(AttendanceCategory.Over10000) => ResourceOrFallback("Demo_AttendanceOver1000", "Attendance over 1000"),
+            nameof(AttendanceCategory.UpTo1000) => ResourceOrFallback("Demo_AttendanceUpTo1000", "<= 1000"),
+            nameof(AttendanceCategory.From1000To5000) => ResourceOrFallback("Demo_AttendanceFrom1000To5000", "1000-5000"),
+            nameof(AttendanceCategory.From5000To10000) => ResourceOrFallback("Demo_AttendanceFrom5000To10000", "5000-10000"),
+            nameof(AttendanceCategory.Over10000) => ResourceOrFallback("Demo_AttendanceOver10000", "> 10000"),
             _ => ResourceOrFallback($"Demo_{NormalizeKey(text)}", text)
         };
     }

@@ -39,6 +39,7 @@
     <sys:String x:Key="DescriptionLabel">Description</sys:String>
     <sys:String x:Key="IconPathLabel">IconPath</sys:String>
     <sys:String x:Key="ColorHexLabel">ColorHex</sys:String>
+    <sys:String x:Key="ColorPickerLabel">Color picker</sys:String>
     <sys:String x:Key="ChangeImageLabel">Change Image</sys:String>
     <sys:String x:Key="RemoveImageLabel">Remove Image</sys:String>
     <sys:String x:Key="CityLabel">City</sys:String>
@@ -87,8 +88,15 @@
     <sys:String x:Key="TypeInUseMessage">This type is used by one or more events and cannot be deleted.</sys:String>
     <sys:String x:Key="TypeDeletedMessage">Type deleted.</sys:String>
     <sys:String x:Key="TagDeletedMessage">Tag deleted. Related event-tag links were removed.</sys:String>
-    <sys:String x:Key="Demo_AttendanceUpTo1000">Attendance up to 1000</sys:String>
-    <sys:String x:Key="Demo_AttendanceOver1000">Attendance over 1000</sys:String>
+    <sys:String x:Key="TagMissingMessage">The selected tag no longer exists.</sys:String>
+    <sys:String x:Key="CodeRequiredMessage">Code is required.</sys:String>
+    <sys:String x:Key="CodeUniqueMessage">Code must be unique.</sys:String>
+    <sys:String x:Key="DescriptionRequiredMessage">Description is required.</sys:String>
+    <sys:String x:Key="ColorHexInvalidMessage">ColorHex must be a valid color, for example #FFB300.</sys:String>
+    <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>
+    <sys:String x:Key="Demo_AttendanceFrom1000To5000">1000-5000</sys:String>
+    <sys:String x:Key="Demo_AttendanceFrom5000To10000">5000-10000</sys:String>
+    <sys:String x:Key="Demo_AttendanceOver10000">&gt; 10000</sys:String>
     <sys:String x:Key="Demo_Urban">Urban</sys:String>
     <sys:String x:Key="Demo_Outdoor">Outdoor</sys:String>
     <sys:String x:Key="Demo_Indoor">Indoor</sys:String>

@@ -12,4 +12,8 @@
     <Resource Include="Assets\Maps\event_map.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.1.2" />
+  </ItemGroup>
+
 </Project>
