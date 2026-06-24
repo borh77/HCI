@@ -10,7 +10,7 @@ namespace StickItApp.ViewModels;
 
 public sealed class MainWindowViewModel : ObservableObject
 {
-    private bool _isMenuOpen = true;
+    private bool _isMenuOpen;
     private UserControl _currentPage;
     private string _currentPageTitleKey;
     private string _selectedLanguage;
@@ -41,16 +41,8 @@ public sealed class MainWindowViewModel : ObservableObject
     public bool IsMenuOpen
     {
         get => _isMenuOpen;
-        set
-        {
-            if (SetProperty(ref _isMenuOpen, value))
-            {
-                OnPropertyChanged(nameof(MenuColumnWidth));
-            }
-        }
+        set => SetProperty(ref _isMenuOpen, value);
     }
-
-    public GridLength MenuColumnWidth => IsMenuOpen ? new GridLength(136) : new GridLength(0);
 
     public UserControl CurrentPage
     {
@@ -109,6 +101,7 @@ public sealed class MainWindowViewModel : ObservableObject
     {
         CurrentPage = page;
         _currentPageTitleKey = titleKey;
+        IsMenuOpen = false;
         OnPropertyChanged(nameof(CurrentPageTitle));
     }
 

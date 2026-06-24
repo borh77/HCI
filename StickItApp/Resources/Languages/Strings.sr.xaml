@@ -68,6 +68,7 @@
     <sys:String x:Key="ClearMapLabel">Ocisti mapu</sys:String>
     <sys:String x:Key="BackToListLabel">Vrati u listu</sys:String>
     <sys:String x:Key="ResetFilterLabel">Resetuj filter</sys:String>
+    <sys:String x:Key="FixedEventMapLabel">Fiksna mapa događaja</sys:String>
     <sys:String x:Key="NoOverlapMessage">To mesto je vec zauzeto. Pomerite dogadjaj malo dalje da se oznake ne preklapaju.</sys:String>
     <sys:String x:Key="DeleteEventTitle">Brisanje dogadjaja</sys:String>
     <sys:String x:Key="DeleteTypeTitle">Brisanje tipa</sys:String>

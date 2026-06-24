@@ -72,4 +72,10 @@ public partial class MainWindow : Window
             }
         }
     }
+
+    private void DrawerBackdrop_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        _viewModel.IsMenuOpen = false;
+        e.Handled = true;
+    }
 }

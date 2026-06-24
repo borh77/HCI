@@ -8,4 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\Maps\event_map.png" />
+  </ItemGroup>
+
 </Project>

@@ -14,7 +14,7 @@ StickItApp is a WPF desktop application for the HCI project topic: managing even
 - Event, type, and tag search/filter/reset/sort flows.
 - Type and tag filters search code/id, name, and description.
 - Advanced search by event name, description, tags, type, attendance, location, and charitable status.
-- Map supports placing events, moving events, returning events to the unplaced list, removing selected events, clearing the map, and preventing overlap with a visible friendly error.
+- Map uses a fixed selected image asset, supports placing events, moving events, returning events to the unplaced list, removing selected events, clearing the map, and preventing overlap with a visible friendly error.
 - Clicking an event on the map shows useful details and actions: Details, Edit, Delete, and Back to list.
 - EN/SR language switch for the main visible labels.
 - Light/dark theme switch with persisted settings.
@@ -36,6 +36,12 @@ CSV files:
 - `event_tags.csv`
 - `previous_dates.csv`
 - `settings.csv`
+
+## Fixed map behavior
+
+The map is a fixed selected image: `StickItApp/Assets/Maps/event_map.png`.
+
+By design, the map does not support scrolling or zooming. Event icons are placed on a fixed `Canvas` overlay above the image, using `Canvas.Left` and `Canvas.Top`. The app clamps coordinates to the image boundaries, prevents icon overlap, and persists each event position plus `IsPlacedOnMap` in `events.csv`.
 
 ## Sample data
 
@@ -85,5 +91,4 @@ The project targets `net8.0-windows` and uses WPF.
 - Language can be switched between EN and SR from the top bar.
 - Theme can be switched between light and dark from the top bar.
 - Language, theme, last sort mode, and last search text are persisted in `settings.csv`.
-
 

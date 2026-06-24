@@ -62,12 +62,15 @@ public partial class MapPage : UserControl, IShortcutAwarePage
         }
 
         Point dropPoint = e.GetPosition(MapDropHost);
+        double mapWidth = MapDropHost.Width;
+        double mapHeight = MapDropHost.Height;
+
         viewModel.PlaceOnMap(
             item,
             dropPoint.X - MapViewModel.IconSize / 2,
             dropPoint.Y - MapViewModel.IconSize / 2,
-            MapDropHost.ActualWidth,
-            MapDropHost.ActualHeight);
+            mapWidth,
+            mapHeight);
         e.Handled = true;
     }
 

@@ -15,7 +15,7 @@
     <Grid Background="{DynamicResource ContentBrush}" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -48,34 +48,43 @@
             </Grid>
         </StackPanel>
 
-        <Grid Grid.Row="1">
-            <Border Background="{DynamicResource SurfaceBrush}"
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <TextBlock Text="{DynamicResource FixedEventMapLabel}"
+                       Margin="0,0,0,6"
+                       Foreground="{DynamicResource MutedTextBrush}"
+                       FontSize="12"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center" />
+
+            <Border Width="380"
+                    Height="430"
+                    Background="{DynamicResource SurfaceBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1"
-                    CornerRadius="8">
+                    CornerRadius="8"
+                    ClipToBounds="True">
                 <Grid x:Name="MapDropHost"
+                      Width="380"
+                      Height="430"
                       AllowDrop="True"
                       Drop="MapSurface_Drop"
                       DragOver="MapSurface_DragOver"
                       ClipToBounds="True">
-                    <Canvas x:Name="MapSurface"
-                            AllowDrop="True"
-                            Drop="MapSurface_Drop"
-                            DragOver="MapSurface_DragOver"
-                            Background="#E6F3F0">
-                        <Rectangle Width="420" Height="34" Canvas.Top="42" Fill="#C7E4D8" />
-                        <Rectangle Width="78" Height="330" Canvas.Left="64" Fill="#D8E9F8" />
-                        <Rectangle Width="360" Height="22" Canvas.Top="168" Fill="#F0D9B8" />
-                        <Rectangle Width="150" Height="190" Canvas.Left="226" Canvas.Top="96" Fill="#D4E6C2" />
-                        <Line X1="0" Y1="300" X2="420" Y2="220" Stroke="#B8C4D6" StrokeThickness="14" />
-                        <Line X1="190" Y1="0" X2="150" Y2="520" Stroke="#B8C4D6" StrokeThickness="10" />
-                    </Canvas>
+                    <Image Source="/Assets/Maps/event_map.png"
+                           Width="380"
+                           Height="430"
+                           Stretch="Fill"
+                           IsHitTestVisible="False" />
 
                     <ItemsControl ItemsSource="{Binding MappedEvents}" IsHitTestVisible="True">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <Canvas AllowDrop="True"
+                                <Canvas x:Name="MapSurface"
+                                        Width="380"
+                                        Height="430"
+                                        AllowDrop="True"
                                         Background="Transparent"
+                                        ClipToBounds="True"
                                         Drop="MapSurface_Drop"
                                         DragOver="MapSurface_DragOver" />
                             </ItemsPanelTemplate>
@@ -148,7 +157,7 @@
                     </Border>
                 </Grid>
             </Border>
-        </Grid>
+        </StackPanel>
 
         <Border x:Name="UnplacedDropZone"
                 Grid.Row="2"

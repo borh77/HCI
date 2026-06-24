@@ -68,6 +68,7 @@
     <sys:String x:Key="ClearMapLabel">Clear Map</sys:String>
     <sys:String x:Key="BackToListLabel">Back to list</sys:String>
     <sys:String x:Key="ResetFilterLabel">Reset Filter</sys:String>
+    <sys:String x:Key="FixedEventMapLabel">Fixed event map</sys:String>
     <sys:String x:Key="NoOverlapMessage">This spot is already taken. Move the event a little so map pins do not overlap.</sys:String>
     <sys:String x:Key="DeleteEventTitle">Delete event</sys:String>
     <sys:String x:Key="DeleteTypeTitle">Delete type</sys:String>
