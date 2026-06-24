@@ -30,7 +30,7 @@
     <sys:String x:Key="FilterLabel">Filter</sys:String>
     <sys:String x:Key="LightThemeLabel">Light</sys:String>
     <sys:String x:Key="DarkThemeLabel">Dark</sys:String>
-    <sys:String x:Key="EventMapPlaceholder">Event map placeholder</sys:String>
+    <sys:String x:Key="EventMapPlaceholder">Filter map events by name, city, type, tag...</sys:String>
     <sys:String x:Key="EventEditorLabel">Event Editor</sys:String>
     <sys:String x:Key="EventDetailsLabel">Event Details</sys:String>
     <sys:String x:Key="TypeEditorLabel">Type Editor</sys:String>

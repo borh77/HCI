@@ -125,7 +125,25 @@
                 <TextBox x:Name="MapFilterTextBox"
                          Height="32"
                          Padding="8,4,32,4"
+                         ToolTip="{DynamicResource EventMapPlaceholder}"
                          Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="9,0,32,0"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="12"
+                           IsHitTestVisible="False"
+                           Text="{DynamicResource EventMapPlaceholder}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=MapFilterTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <Button Width="24"
                         Height="24"
                         Margin="0,0,5,0"

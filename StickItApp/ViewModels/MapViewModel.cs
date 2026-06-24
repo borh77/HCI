@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
@@ -220,11 +221,105 @@ public sealed class MapViewModel : ObservableObject
 
         string query = FilterText.Trim();
         EventType? type = App.DataStore.EventTypes.FirstOrDefault(item => item.Id == eventItem.TypeId);
-        return (eventItem.Id ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               (eventItem.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               (eventItem.TypeId ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               (type?.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               (type?.Description ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase);
+
+        return MatchesAny(
+                   query,
+                   eventItem.Id,
+                   eventItem.Name,
+                   eventItem.City,
+                   eventItem.Country,
+                   GetLocationSearchValue(eventItem),
+                   eventItem.Description,
+                   eventItem.TypeId,
+                   type?.Id,
+                   type?.Name,
+                   type?.Description,
+                   eventItem.AverageCost.ToString(CultureInfo.CurrentCulture),
+                   eventItem.AverageCost.ToString(CultureInfo.InvariantCulture)) ||
+               MatchesAny(query, GetAttendanceSearchValues(eventItem)) ||
+               MatchesAny(query, GetCharitableSearchValues(eventItem)) ||
+               MatchesAny(query, GetDateSearchValues(eventItem)) ||
+               MatchesAny(query, GetTagSearchValues(eventItem));
+    }
+
+    private static bool MatchesAny(string query, params string?[] values)
+    {
+        return values.Any(value => !string.IsNullOrWhiteSpace(value) &&
+                                   value.Contains(query, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string? GetLocationSearchValue(Event eventItem)
+    {
+        if (string.IsNullOrWhiteSpace(eventItem.City) && string.IsNullOrWhiteSpace(eventItem.Country))
+        {
+            return null;
+        }
+
+        return $"{eventItem.City}, {eventItem.Country}".Trim(' ', ',');
+    }
+
+    private static string?[] GetAttendanceSearchValues(Event eventItem)
+    {
+        return eventItem.Attendance switch
+        {
+            AttendanceCategory.UpTo1000 => [eventItem.Attendance.ToString(), "1000", "<= 1000", "Up to 1000"],
+            AttendanceCategory.From1000To5000 => [eventItem.Attendance.ToString(), "1000-5000", "1000 to 5000"],
+            AttendanceCategory.From5000To10000 => [eventItem.Attendance.ToString(), "5000-10000", "5000 to 10000"],
+            AttendanceCategory.Over10000 => [eventItem.Attendance.ToString(), "10000+", "> 10000", "Over 10000"],
+            _ => [eventItem.Attendance.ToString()]
+        };
+    }
+
+    private static string?[] GetCharitableSearchValues(Event eventItem)
+    {
+        return eventItem.IsCharitable
+            ? ["true", "yes", "charitable", "charity", "dobrotvorno", "da"]
+            : ["false", "no", "ne"];
+    }
+
+    private static string?[] GetDateSearchValues(Event eventItem)
+    {
+        List<string?> values = [];
+        AddDateSearchValues(values, eventItem.Date);
+        AddDateSearchValues(values, eventItem.CurrentStart);
+        AddDateSearchValues(values, eventItem.CurrentEnd);
+
+        foreach (PreviousDate previousDate in App.DataStore.PreviousDates.Where(item => item.EventId == eventItem.Id))
+        {
+            AddDateSearchValues(values, previousDate.Date);
+            AddDateSearchValues(values, previousDate.Start);
+            AddDateSearchValues(values, previousDate.End);
+        }
+
+        return [.. values];
+    }
+
+    private static void AddDateSearchValues(List<string?> values, DateTime date)
+    {
+        values.Add(date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture));
+        values.Add(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
+        values.Add(date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+    }
+
+    private static string?[] GetTagSearchValues(Event eventItem)
+    {
+        return
+        [
+            .. App.DataStore.EventTags
+                .Where(relation => relation.EventId == eventItem.Id)
+                .SelectMany(relation =>
+                {
+                    Tag? tag = App.DataStore.Tags.FirstOrDefault(item => item.Id == relation.TagId);
+                    return new[]
+                    {
+                        relation.TagId,
+                        tag?.Id,
+                        tag?.Name,
+                        tag?.Description,
+                        tag?.ColorHex
+                    };
+                })
+        ];
     }
 
     private bool OverlapsAnotherEvent(Event movingEvent, double x, double y)
