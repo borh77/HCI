@@ -21,7 +21,7 @@ public sealed class MapViewModel : ObservableObject
         _shell = shell;
         _showStatus = showStatus;
 
-        ResetFilterCommand = new RelayCommand(() => FilterText = string.Empty);
+        ResetFilterCommand = new RelayCommand(ResetMapView);
         ClearMapCommand = new RelayCommand(ClearMap);
         SelectEventCommand = new RelayCommand(parameter =>
         {
@@ -33,6 +33,7 @@ public sealed class MapViewModel : ObservableObject
         DetailsCommand = new RelayCommand(() => RunForSelected(_shell.NavigateToEventDetails));
         EditCommand = new RelayCommand(() => RunForSelected(_shell.NavigateToEventEditor));
         DeleteCommand = new RelayCommand(DeleteSelected);
+        CloseDetailsCommand = new RelayCommand(CloseDetails);
         BackToListCommand = new RelayCommand(() =>
         {
             if (SelectedEvent is not null)
@@ -84,6 +85,8 @@ public sealed class MapViewModel : ObservableObject
 
     public ICommand DeleteCommand { get; }
 
+    public ICommand CloseDetailsCommand { get; }
+
     public ICommand BackToListCommand { get; }
 
     public bool PlaceOnMap(MapEventViewModel item, double x, double y, double mapWidth, double mapHeight)
@@ -123,13 +126,30 @@ public sealed class MapViewModel : ObservableObject
         SaveAndRefresh();
     }
 
+    public void ResetMapView()
+    {
+        _filterText = string.Empty;
+        OnPropertyChanged(nameof(FilterText));
+        SelectedEvent = null;
+        Message = string.Empty;
+        _showStatus?.Invoke(string.Empty, false);
+        Refresh();
+    }
+
+    private void CloseDetails()
+    {
+        SelectedEvent = null;
+        Message = string.Empty;
+        _showStatus?.Invoke(string.Empty, false);
+    }
+
     private void Refresh()
     {
         string? selectedId = SelectedEvent?.Id;
         MappedEvents.Clear();
         UnplacedEvents.Clear();
 
-        foreach (Event eventItem in App.DataStore.Events.Where(MatchesFilter).OrderBy(item => item.Name))
+        foreach (Event eventItem in App.DataStore.Events.Where(MatchesFilter).OrderBy(item => item.Name ?? string.Empty))
         {
             MapEventViewModel item = new(eventItem);
             if (eventItem.IsPlacedOnMap)
@@ -155,8 +175,8 @@ public sealed class MapViewModel : ObservableObject
         }
 
         string query = FilterText.Trim();
-        return eventItem.Id.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               eventItem.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+        return (eventItem.Id ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               (eventItem.Name ?? string.Empty).Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool OverlapsAnotherEvent(Event movingEvent, double x, double y)

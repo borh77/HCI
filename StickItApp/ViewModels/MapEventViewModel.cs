@@ -18,15 +18,19 @@ public sealed class MapEventViewModel : ObservableObject
 
     public Event Event { get; }
 
-    public string Id => Event.Id;
+    public string Id => string.IsNullOrWhiteSpace(Event.Id) ? string.Empty : Event.Id;
 
     public string ShortCode => Id.Length <= 5 ? Id : Id[..5];
 
-    public string Name => Event.Name;
+    public string Name => string.IsNullOrWhiteSpace(Event.Name) ? "Unnamed event" : Event.Name;
 
-    public string City => Event.City;
+    public string Initial => string.IsNullOrWhiteSpace(Name)
+        ? "?"
+        : Name.Trim()[0].ToString().ToUpperInvariant();
 
-    public string Country => Event.Country;
+    public string City => Event.City ?? string.Empty;
+
+    public string Country => Event.Country ?? string.Empty;
 
     public string Location => string.IsNullOrWhiteSpace(City) && string.IsNullOrWhiteSpace(Country)
         ? "-"
@@ -42,22 +46,22 @@ public sealed class MapEventViewModel : ObservableObject
 
     public EventType? Type => App.DataStore.EventTypes.FirstOrDefault(type => type.Id == Event.TypeId);
 
-    public string TypeName => Type is null ? "-" : DisplayTextService.ToDisplayText(Type);
+    public string TypeName => Type is null ? "Unknown" : DisplayTextService.ToDisplayText(Type);
 
-    public string TypeColorHex => Type?.ColorHex ?? "#64748B";
+    public string TypeColorHex => string.IsNullOrWhiteSpace(Type?.ColorHex) ? "#64748B" : Type.ColorHex;
 
     public string IconPath
     {
         get
         {
-            string eventIcon = ResolvePath(Event.IconPath ?? string.Empty);
-            if (File.Exists(eventIcon))
+            string eventIcon = ResolvePath(Event.IconPath);
+            if (!string.IsNullOrWhiteSpace(eventIcon) && File.Exists(eventIcon))
             {
                 return eventIcon;
             }
 
-            string typeIcon = ResolvePath(Type?.IconKey ?? string.Empty);
-            return File.Exists(typeIcon) ? typeIcon : string.Empty;
+            string typeIcon = ResolvePath(Type?.IconKey);
+            return !string.IsNullOrWhiteSpace(typeIcon) && File.Exists(typeIcon) ? typeIcon : string.Empty;
         }
     }
 
@@ -79,11 +83,11 @@ public sealed class MapEventViewModel : ObservableObject
         Y = Event.Y;
     }
 
-    private static string ResolvePath(string path)
+    private static string ResolvePath(string? path)
     {
         if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
         {
-            return path;
+            return path ?? string.Empty;
         }
 
         return Path.Combine(AppContext.BaseDirectory, path);

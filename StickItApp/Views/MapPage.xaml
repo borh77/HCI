@@ -12,8 +12,9 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource ContentBrush}" Margin="10">
+    <Grid x:Name="MapRoot" Background="{DynamicResource ContentBrush}" Margin="8">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -56,23 +57,23 @@
                        FontWeight="SemiBold"
                        HorizontalAlignment="Center" />
 
-            <Border Width="380"
-                    Height="430"
+            <Border Width="376"
+                    Height="320"
                     Background="{DynamicResource SurfaceBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1"
                     CornerRadius="8"
                     ClipToBounds="True">
                 <Grid x:Name="MapDropHost"
-                      Width="380"
-                      Height="430"
+                      Width="376"
+                      Height="320"
                       AllowDrop="True"
                       Drop="MapSurface_Drop"
                       DragOver="MapSurface_DragOver"
                       ClipToBounds="True">
                     <Image Source="/Assets/Maps/event_map.png"
-                           Width="380"
-                           Height="430"
+                           Width="376"
+                           Height="320"
                            Stretch="Fill"
                            IsHitTestVisible="False" />
 
@@ -80,8 +81,8 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Canvas x:Name="MapSurface"
-                                        Width="380"
-                                        Height="430"
+                                        Width="376"
+                                        Height="320"
                                         AllowDrop="True"
                                         Background="Transparent"
                                         ClipToBounds="True"
@@ -124,8 +125,9 @@
 
                     <Border HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Width="250"
-                            Margin="10"
+                            Width="300"
+                            MaxHeight="210"
+                            Margin="16"
                             Padding="10"
                             Background="{DynamicResource SurfaceBrush}"
                             BorderBrush="{DynamicResource BorderBrush}"
@@ -141,28 +143,58 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <StackPanel DataContext="{Binding SelectedEvent}">
-                            <TextBlock Text="{Binding Id}" Foreground="{DynamicResource MutedTextBrush}" FontSize="11" />
-                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding DateText}" Foreground="{DynamicResource TextBrush}" FontSize="12" />
-                            <TextBlock Text="{Binding Location}" Foreground="{DynamicResource TextBrush}" FontSize="12" />
-                            <TextBlock Text="{Binding TypeName}" Foreground="{DynamicResource MutedTextBrush}" FontSize="12" />
-                            <WrapPanel HorizontalAlignment="Right" Margin="0,8,0,0" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" DataContext="{Binding SelectedEvent}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="34" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                    <TextBlock Text="{Binding Id}" Foreground="{DynamicResource MutedTextBrush}" FontSize="11" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" MaxHeight="42" />
+                                    <TextBlock Text="{Binding DateText}" Foreground="{DynamicResource TextBrush}" FontSize="12" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Location}" Foreground="{DynamicResource TextBrush}" FontSize="12" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding TypeName}" Foreground="{DynamicResource MutedTextBrush}" FontSize="12" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                                <Button Grid.Column="1"
+                                        Width="28"
+                                        Height="28"
+                                        Margin="4,0,0,0"
+                                        Padding="0"
+                                        VerticalAlignment="Top"
+                                        Content="X"
+                                        ToolTip="{DynamicResource BackToMapLabel}"
+                                        Command="{Binding DataContext.CloseDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                            </Grid>
+                            <WrapPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0,8,0,0" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
                                 <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DetailsLabel}" Content="{DynamicResource DetailsLabel}" Command="{Binding DetailsCommand}" />
                                 <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource EditLabel}" Content="{DynamicResource EditLabel}" Command="{Binding EditCommand}" />
                                 <Button Style="{StaticResource MapActionButtonStyle}" ToolTip="{DynamicResource DeleteLabel}" Content="{DynamicResource DeleteLabel}" Command="{Binding DeleteCommand}" />
-                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource BackToListLabel}" Command="{Binding BackToListCommand}" />
+                                <Button Style="{StaticResource MapActionButtonStyle}" Content="{DynamicResource BackToMapLabel}" Command="{Binding CloseDetailsCommand}" />
                             </WrapPanel>
-                        </StackPanel>
+                        </Grid>
                     </Border>
                 </Grid>
             </Border>
         </StackPanel>
 
+        <TextBlock Grid.Row="2"
+                   Text="{DynamicResource MapDragDropInstructionLabel}"
+                   Margin="0,4,0,3"
+                   Foreground="{DynamicResource MutedTextBrush}"
+                   FontSize="12"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center" />
+
         <Border x:Name="UnplacedDropZone"
-                Grid.Row="2"
-                MinHeight="92"
-                Margin="0,8,0,0"
+                Grid.Row="3"
+                Height="140"
+                Margin="0,0,0,0"
                 Padding="6"
                 AllowDrop="True"
                 Drop="UnplacedDropZone_Drop"
@@ -171,7 +203,27 @@
                 BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="8">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Width="24"
+                        Margin="0,0,5,16"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        Content="&lt;"
+                        Click="EventTrayScrollLeft_Click" />
+                <ScrollViewer x:Name="EventTrayScrollViewer"
+                              Grid.Column="1"
+                              HorizontalScrollBarVisibility="Visible"
+                              VerticalScrollBarVisibility="Disabled"
+                              PanningMode="HorizontalOnly"
+                              Height="124"
+                              Padding="0,0,0,2"
+                              PreviewMouseWheel="EventTrayScrollViewer_PreviewMouseWheel">
                 <ItemsControl ItemsSource="{Binding UnplacedEvents}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -181,7 +233,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Width="118"
-                                    Height="70"
+                                    Height="106"
                                     Margin="0,0,8,0"
                                     Padding="6"
                                     Background="{DynamicResource ContentBrush}"
@@ -189,25 +241,75 @@
                                     BorderThickness="1"
                                     CornerRadius="7"
                                     PreviewMouseLeftButtonDown="EventCard_PreviewMouseLeftButtonDown"
-                                    PreviewMouseMove="EventCard_PreviewMouseMove">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="34" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="30" Height="30" Background="{Binding TypeColorHex}" CornerRadius="6">
-                                        <Image Source="{Binding IconPath}" Stretch="Uniform" Margin="4" />
+                                    PreviewMouseMove="EventCard_PreviewMouseMove"
+                                    Cursor="Hand">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                                    <Border Width="54" Height="54" Background="{Binding TypeColorHex}" CornerRadius="10" HorizontalAlignment="Center">
+                                        <Grid>
+                                            <Image Source="{Binding IconPath}"
+                                                   Stretch="Uniform"
+                                                   Margin="8">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IconPath}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                            <TextBlock Text="{Binding Initial}"
+                                                       Foreground="White"
+                                                       FontSize="20"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IconPath}" Value="">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IconPath}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
                                     </Border>
-                                    <StackPanel Grid.Column="1" Margin="6,0,0,0">
-                                        <TextBlock Text="{Binding Id}" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" TextTrimming="CharacterEllipsis" />
-                                        <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" MaxHeight="34" />
-                                    </StackPanel>
-                                </Grid>
+                                    <TextBlock Text="{Binding Name}"
+                                               Margin="0,8,0,0"
+                                               Width="104"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               LineHeight="13"
+                                               MaxHeight="34" />
+                                </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </ScrollViewer>
+                </ScrollViewer>
+                <Button Grid.Column="2"
+                        Width="24"
+                        Margin="5,0,0,16"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        Content="&gt;"
+                        Click="EventTrayScrollRight_Click" />
+            </Grid>
         </Border>
     </Grid>
 </UserControl>
