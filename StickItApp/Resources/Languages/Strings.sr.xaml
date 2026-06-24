@@ -59,6 +59,10 @@
     <sys:String x:Key="AddNewTypeLabel">Dodaj novi tip</sys:String>
     <sys:String x:Key="AddNewTagLabel">Dodaj novu oznaku</sys:String>
     <sys:String x:Key="IconLabel">Ikona</sys:String>
+    <sys:String x:Key="EventImageLabel">Slika doga&#273;aja</sys:String>
+    <sys:String x:Key="EventImageFallbackHelpLabel">Opciono. Ako slika nije izabrana, prikaza&#263;e se ikona tipa doga&#273;aja.</sys:String>
+    <sys:String x:Key="EventImageAllowedFormatsLabel">Dozvoljeni formati: .png, .jpg, .jpeg</sys:String>
+    <sys:String x:Key="EventImageFallbackShortLabel">Ikona tipa</sys:String>
     <sys:String x:Key="CurrentDateLabel">Trenutni datum</sys:String>
     <sys:String x:Key="PreviousDatesLabel">Prethodni datumi</sys:String>
     <sys:String x:Key="BackLabel">Nazad</sys:String>
@@ -100,6 +104,8 @@
     <sys:String x:Key="NameRequiredMessage">Naziv je obavezan.</sys:String>
     <sys:String x:Key="DescriptionRequiredMessage">Opis je obavezan.</sys:String>
     <sys:String x:Key="ColorHexInvalidMessage">Hex boja mora biti ispravna, na primer #FFB300.</sys:String>
+    <sys:String x:Key="UnsupportedImageFormatMessage">Format slike nije podr&#382;an. Izaberite PNG ili JPG sliku.</sys:String>
+    <sys:String x:Key="ImageFileMissingMessage">Izabrana slika nije prona&#273;ena.</sys:String>
     <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>
     <sys:String x:Key="Demo_AttendanceFrom1000To5000">1000-5000</sys:String>
     <sys:String x:Key="Demo_AttendanceFrom5000To10000">5000-10000</sys:String>

@@ -131,6 +131,7 @@ public sealed class EventEditorViewModel : ObservableObject
             if (SetProperty(ref _selectedType, value))
             {
                 OnPropertyChanged(nameof(EffectiveIconPreviewPath));
+                OnPropertyChanged(nameof(HasEffectiveIconPreview));
             }
         }
     }
@@ -161,6 +162,9 @@ public sealed class EventEditorViewModel : ObservableObject
             if (SetProperty(ref _iconPath, value))
             {
                 OnPropertyChanged(nameof(EffectiveIconPreviewPath));
+                OnPropertyChanged(nameof(HasEffectiveIconPreview));
+                OnPropertyChanged(nameof(HasCustomImage));
+                OnPropertyChanged(nameof(SelectedImageFileName));
             }
         }
     }
@@ -179,6 +183,14 @@ public sealed class EventEditorViewModel : ObservableObject
             return string.IsNullOrWhiteSpace(typeIcon) ? null : typeIcon;
         }
     }
+
+    public bool HasEffectiveIconPreview => !string.IsNullOrWhiteSpace(EffectiveIconPreviewPath);
+
+    public bool HasCustomImage => !string.IsNullOrWhiteSpace(IconPath);
+
+    public string SelectedImageFileName => string.IsNullOrWhiteSpace(IconPath)
+        ? GetString("EventImageFallbackShortLabel")
+        : Path.GetFileName(IconPath);
 
     public DateTime? CurrentStart
     {
@@ -339,13 +351,27 @@ public sealed class EventEditorViewModel : ObservableObject
     {
         OpenFileDialog dialog = new()
         {
-            Filter = "Image files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png",
+            Filter = "Image files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg",
             Multiselect = false
         };
 
         if (dialog.ShowDialog() == true)
         {
+            string extension = Path.GetExtension(dialog.FileName);
+            if (!IsSupportedImageExtension(extension))
+            {
+                ValidationMessage = GetString("UnsupportedImageFormatMessage");
+                return;
+            }
+
+            if (!File.Exists(dialog.FileName))
+            {
+                ValidationMessage = GetString("ImageFileMissingMessage");
+                return;
+            }
+
             IconPath = MakeRelativeWhenPossible(dialog.FileName);
+            ValidationMessage = string.Empty;
         }
     }
 
@@ -502,19 +528,16 @@ public sealed class EventEditorViewModel : ObservableObject
             : path;
     }
 
-    private static string ResolvePath(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path))
-        {
-            return path;
-        }
-
-        return Path.Combine(AppContext.BaseDirectory, path);
-    }
-
     private static string GetString(string resourceKey)
     {
         return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
+    }
+
+    private static bool IsSupportedImageExtension(string extension)
+    {
+        return extension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
+               extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+               extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase);
     }
 
 }

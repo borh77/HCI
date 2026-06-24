@@ -59,6 +59,10 @@
     <sys:String x:Key="AddNewTypeLabel">Add new type</sys:String>
     <sys:String x:Key="AddNewTagLabel">Add new tag</sys:String>
     <sys:String x:Key="IconLabel">Icon</sys:String>
+    <sys:String x:Key="EventImageLabel">Event image</sys:String>
+    <sys:String x:Key="EventImageFallbackHelpLabel">Optional. If no image is selected, the event type icon will be shown.</sys:String>
+    <sys:String x:Key="EventImageAllowedFormatsLabel">Allowed formats: .png, .jpg, .jpeg</sys:String>
+    <sys:String x:Key="EventImageFallbackShortLabel">Type icon fallback</sys:String>
     <sys:String x:Key="CurrentDateLabel">Current Date</sys:String>
     <sys:String x:Key="PreviousDatesLabel">Previous Dates</sys:String>
     <sys:String x:Key="BackLabel">Back</sys:String>
@@ -100,6 +104,8 @@
     <sys:String x:Key="NameRequiredMessage">Name is required.</sys:String>
     <sys:String x:Key="DescriptionRequiredMessage">Description is required.</sys:String>
     <sys:String x:Key="ColorHexInvalidMessage">ColorHex must be a valid color, for example #FFB300.</sys:String>
+    <sys:String x:Key="UnsupportedImageFormatMessage">Unsupported image format. Please choose a PNG or JPG image.</sys:String>
+    <sys:String x:Key="ImageFileMissingMessage">The selected image file could not be found.</sys:String>
     <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>
     <sys:String x:Key="Demo_AttendanceFrom1000To5000">1000-5000</sys:String>
     <sys:String x:Key="Demo_AttendanceFrom5000To10000">5000-10000</sys:String>
