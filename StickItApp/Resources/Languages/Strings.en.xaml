@@ -8,7 +8,6 @@
     <sys:String x:Key="TypesLabel">Types</sys:String>
     <sys:String x:Key="TagsLabel">Tags</sys:String>
     <sys:String x:Key="SearchLabel">Search</sys:String>
-    <sys:String x:Key="SettingsLabel">Settings</sys:String>
     <sys:String x:Key="AddLabel">Add</sys:String>
     <sys:String x:Key="NewEventLabel">New Event</sys:String>
     <sys:String x:Key="NewTypeLabel">New Type</sys:String>
@@ -31,7 +30,6 @@
     <sys:String x:Key="EditEventLabel">Edit Event</sys:String>
     <sys:String x:Key="EditTypeLabel">Edit Type</sys:String>
     <sys:String x:Key="EditTagLabel">Edit Tag</sys:String>
-    <sys:String x:Key="SettingsPlaceholder">Language and theme settings placeholder</sys:String>
     <sys:String x:Key="CodeLabel">Code</sys:String>
     <sys:String x:Key="NameLabel">Name</sys:String>
     <sys:String x:Key="DescriptionLabel">Description</sys:String>

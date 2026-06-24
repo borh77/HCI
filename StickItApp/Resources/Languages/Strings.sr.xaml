@@ -8,7 +8,6 @@
     <sys:String x:Key="TypesLabel">Tipovi</sys:String>
     <sys:String x:Key="TagsLabel">Oznake</sys:String>
     <sys:String x:Key="SearchLabel">Pretraga</sys:String>
-    <sys:String x:Key="SettingsLabel">Podesavanja</sys:String>
     <sys:String x:Key="AddLabel">Dodaj</sys:String>
     <sys:String x:Key="NewEventLabel">Novi dogadjaj</sys:String>
     <sys:String x:Key="NewTypeLabel">Novi tip</sys:String>
@@ -31,7 +30,6 @@
     <sys:String x:Key="EditEventLabel">Uredjivanje dogadjaja</sys:String>
     <sys:String x:Key="EditTypeLabel">Uredjivanje tipa</sys:String>
     <sys:String x:Key="EditTagLabel">Uredjivanje oznake</sys:String>
-    <sys:String x:Key="SettingsPlaceholder">Privremeni prikaz podesavanja jezika i teme</sys:String>
     <sys:String x:Key="CodeLabel">Sifra</sys:String>
     <sys:String x:Key="NameLabel">Naziv</sys:String>
     <sys:String x:Key="DescriptionLabel">Opis</sys:String>

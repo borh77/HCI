@@ -37,7 +37,6 @@ public sealed class MainWindowViewModel : ObservableObject
         ShowTypesCommand = new RelayCommand(NavigateToTypeList);
         ShowTagsCommand = new RelayCommand(NavigateToTagList);
         ShowSearchCommand = new RelayCommand(NavigateToSearch);
-        ShowSettingsCommand = new RelayCommand(() => Navigate(() => new SettingsPage(), "SettingsLabel"));
         NewEventCommand = new RelayCommand(() => NavigateToEventEditor(null));
         NewTypeCommand = new RelayCommand(() => NavigateToTypeEditor(null));
         NewTagCommand = new RelayCommand(() => NavigateToTagEditor(null));
@@ -121,7 +120,6 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand ShowTypesCommand { get; }
     public ICommand ShowTagsCommand { get; }
     public ICommand ShowSearchCommand { get; }
-    public ICommand ShowSettingsCommand { get; }
     public ICommand NewEventCommand { get; }
     public ICommand NewTypeCommand { get; }
     public ICommand NewTagCommand { get; }
