@@ -221,6 +221,11 @@ public sealed class TypeEditorViewModel : ObservableObject
             return false;
         }
 
+        if (!ValidateIconPath())
+        {
+            return false;
+        }
+
         ValidationMessage = string.Empty;
         return true;
     }
@@ -235,8 +240,64 @@ public sealed class TypeEditorViewModel : ObservableObject
 
         if (dialog.ShowDialog() == true)
         {
+            string extension = Path.GetExtension(dialog.FileName);
+            if (!IsSupportedImageExtension(extension))
+            {
+                ValidationMessage = GetString("UnsupportedImageFormatMessage");
+                return;
+            }
+
+            if (!File.Exists(dialog.FileName))
+            {
+                ValidationMessage = GetString("ImageFileMissingMessage");
+                return;
+            }
+
             IconKey = MakeRelativeWhenPossible(dialog.FileName);
+            ValidationMessage = string.Empty;
         }
+    }
+
+    private bool ValidateIconPath()
+    {
+        if (string.IsNullOrWhiteSpace(IconKey))
+        {
+            ValidationMessage = GetString("UnsupportedImageFormatMessage");
+            return false;
+        }
+
+        string trimmed = IconKey.Trim();
+        if (IsDefaultIconPath(trimmed))
+        {
+            return true;
+        }
+
+        if (!IsSupportedImageExtension(Path.GetExtension(trimmed)))
+        {
+            ValidationMessage = GetString("UnsupportedImageFormatMessage");
+            return false;
+        }
+
+        if (!File.Exists(trimmed) && (Path.IsPathRooted(trimmed) || !File.Exists(Path.Combine(AppContext.BaseDirectory, trimmed))))
+        {
+            ValidationMessage = GetString("ImageFileMissingMessage");
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool IsDefaultIconPath(string path)
+    {
+        return DefaultIconOptions.Any(option => string.Equals(option.Path, path, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsSupportedImageExtension(string? extension)
+    {
+        return extension is not null &&
+               (extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".png", StringComparison.OrdinalIgnoreCase));
     }
 
     private static string MakeRelativeWhenPossible(string path)

@@ -112,7 +112,7 @@
     <sys:String x:Key="NameRequiredMessage">Naziv je obavezan.</sys:String>
     <sys:String x:Key="DescriptionRequiredMessage">Opis je obavezan.</sys:String>
     <sys:String x:Key="ColorHexInvalidMessage">Hex boja mora biti ispravna, na primer #FFB300.</sys:String>
-    <sys:String x:Key="UnsupportedImageFormatMessage">Format slike nije podr&#382;an. Izaberite PNG ili JPG sliku.</sys:String>
+    <sys:String x:Key="UnsupportedImageFormatMessage">Slika mora biti .jpg, .jpeg ili .png fajl.</sys:String>
     <sys:String x:Key="ImageFileMissingMessage">Izabrana slika nije prona&#273;ena.</sys:String>
     <sys:String x:Key="Demo_AttendanceUpTo1000">&#8804; 1000</sys:String>
     <sys:String x:Key="Demo_AttendanceFrom1000To5000">1000-5000</sys:String>
