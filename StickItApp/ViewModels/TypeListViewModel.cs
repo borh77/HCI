@@ -113,17 +113,33 @@ public sealed class TypeListViewModel : ObservableObject
         if (App.DataStore.Events.Any(item => item.TypeId == type.Id))
         {
             MessageBox.Show(
-                "This type is used by one or more events and cannot be deleted.",
-                "Delete type",
+                GetString("TypeInUseMessage"),
+                GetString("DeleteTypeTitle"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+            return;
+        }
+
+        MessageBoxResult result = MessageBox.Show(
+            string.Format(GetString("DeleteTypeConfirmation"), type.Name),
+            GetString("DeleteTypeTitle"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
             return;
         }
 
         App.DataStore.EventTypes.Remove(type);
         App.DataService.SaveAll(App.DataStore);
         TypesView.Refresh();
-        MessageBox.Show("Type deleted.", "Delete type", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(GetString("TypeDeletedMessage"), GetString("DeleteTypeTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
         _showStatus?.Invoke($"Type '{type.Name}' deleted.", false);
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

@@ -282,7 +282,8 @@ public sealed class EventEditorViewModel : ObservableObject
 
         string query = TagSearchText.Trim();
         return tag.Id.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-               tag.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+               tag.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+               tag.Description.Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
     private void AddSelectedTag()

@@ -85,7 +85,8 @@ public sealed class TagListViewModel : ObservableObject
 
         string query = FilterText.Trim();
         return Contains(tag.Id, query) ||
-               Contains(tag.Name, query);
+               Contains(tag.Name, query) ||
+               Contains(tag.Description, query);
     }
 
     private static bool Contains(string value, string query)
@@ -109,6 +110,17 @@ public sealed class TagListViewModel : ObservableObject
             return;
         }
 
+        MessageBoxResult result = MessageBox.Show(
+            string.Format(GetString("DeleteTagConfirmation"), tag.Name),
+            GetString("DeleteTagTitle"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
         App.DataStore.Tags.Remove(tag);
         List<EventTag> relations = App.DataStore.EventTags.Where(item => item.TagId == tag.Id).ToList();
         foreach (EventTag relation in relations)
@@ -118,7 +130,12 @@ public sealed class TagListViewModel : ObservableObject
 
         App.DataService.SaveAll(App.DataStore);
         TagsView.Refresh();
-        MessageBox.Show("Tag deleted. Related event-tag links were removed.", "Delete tag", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(GetString("TagDeletedMessage"), GetString("DeleteTagTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
         _showStatus?.Invoke($"Tag '{tag.Name}' deleted.", false);
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

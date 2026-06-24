@@ -68,5 +68,15 @@
     <sys:String x:Key="ClearMapLabel">Ocisti mapu</sys:String>
     <sys:String x:Key="BackToListLabel">Vrati u listu</sys:String>
     <sys:String x:Key="ResetFilterLabel">Resetuj filter</sys:String>
-    <sys:String x:Key="NoOverlapMessage">Dogadjaji ne mogu da se preklapaju na mapi.</sys:String>
+    <sys:String x:Key="NoOverlapMessage">To mesto je vec zauzeto. Pomerite dogadjaj malo dalje da se oznake ne preklapaju.</sys:String>
+    <sys:String x:Key="DeleteEventTitle">Brisanje dogadjaja</sys:String>
+    <sys:String x:Key="DeleteTypeTitle">Brisanje tipa</sys:String>
+    <sys:String x:Key="DeleteTagTitle">Brisanje oznake</sys:String>
+    <sys:String x:Key="DeleteEventConfirmation">Obrisati dogadjaj '{0}'?</sys:String>
+    <sys:String x:Key="DeleteTypeConfirmation">Obrisati tip '{0}'?</sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">Obrisati oznaku '{0}'? Veze sa dogadjajima ce biti uklonjene, ali dogadjaji ostaju.</sys:String>
+    <sys:String x:Key="ClearMapConfirmation">Ukloniti sve dogadjaje sa mape?</sys:String>
+    <sys:String x:Key="TypeInUseMessage">Ovaj tip koristi jedan ili vise dogadjaja i ne moze se obrisati.</sys:String>
+    <sys:String x:Key="TypeDeletedMessage">Tip je obrisan.</sys:String>
+    <sys:String x:Key="TagDeletedMessage">Oznaka je obrisana. Veze sa dogadjajima su uklonjene.</sys:String>
 </ResourceDictionary>

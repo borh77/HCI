@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using StickItApp.Commands;
 using StickItApp.Models;
@@ -92,7 +93,7 @@ public sealed class MapViewModel : ObservableObject
 
         if (OverlapsAnotherEvent(item.Event, clampedX, clampedY))
         {
-            Message = "Events cannot overlap on the map.";
+            Message = GetString("NoOverlapMessage");
             _showStatus?.Invoke(Message, true);
             item.SyncFromEvent();
             return false;
@@ -183,6 +184,17 @@ public sealed class MapViewModel : ObservableObject
 
     private void ClearMap()
     {
+        MessageBoxResult result = MessageBox.Show(
+            GetString("ClearMapConfirmation"),
+            GetString("ClearMapLabel"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
         foreach (Event eventItem in App.DataStore.Events)
         {
             eventItem.IsPlacedOnMap = false;
@@ -204,6 +216,19 @@ public sealed class MapViewModel : ObservableObject
         }
 
         string eventId = SelectedEvent.Id;
+        string eventName = SelectedEvent.Name;
+
+        MessageBoxResult result = MessageBox.Show(
+            string.Format(GetString("DeleteEventConfirmation"), eventName),
+            GetString("DeleteEventTitle"),
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
         App.DataStore.Events.Remove(SelectedEvent.Event);
 
         foreach (EventTag relation in App.DataStore.EventTags.Where(item => item.EventId == eventId).ToList())
@@ -217,7 +242,7 @@ public sealed class MapViewModel : ObservableObject
         }
 
         Message = string.Empty;
-        _showStatus?.Invoke($"Event '{SelectedEvent.Name}' deleted.", false);
+        _showStatus?.Invoke($"Event '{eventName}' deleted.", false);
         SaveAndRefresh();
     }
 
@@ -248,5 +273,10 @@ public sealed class MapViewModel : ObservableObject
         }
 
         return value > max ? max : value;
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

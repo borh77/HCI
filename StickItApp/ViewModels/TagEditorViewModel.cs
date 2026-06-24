@@ -12,6 +12,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
     private readonly string? _originalId;
     private string _code = string.Empty;
     private string _name = string.Empty;
+    private string _description = string.Empty;
     private string _colorHex = "#FFB300";
     private string _validationMessage = string.Empty;
 
@@ -24,6 +25,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
         {
             _code = tag.Id;
             _name = tag.Name;
+            _description = tag.Description;
             _colorHex = tag.ColorHex;
         }
 
@@ -62,6 +64,12 @@ public sealed partial class TagEditorViewModel : ObservableObject
         set => SetProperty(ref _name, value);
     }
 
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
+
     public string ColorHex
     {
         get => _colorHex;
@@ -93,6 +101,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
             {
                 Id = Code,
                 Name = Name.Trim(),
+                Description = Description.Trim(),
                 ColorHex = ColorHex
             });
         }
@@ -115,6 +124,7 @@ public sealed partial class TagEditorViewModel : ObservableObject
 
             tag.Id = Code;
             tag.Name = Name.Trim();
+            tag.Description = Description.Trim();
             tag.ColorHex = ColorHex;
         }
 
@@ -143,6 +153,12 @@ public sealed partial class TagEditorViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(Name))
         {
             ValidationMessage = "Name is required.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            ValidationMessage = "Description is required.";
             return false;
         }
 

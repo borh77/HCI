@@ -68,5 +68,15 @@
     <sys:String x:Key="ClearMapLabel">Clear Map</sys:String>
     <sys:String x:Key="BackToListLabel">Back to list</sys:String>
     <sys:String x:Key="ResetFilterLabel">Reset Filter</sys:String>
-    <sys:String x:Key="NoOverlapMessage">Events cannot overlap on the map.</sys:String>
+    <sys:String x:Key="NoOverlapMessage">This spot is already taken. Move the event a little so map pins do not overlap.</sys:String>
+    <sys:String x:Key="DeleteEventTitle">Delete event</sys:String>
+    <sys:String x:Key="DeleteTypeTitle">Delete type</sys:String>
+    <sys:String x:Key="DeleteTagTitle">Delete tag</sys:String>
+    <sys:String x:Key="DeleteEventConfirmation">Delete event '{0}'?</sys:String>
+    <sys:String x:Key="DeleteTypeConfirmation">Delete type '{0}'?</sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">Delete tag '{0}'? Event-tag links will be removed, but events will stay.</sys:String>
+    <sys:String x:Key="ClearMapConfirmation">Remove all events from the map?</sys:String>
+    <sys:String x:Key="TypeInUseMessage">This type is used by one or more events and cannot be deleted.</sys:String>
+    <sys:String x:Key="TypeDeletedMessage">Type deleted.</sys:String>
+    <sys:String x:Key="TagDeletedMessage">Tag deleted. Related event-tag links were removed.</sys:String>
 </ResourceDictionary>

@@ -34,7 +34,7 @@ public sealed class CsvDataService
     ];
 
     private static readonly string[] EventTypeHeader = ["Id", "Name", "IconKey", "ColorHex", "Description"];
-    private static readonly string[] TagHeader = ["Id", "Name", "ColorHex"];
+    private static readonly string[] TagHeader = ["Id", "Name", "ColorHex", "Description"];
     private static readonly string[] EventTagHeader = ["EventId", "TagId"];
     private static readonly string[] PreviousDateHeader = ["Id", "EventId", "StartDate", "EndDate"];
     private static readonly string[] SettingsHeader = ["Key", "Value"];
@@ -68,6 +68,13 @@ public sealed class CsvDataService
         EnsureFiles();
 
         if (!HasDataRows(EventsPath) && !HasDataRows(EventTypesPath) && !HasDataRows(TagsPath))
+        {
+            SaveAll(CreateSampleData());
+            return;
+        }
+
+        CsvDataStore existingStore = LoadAll();
+        if (IsOriginalSampleData(existingStore))
         {
             SaveAll(CreateSampleData());
             return;
@@ -174,7 +181,8 @@ public sealed class CsvDataService
             {
                 Id = row[0],
                 Name = row[1],
-                ColorHex = row[2]
+                ColorHex = row[2],
+                Description = row.Count >= 4 ? row[3] : string.Empty
             });
         }
     }
@@ -430,7 +438,7 @@ public sealed class CsvDataService
     private void SaveTags(IEnumerable<Tag> tags)
     {
         List<IReadOnlyList<string>> rows = [TagHeader];
-        rows.AddRange(tags.Select(item => new[] { item.Id, item.Name, item.ColorHex }));
+        rows.AddRange(tags.Select(item => new[] { item.Id, item.Name, item.ColorHex, item.Description }));
         WriteRows(TagsPath, rows);
     }
 
@@ -628,141 +636,176 @@ public sealed class CsvDataService
     {
         CsvDataStore store = new();
 
-        EventType reminder = new()
+        EventType musicFestival = new()
         {
-            Id = "TYPE-REMINDER",
-            Name = "Reminder",
-            IconKey = "bell",
-            ColorHex = "#2563EB",
-            Description = "Small tasks and personal reminders."
-        };
-        EventType birthday = new()
-        {
-            Id = "TYPE-BIRTHDAY",
-            Name = "Birthday",
-            IconKey = "cake",
-            ColorHex = "#DB2777",
-            Description = "Birthday events and celebrations."
-        };
-        EventType meeting = new()
-        {
-            Id = "TYPE-MEETING",
-            Name = "Meeting",
-            IconKey = "users",
-            ColorHex = "#059669",
-            Description = "Group meetings and appointments."
-        };
-        EventType exam = new()
-        {
-            Id = "TYPE-EXAM",
-            Name = "Exam",
-            IconKey = "book-open",
-            ColorHex = "#D97706",
-            Description = "Exam dates and study deadlines."
-        };
-        EventType personal = new()
-        {
-            Id = "TYPE-PERSONAL",
-            Name = "Personal",
-            IconKey = "sticky-note",
+            Id = "TYPE-MUSIC",
+            Name = "Music Festival",
+            IconKey = string.Empty,
             ColorHex = "#7C3AED",
-            Description = "Personal notes on the map."
+            Description = "Large multi-day concerts and festival programs."
+        };
+        EventType sportsEvent = new()
+        {
+            Id = "TYPE-SPORTS",
+            Name = "Sports Event",
+            IconKey = string.Empty,
+            ColorHex = "#2563EB",
+            Description = "Competitive sports events with spectators."
+        };
+        EventType movieAwards = new()
+        {
+            Id = "TYPE-MOVIE",
+            Name = "Movie Awards",
+            IconKey = string.Empty,
+            ColorHex = "#DB2777",
+            Description = "Film premieres, ceremonies, and award shows."
+        };
+        EventType techConference = new()
+        {
+            Id = "TYPE-TECH",
+            Name = "Tech Conference",
+            IconKey = string.Empty,
+            ColorHex = "#059669",
+            Description = "Professional conferences focused on technology."
+        };
+        EventType culturalFair = new()
+        {
+            Id = "TYPE-CULTURE",
+            Name = "Cultural Fair",
+            IconKey = string.Empty,
+            ColorHex = "#D97706",
+            Description = "Public culture, tradition, food, and city events."
         };
 
-        store.EventTypes.Add(reminder);
-        store.EventTypes.Add(birthday);
-        store.EventTypes.Add(meeting);
-        store.EventTypes.Add(exam);
-        store.EventTypes.Add(personal);
+        store.EventTypes.Add(musicFestival);
+        store.EventTypes.Add(sportsEvent);
+        store.EventTypes.Add(movieAwards);
+        store.EventTypes.Add(techConference);
+        store.EventTypes.Add(culturalFair);
 
-        Tag important = new() { Id = "TAG-IMPORTANT", Name = "Important", ColorHex = "#EF4444" };
-        Tag school = new() { Id = "TAG-SCHOOL", Name = "School", ColorHex = "#F59E0B" };
-        Tag family = new() { Id = "TAG-FAMILY", Name = "Family", ColorHex = "#EC4899" };
-        Tag work = new() { Id = "TAG-WORK", Name = "Work", ColorHex = "#10B981" };
-        Tag urgent = new() { Id = "TAG-URGENT", Name = "Urgent", ColorHex = "#DC2626" };
+        Tag family = new() { Id = "TAG-FAMILY", Name = "Family", ColorHex = "#EC4899", Description = "Appropriate or interesting for families." };
+        Tag night = new() { Id = "TAG-NIGHT", Name = "Night", ColorHex = "#6366F1", Description = "Evening or late-night program." };
+        Tag outdoor = new() { Id = "TAG-OUTDOOR", Name = "Outdoor", ColorHex = "#10B981", Description = "Takes place mainly outdoors." };
+        Tag student = new() { Id = "TAG-STUDENT", Name = "Student", ColorHex = "#F59E0B", Description = "Useful for student visitors and budgets." };
+        Tag urban = new() { Id = "TAG-URBAN", Name = "Urban", ColorHex = "#64748B", Description = "Major city event with dense public activity." };
 
-        store.Tags.Add(important);
-        store.Tags.Add(school);
         store.Tags.Add(family);
-        store.Tags.Add(work);
-        store.Tags.Add(urgent);
+        store.Tags.Add(night);
+        store.Tags.Add(outdoor);
+        store.Tags.Add(student);
+        store.Tags.Add(urban);
 
-        DateTime created = new(2026, 1, 10);
+        DateTime created = new(2026, 1, 15);
 
         AddSampleEvent(
             store,
-            id: "EVT-HCI-EXAM",
-            name: "Study for HCI exam",
-            description: "Review lectures, wireframes, and WPF interaction patterns.",
-            date: new DateTime(2026, 2, 5),
-            typeId: exam.Id,
-            x: 92,
-            y: 146,
+            id: "EVT-EXIT-2026",
+            name: "EXIT 2026",
+            city: "Novi Sad",
+            country: "Serbia",
+            description: "International music festival at Petrovaradin Fortress with night concerts and student visitors.",
+            currentStart: new DateTime(2026, 7, 9),
+            currentEnd: new DateTime(2026, 7, 12),
+            averageCost: 180,
+            attendance: AttendanceCategory.Over10000,
+            isCharitable: false,
+            typeId: musicFestival.Id,
+            x: 76,
+            y: 132,
+            isPlacedOnMap: true,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [important.Id, school.Id],
-            previousDates: [new DateTime(2026, 1, 29)]);
+            tagIds: [night.Id, outdoor.Id, student.Id],
+            previousDates: [(new DateTime(2025, 7, 10), new DateTime(2025, 7, 13))]);
 
         AddSampleEvent(
             store,
-            id: "EVT-DOCS",
-            name: "Submit project documentation",
-            description: "Prepare the final project notes and screenshots.",
-            date: new DateTime(2026, 2, 12),
-            typeId: reminder.Id,
-            x: 244,
-            y: 108,
+            id: "EVT-NBA-FINALS-2026",
+            name: "NBA Finals 2026",
+            city: "New York",
+            country: "USA",
+            description: "Championship basketball event with a large urban audience and premium ticket demand.",
+            currentStart: new DateTime(2026, 6, 4),
+            currentEnd: new DateTime(2026, 6, 18),
+            averageCost: 950,
+            attendance: AttendanceCategory.Over10000,
+            isCharitable: false,
+            typeId: sportsEvent.Id,
+            x: 250,
+            y: 104,
+            isPlacedOnMap: true,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [important.Id, school.Id, urgent.Id],
-            previousDates: [new DateTime(2026, 2, 8)]);
+            tagIds: [urban.Id, night.Id],
+            previousDates: [(new DateTime(2025, 6, 5), new DateTime(2025, 6, 22))]);
 
         AddSampleEvent(
             store,
-            id: "EVT-BIRTHDAY",
-            name: "Family birthday dinner",
-            description: "Reserve a table and bring the gift.",
-            date: new DateTime(2026, 3, 4),
-            typeId: birthday.Id,
-            x: 171,
-            y: 298,
+            id: "EVT-OSCARS-2026",
+            name: "Oscars 2026",
+            city: "Los Angeles",
+            country: "USA",
+            description: "Movie awards ceremony with red carpet arrivals, media coverage, and formal evening program.",
+            currentStart: new DateTime(2026, 3, 15),
+            currentEnd: new DateTime(2026, 3, 15),
+            averageCost: 650,
+            attendance: AttendanceCategory.From5000To10000,
+            isCharitable: true,
+            typeId: movieAwards.Id,
+            x: 0,
+            y: 0,
+            isPlacedOnMap: false,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [family.Id],
-            previousDates: [new DateTime(2025, 3, 4)]);
+            tagIds: [night.Id, urban.Id],
+            previousDates: [(new DateTime(2025, 3, 2), new DateTime(2025, 3, 2))]);
 
         AddSampleEvent(
             store,
-            id: "EVT-MEETING",
-            name: "Team meeting",
-            description: "Discuss prototype feedback and next steps.",
-            date: new DateTime(2026, 1, 22),
-            typeId: meeting.Id,
-            x: 304,
-            y: 242,
+            id: "EVT-OKTOBERFEST-2026",
+            name: "Oktoberfest 2026",
+            city: "Munich",
+            country: "Germany",
+            description: "Cultural fair with outdoor tents, food, music, and family-friendly daytime activities.",
+            currentStart: new DateTime(2026, 9, 19),
+            currentEnd: new DateTime(2026, 10, 4),
+            averageCost: 240,
+            attendance: AttendanceCategory.Over10000,
+            isCharitable: false,
+            typeId: culturalFair.Id,
+            x: 0,
+            y: 0,
+            isPlacedOnMap: false,
             isCompleted: false,
             createdAt: created,
             updatedAt: created,
-            tagIds: [work.Id],
-            previousDates: [new DateTime(2026, 1, 15)]);
+            tagIds: [family.Id, outdoor.Id, urban.Id],
+            previousDates: [(new DateTime(2025, 9, 20), new DateTime(2025, 10, 5))]);
 
         AddSampleEvent(
             store,
-            id: "EVT-STICKY-NOTES",
-            name: "Buy sticky notes",
-            description: "Pick colors for planning and event grouping.",
-            date: new DateTime(2026, 1, 18),
-            typeId: personal.Id,
-            x: 120,
-            y: 415,
-            isCompleted: true,
+            id: "EVT-CANNES-2026",
+            name: "Cannes Film Festival 2026",
+            city: "Cannes",
+            country: "France",
+            description: "International film festival with premieres, industry guests, and public city events.",
+            currentStart: new DateTime(2026, 5, 12),
+            currentEnd: new DateTime(2026, 5, 23),
+            averageCost: 420,
+            attendance: AttendanceCategory.From5000To10000,
+            isCharitable: false,
+            typeId: movieAwards.Id,
+            x: 0,
+            y: 0,
+            isPlacedOnMap: false,
+            isCompleted: false,
             createdAt: created,
-            updatedAt: new DateTime(2026, 1, 18),
-            tagIds: [],
-            previousDates: []);
+            updatedAt: created,
+            tagIds: [urban.Id, student.Id],
+            previousDates: [(new DateTime(2025, 5, 13), new DateTime(2025, 5, 24))]);
 
         store.Settings = new AppSettings
         {
@@ -775,30 +818,54 @@ public sealed class CsvDataService
         return store;
     }
 
+    private static bool IsOriginalSampleData(CsvDataStore store)
+    {
+        string[] originalTypeIds = ["TYPE-REMINDER", "TYPE-BIRTHDAY", "TYPE-MEETING", "TYPE-EXAM", "TYPE-PERSONAL"];
+        string[] originalEventIds = ["EVT-HCI-EXAM", "EVT-DOCS", "EVT-BIRTHDAY", "EVT-MEETING", "EVT-STICKY-NOTES"];
+
+        return store.EventTypes.Any(type => originalTypeIds.Contains(type.Id)) ||
+               store.Events.Any(eventItem => originalEventIds.Contains(eventItem.Id));
+    }
+
     private static void AddSampleEvent(
         CsvDataStore store,
         string id,
         string name,
+        string city,
+        string country,
         string description,
-        DateTime date,
+        DateTime currentStart,
+        DateTime currentEnd,
+        decimal averageCost,
+        AttendanceCategory attendance,
+        bool isCharitable,
         string typeId,
         double x,
         double y,
+        bool isPlacedOnMap,
         bool isCompleted,
         DateTime createdAt,
         DateTime updatedAt,
         IReadOnlyList<string> tagIds,
-        IReadOnlyList<DateTime> previousDates)
+        IReadOnlyList<(DateTime Start, DateTime End)> previousDates)
     {
         store.Events.Add(new Event
         {
             Id = id,
             Name = name,
+            City = city,
+            Country = country,
             Description = description,
-            Date = date,
+            Date = currentStart,
+            CurrentStart = currentStart,
+            CurrentEnd = currentEnd,
+            AverageCost = averageCost,
+            Attendance = attendance,
+            IsCharitable = isCharitable,
             TypeId = typeId,
             X = x,
             Y = y,
+            IsPlacedOnMap = isPlacedOnMap,
             IsCompleted = isCompleted,
             CreatedAt = createdAt,
             UpdatedAt = updatedAt
@@ -810,13 +877,15 @@ public sealed class CsvDataService
         }
 
         int index = 1;
-        foreach (DateTime previousDate in previousDates)
+        foreach ((DateTime start, DateTime end) in previousDates)
         {
             store.PreviousDates.Add(new PreviousDate
             {
                 Id = $"{id}-PREV-{index}",
                 EventId = id,
-                Date = previousDate
+                Date = start,
+                Start = start,
+                End = end
             });
             index++;
         }

@@ -142,8 +142,8 @@ public sealed class EventListViewModel : ObservableObject
         }
 
         MessageBoxResult result = MessageBox.Show(
-            $"Delete event '{item.Name}'?",
-            "Delete event",
+            string.Format(GetString("DeleteEventConfirmation"), item.Name),
+            GetString("DeleteEventTitle"),
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
 
@@ -184,5 +184,10 @@ public sealed class EventListViewModel : ObservableObject
         {
             App.DataStore.PreviousDates.Remove(previousDate);
         }
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }

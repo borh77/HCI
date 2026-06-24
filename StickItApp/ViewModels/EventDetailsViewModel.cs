@@ -68,8 +68,8 @@ public sealed class EventDetailsViewModel : ObservableObject
     private void Delete()
     {
         MessageBoxResult result = MessageBox.Show(
-            $"Delete event '{Event.Name}'?",
-            "Delete event",
+            string.Format(GetString("DeleteEventConfirmation"), Event.Name),
+            GetString("DeleteEventTitle"),
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
 
@@ -102,5 +102,10 @@ public sealed class EventDetailsViewModel : ObservableObject
         }
 
         return Path.Combine(AppContext.BaseDirectory, path);
+    }
+
+    private static string GetString(string resourceKey)
+    {
+        return Application.Current.TryFindResource(resourceKey) as string ?? resourceKey;
     }
 }
