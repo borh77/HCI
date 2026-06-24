@@ -1,8 +1,8 @@
 <UserControl x:Class="StickItApp.Views.EventEditorPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ScrollViewer Background="{DynamicResource ContentBrush}" VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="14">
+    <ScrollViewer Background="{DynamicResource ContentBrush}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="12" HorizontalAlignment="Stretch">
             <TextBlock Text="{Binding PageTitle}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" />
 
             <TextBlock Text="{DynamicResource CodeLabel}" Margin="0,12,0,3" Foreground="{DynamicResource TextBrush}" />
